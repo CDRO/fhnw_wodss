@@ -40,6 +40,11 @@ angular
         controller: 'BoardsCtrl',
         controllerAs: 'boards'
       })
+      .when('/tasks', {
+        templateUrl: 'views/tasks.html',
+        controller: 'TasksCtrl',
+        controllerAs: 'tasks'
+      })
       .otherwise({
         redirectTo: '/'
       });

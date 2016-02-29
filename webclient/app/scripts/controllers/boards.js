@@ -10,18 +10,18 @@
 
 var boardController = function(boardService, $scope) {
 
-  this.list = boardService.getBoards();
+  this.list = boardService.getAll();
 
-  this.addBoard = function(){
-    boardService.addBoard({title: $scope.title});
+  this.add = function(){
+    boardService.add({title: $scope.title});
   };
 
-  this.updateBoard = function(board){
-    boardService.updateBoard(board);
+  this.update = function(board){
+    boardService.update(board);
   };
 
-  this.removeBoard = function(board){
-    boardService.removeBoard(board);
+  this.remove = function(board){
+    boardService.remove(board);
   }
 };
 
