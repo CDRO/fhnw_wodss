@@ -1,7 +1,9 @@
 # angular-webclient
 
-This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
-version 0.15.1.
+## Installation
+sudo su -c "gem install sass"
+npm install
+bower install
 
 ## Build & development
 

@@ -10,6 +10,7 @@
  */
 angular
   .module('angularWebclientApp', [
+    'services',
     'ngAnimate',
     'ngCookies',
     'ngResource',
@@ -23,6 +24,21 @@ angular
         templateUrl: 'views/main.html',
         controller: 'MainCtrl',
         controllerAs: 'main'
+      })
+      .when('/login', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl',
+        controllerAs: 'login'
+      })
+      .when('/register', {
+        templateUrl: 'views/register.html',
+        controller: 'RegisterCtrl',
+        controllerAs: 'register'
+      })
+      .when('/boards', {
+        templateUrl: 'views/boards/boardOverview.html',
+        controller: 'BoardsCtrl',
+        controllerAs: 'boards'
       })
       .otherwise({
         redirectTo: '/'
