@@ -2,19 +2,45 @@ package ch.fhnw.wodss.domain;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 /**
  * The task to do.
  * 
  * @author tobias
  *
  */
+@Entity
 public interface Task {
+
+	/**
+	 * Gets the task id.
+	 * 
+	 * @return the task id.
+	 */
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	public Integer getId();
+
+	/**
+	 * Sets the id of the task.
+	 * 
+	 * @param id
+	 *            the id to set.
+	 */
+	public void setId(Integer id);
 
 	/**
 	 * Gets the board of this task.
 	 * 
 	 * @return the board of this task.
 	 */
+	@ManyToOne
 	public Board getBoard();
 
 	/**
@@ -30,12 +56,14 @@ public interface Task {
 	 * 
 	 * @return the state of the current task.
 	 */
+	@Column
 	public TaskState getState();
 
 	/**
 	 * Sets the state of the current task.
 	 * 
-	 * @param the state to set.
+	 * @param the
+	 *            state to set.
 	 */
 	public void setState(TaskState state);
 
@@ -44,6 +72,7 @@ public interface Task {
 	 * 
 	 * @return the assignee of this task.
 	 */
+	@ManyToOne
 	public User getAssignee();
 
 	/**
@@ -59,12 +88,13 @@ public interface Task {
 	 * 
 	 * @return the creation date of this task.
 	 */
+	@Column
 	public Date getCreationDate();
 
 	/**
 	 * Sets the creation date of this task.
 	 * 
-	 * @param date
+	 * @param creationDate
 	 *            the creation date to set.
 	 */
 	public void setCreationDate(Date creationDate);
@@ -74,12 +104,13 @@ public interface Task {
 	 * 
 	 * @return the due date of this task.
 	 */
+	@Column
 	public Date getDueDate();
 
 	/**
 	 * Sets the due date of this task.
 	 * 
-	 * @param date
+	 * @param dueDate
 	 *            the due date to set.
 	 */
 	public void setDueDate(Date dueDate);
@@ -89,12 +120,14 @@ public interface Task {
 	 * 
 	 * @return the date when this task has been completed.
 	 */
+	@Column
 	public Date getDoneDate();
 
 	/**
 	 * Sets the date when this task has been completed.
 	 * 
-	 * @param the date to set when this task has been completed.
+	 * @param doneDate
+	 *            date to set when this task has been completed.
 	 */
 	public void setDoneDate(Date doneDate);
 
@@ -103,6 +136,7 @@ public interface Task {
 	 * 
 	 * @return the description of this task.
 	 */
+	@Column
 	public String getDescription();
 
 	/**

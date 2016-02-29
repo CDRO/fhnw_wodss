@@ -2,13 +2,39 @@ package ch.fhnw.wodss.domain;
 
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+
 /**
  * The board that holds tasks.
  * 
  * @author tobias
  *
  */
+@Entity
 public interface Board {
+
+	/**
+	 * Gets the board id.
+	 * 
+	 * @return the board id.
+	 */
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	public Integer getId();
+
+	/**
+	 * Sets the board's id.
+	 * 
+	 * @param id
+	 *            the id to set.
+	 */
+	public void setId(Integer id);
 
 	/**
 	 * Sets the title of the board.
@@ -23,6 +49,7 @@ public interface Board {
 	 * 
 	 * @return the title of the board.
 	 */
+	@Column
 	public String getTitle();
 
 	/**
@@ -30,31 +57,29 @@ public interface Board {
 	 * 
 	 * @return the list of all tasks.
 	 */
+	@OneToMany
 	public List<Task> getTasks();
-
+	
 	/**
-	 * Adds or saves a task to this board.
-	 * 
-	 * @param task
-	 *            the task to add or to save.
+	 * Sets the list of tasks.
+	 * @param tasks the list of tasks to set.
 	 */
-	public void saveTask(Task task);
-
-	/**
-	 * Deletes a task.
-	 * 
-	 * @param task
-	 *            the task to delete.
-	 */
-	public void deleteTask(Task task);
+	public void setTasks(List<Task> tasks);
 
 	/**
 	 * Gets all users that have permission to see this board.
 	 * 
 	 * @return the list of users that have permission to see this board.
 	 */
+	@ManyToMany
 	public List<User> getUsers();
-
+	
+	/**
+	 * Sets the list of users.
+	 * @param users the list of users to set.
+	 */
+	public void setUsers(List<User> users);
+	
 	/**
 	 * Permits a user for this board.
 	 * 
@@ -64,11 +89,28 @@ public interface Board {
 	public void addUser(User user);
 
 	/**
-	 * Deletes a user from this board.
+	 * Removes a user from this board.
 	 * 
 	 * @param user
 	 *            the user to delete.
 	 */
-	public void deleteUser(User user);
+	public void removeUser(User user);
+
+	/**
+	 * Adds a task to this board.
+	 * 
+	 * @param task
+	 *            the task to add.
+	 */
+	public void addTask( Task task);
+	
+
+	/**
+	 * Removes the task from this board.
+	 * 
+	 * @param task
+	 *            the task to remove.
+	 */
+	public void removeTask(Task task);
 
 }

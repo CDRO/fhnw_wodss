@@ -2,8 +2,11 @@ package ch.fhnw.wodss.domain;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 class TaskImpl implements Task {
 	
+	private Integer id;
 	private Board board;
 	private TaskState state;
 	private User assignee;
@@ -14,6 +17,16 @@ class TaskImpl implements Task {
 	
 	TaskImpl(){
 		super();
+	}
+	
+	@Override
+	public Integer getId(){
+		return id;
+	}
+	
+	@Override
+	public void setId(Integer id){
+		this.id = id;
 	}
 
 	@Override
@@ -84,6 +97,29 @@ class TaskImpl implements Task {
 	@Override
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	@Override
+	public boolean equals(Object object){
+		if(!(object instanceof Task)){
+			return false;
+		}
+		Task task = (Task) object;
+		return task.getId() == this.id;
+	}
+	
+	@Override
+	public int hashCode(){
+		return new HashCodeBuilder(17,31). 
+				append(id). 
+				append(board). 
+				append(state). 
+				append(assignee). 
+				append(creationDate). 
+				append(dueDate). 
+				append(doneDate). 
+				append(description). 
+				toHashCode();
 	}
 
 }
