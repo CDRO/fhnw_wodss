@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>ToDo Application</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -36,13 +36,13 @@
             <a class="navbar-brand" href="#/">ToDo dideli done</a>
           </div>
 
-          <div class="collapse navbar-collapse" id="js-navbar-collapse">
+          <div class="collapse navbar-collapse" id="js-navbar-collapse" ng-controller="HeaderCtrl">
 
             <ul class="nav navbar-nav">
-              <li class="active"><a href="#/">Home</a></li>
-              <li><a ng-href="#/boards">Boards</a></li>
-              <li><a ng-href="#/register">Registrieren</a></li>
-              <li><a ng-href="#/login">Login</a></li>
+              <li ng-class="{ active: isActive('/home')}"><a href="#/home">Home</a></li>
+              <li ng-class="{ active: isActive('/boards')}"><a ng-href="#/boards">Boards</a></li>
+              <li ng-class="{ active: isActive('/register')}"><a ng-href="#/register">Registrieren</a></li>
+              <li ng-class="{ active: isActive('/login')}"><a ng-href="#/login">Login</a></li>
             </ul>
           </div>
         </div>
