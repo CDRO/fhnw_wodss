@@ -1,0 +1,21 @@
+<div class="col-md-12">
+  <h2>Boards</h2>
+  <div ng-repeat="board in boards.list">
+    <p>{{board.title}}
+      <button ng-click="boards.updateBoard(board)" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
+      <button ng-click="boards.removeBoard(board)" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+    </p>
+  </div>
+
+  <h2>Board erstellen</h2>
+  <form name="form" ng-submit="boards.addBoard()" role="form" class="form-inline">
+
+  <div class="form-group" ng-class="{'has-error': form.title.$dirty && form.title.$error.required}">
+      <label for="title">Bezeichnung</label>
+      <input type="input" name="title" id="title" class="form-control" ng-model="title" required />
+      <span ng-show="form.title.$dirty && form.title.$error.required" class="help-block">Bitte geben Sie einen Board Titel an</span>
+    </div>
+    <button type="submit" ng-disabled="form.$invalid || boards.dataLoading" class="btn btn-primary">Erstellen</button>
+
+  </form>
+</div>
