@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import ch.fhnw.wodss.domain.Board;
 import ch.fhnw.wodss.repository.BoardRepository;
 
 @Component
+@Transactional
 public class BoardService {
 	
 	@Autowired

@@ -30,7 +30,7 @@ public class UserFactory {
 	 * @return the created user reference.
 	 */
 	public User createUser(String name, String email) {
-		User user = new UserImpl();
+		User user = new User();
 		user.setName(name);
 		user.setEmail(email);
 		return user;

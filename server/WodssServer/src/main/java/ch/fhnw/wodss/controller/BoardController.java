@@ -3,6 +3,8 @@ package ch.fhnw.wodss.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,28 +21,33 @@ public class BoardController {
 	private BoardService boardService;
 	
 	@RequestMapping(path = "/boards", method = RequestMethod.GET)
-    public List<Board> getAllBoards() {
-        return boardService.getAll();
+    public ResponseEntity<List<Board>> getAllBoards() {
+         List<Board> boards = boardService.getAll();
+         return new ResponseEntity<>(boards, HttpStatus.OK);
     }
 	
 	@RequestMapping(path = "/board/{id}", method = RequestMethod.GET)
-	public Board getBoard(@PathVariable Integer id) {
-		return boardService.getById(id);
+	public ResponseEntity<Board> getBoard(@PathVariable Integer id) {
+		 Board board = boardService.getById(id);
+		 return new ResponseEntity<>(board, HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/board", method = RequestMethod.POST)
-	public void createBoard(@RequestBody Board board) {
-		boardService.saveBoard(board);
+	public ResponseEntity<Board> createBoard(@RequestBody Board board) {
+		 Board savedBoard = boardService.saveBoard(board);
+		 return new ResponseEntity<>(savedBoard, HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/board/{id}", method = RequestMethod.DELETE)
-	public void deleteBoard(@PathVariable Integer id) {
+	public ResponseEntity<String> deleteBoard(@PathVariable Integer id) {
 		boardService.deleteBoard(id);
+		return new ResponseEntity<>("Deleted board.", HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/board/{id}", method = RequestMethod.PUT)
-	public void updateBoard(@PathVariable Integer id, @RequestBody Board board) {
-		boardService.saveBoard(board);
+	public ResponseEntity<Board> updateBoard(@PathVariable Integer id, @RequestBody Board board) {
+		Board updatedBoard = boardService.saveBoard(board);
+		return new ResponseEntity<>(updatedBoard, HttpStatus.OK);
 	}
 	
 	
