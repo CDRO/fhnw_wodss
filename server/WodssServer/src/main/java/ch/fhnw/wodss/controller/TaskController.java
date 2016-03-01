@@ -41,7 +41,7 @@ public class TaskController {
 	@RequestMapping(path = "/task/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteTask(@PathVariable Integer id) {
 		taskService.deleteTask(id);
-		return new ResponseEntity<>("Deleted board.", HttpStatus.OK);
+		return new ResponseEntity<>("Deleted task.", HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/task/{id}", method = RequestMethod.PUT)
