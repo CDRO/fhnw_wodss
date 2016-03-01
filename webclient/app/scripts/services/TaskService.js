@@ -5,15 +5,23 @@
 
   var module = angular.module('services');
 
-  var BoardService = function (service) {
+  var TaskService = function (service) {
 
     var dummyData = [{
       id: 23,
-      title: "Mein Board"
+      title: "Mein Task",
+      state: "Erledigt"
     },{
       id: 25,
-      title: "Zweite Board"
+      title: "Zweiter Task",
+      state: "Offen"
+    },
+    {
+      id: 27,
+      title: "Task",
+      state: "In Bearbeitung"
     }
+
     ];
 
     /**
@@ -28,7 +36,7 @@
      * Save the specified Board
      */
     this.add = function(board){
-      //return service.createObject('board', board);
+      //return service.createObject('task', board);
       dummyData.push(board);
     };
 
@@ -37,7 +45,7 @@
        * @param board
        */
     this.update = function(board){
-      return service.updateObject('board', board);
+      return service.updateObject('task', board);
     };
 
     /**
@@ -45,15 +53,14 @@
      * @param board board with id specified
      */
     this.remove = function (board) {
-        service.deleteObject('board', board);
+        service.deleteObject('task', board);
     };
-
 
   };
 
   // Inject Dependencies
-  BoardService.$inject = ['ApiService'];
+  TaskService.$inject = ['ApiService'];
 
   // Export
-  module.service('BoardService', BoardService);
+  module.service('TaskService', TaskService);
 })();

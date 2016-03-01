@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>ToDo Application</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -36,12 +36,13 @@
             <a class="navbar-brand" href="#/">ToDo dideli done</a>
           </div>
 
-          <div class="collapse navbar-collapse" id="js-navbar-collapse">
+          <div class="collapse navbar-collapse" id="js-navbar-collapse" ng-controller="HeaderCtrl">
 
             <ul class="nav navbar-nav">
-              <li class="active"><a href="#/">Home</a></li>
-              <li><a ng-href="#/about">About</a></li>
-              <li><a ng-href="#/">Contact</a></li>
+              <li ng-class="{ active: isActive('/home')}"><a href="#/home">Home</a></li>
+              <li ng-class="{ active: isActive('/boards')}"><a ng-href="#/boards">Boards</a></li>
+              <li ng-class="{ active: isActive('/register')}"><a ng-href="#/register">Registrieren</a></li>
+              <li ng-class="{ active: isActive('/login')}"><a ng-href="#/login">Login</a></li>
             </ul>
           </div>
         </div>
@@ -54,7 +55,7 @@
 
     <div class="footer">
       <div class="container">
-        <p class="text-center"><span class="glyphicon glyphicon-star"></span> Let's do the work </p>
+        <p class="text-center"><span class="glyphicon glyphicon-star"></span> Let's <b>do</b> the work </p>
       </div>
     </div>
 
@@ -89,12 +90,14 @@
         <script src="scripts/services/ApiService.js"></script>
         <script src="scripts/services/AuthService.js"></script>
         <script src="scripts/services/BoardService.js"></script>
+        <script src="scripts/services/TaskService.js"></script>
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/login.js"></script>
         <script src="scripts/controllers/register.js"></script>
 
         <script src="scripts/controllers/boards.js"></script>
+        <script src="scripts/controllers/tasks.js"></script>
         <!-- endbuild -->
 </body>
 </html>

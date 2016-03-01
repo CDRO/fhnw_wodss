@@ -20,7 +20,7 @@ angular
   ])
   .config(function ($routeProvider) {
     $routeProvider
-      .when('/', {
+      .when('/home', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl',
         controllerAs: 'main'
@@ -40,7 +40,16 @@ angular
         controller: 'BoardsCtrl',
         controllerAs: 'boards'
       })
+      .when('/tasks', {
+        templateUrl: 'views/tasks.html',
+        controller: 'TasksCtrl',
+        controllerAs: 'tasks'
+      })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/home'
       });
-  });
+  }).controller('HeaderCtrl', function ($scope, $location) {
+    $scope.isActive = function (viewLocation) {
+      return $location.path().indexOf(viewLocation) == 0;
+    };
+});;
