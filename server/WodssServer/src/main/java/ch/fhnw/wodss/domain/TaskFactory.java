@@ -34,10 +34,9 @@ public class TaskFactory {
 	 * @return the created task.
 	 */
 	public Task createTask(Board board, String description) {
-		Task task = new TaskImpl();
+		Task task = new Task();
 		task.setBoard(board);
 		task.setDescription(description);
-		task.setAssignee(UnassignedUser.getInstance());
 		task.setCreationDate(new Date());
 		task.setState(TaskState.TO_DO);
 		return task;
@@ -56,7 +55,7 @@ public class TaskFactory {
 	 * @return the created task.
 	 */
 	public Task createTask(Board board, String description, User assignee) {
-		Task task = new TaskImpl();
+		Task task = new Task();
 		task.setBoard(board);
 		task.setDescription(description);
 		task.setAssignee(assignee);

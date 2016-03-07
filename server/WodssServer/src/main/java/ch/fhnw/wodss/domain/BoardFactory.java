@@ -34,7 +34,7 @@ public class BoardFactory {
 	 * @return the board to create.
 	 */
 	public Board createBoard(String title) {
-		Board board = new BoardImpl();
+		Board board = new Board();
 		board.setTitle(title);
 		return board;
 	}
