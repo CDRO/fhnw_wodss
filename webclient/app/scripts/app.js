@@ -14,42 +14,53 @@ angular
     'ngAnimate',
     'ngCookies',
     'ngResource',
-    'ngRoute',
+    'ui.router',
     'ngSanitize',
     'ngTouch'
   ])
-  .config(function ($routeProvider) {
-    $routeProvider
-      .when('/home', {
+  .config(function ($stateProvider, $urlRouterProvider) {
+    // For any unmatched url, redirect to /state1
+    $urlRouterProvider.otherwise("/home");
+
+    $stateProvider
+      .state('home', {
+        url: '',
         templateUrl: 'views/main.html',
         controller: 'MainCtrl',
         controllerAs: 'main'
       })
-      .when('/login', {
+      .state('login', {
+        url: "/login",
         templateUrl: 'views/login.html',
         controller: 'LoginCtrl',
         controllerAs: 'login'
       })
-      .when('/register', {
+      .state('register', {
+        url: "/register",
         templateUrl: 'views/register.html',
         controller: 'RegisterCtrl',
         controllerAs: 'register'
       })
-      .when('/boards', {
+      .state('boards', {
+        url: "/boards",
         templateUrl: 'views/boards/boardOverview.html',
         controller: 'BoardsCtrl',
         controllerAs: 'boards'
       })
-      .when('/tasks', {
-        templateUrl: 'views/tasks.html',
+      .state('tasksFromBoard', {
+        url: "/tasks/board/:boardId",
+        templateUrl: 'views/boards/boardOverview.html',
         controller: 'TasksCtrl',
         controllerAs: 'tasks'
       })
-      .otherwise({
-        redirectTo: '/home'
+      .state('tasks', {
+        url: "/tasks",
+        templateUrl: 'views/tasks.html',
+        controller: 'TasksCtrl',
+        controllerAs: 'tasks'
       });
   }).controller('HeaderCtrl', function ($scope, $location) {
     $scope.isActive = function (viewLocation) {
       return $location.path().indexOf(viewLocation) == 0;
     };
-});;
+});

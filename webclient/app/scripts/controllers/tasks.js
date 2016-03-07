@@ -9,8 +9,13 @@
  */
 var module = angular.module('angularWebclientApp');
 
-var taskController = function(taskService){
-  this.list = taskService.getAll();
+var taskController = function(taskService, params){
+  this.list = [];
+  if(params.boardId){
+    this.list = taskService.getByBoard(params.boardId);
+  }else{
+    this.list = taskService.getAll();
+  }
 
   this.add = function(task){
       taskService.add(task);
@@ -19,8 +24,10 @@ var taskController = function(taskService){
   this.remove = function(task){
     taskService.remove(task);
   };
+
+
 };
 
-taskController.$inject = ['TaskService'];
+taskController.$inject = ['TaskService', '$stateParams'];
 
 module.controller('TasksCtrl', taskController);

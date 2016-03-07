@@ -101,6 +101,7 @@
      * @returns {string}
      */
     helpers.encodeBasicAuth = function () {
+
       return 'Basic ' + btoa(currentUser.email + ':' + currentUser.token);
     };
 
