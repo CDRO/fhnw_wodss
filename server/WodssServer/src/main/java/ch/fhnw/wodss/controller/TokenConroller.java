@@ -20,7 +20,7 @@ public class TokenConroller {
 	}
 	
 	@RequestMapping(path = "/token/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<String> deleteToken(@PathVariable String id) {
+	public ResponseEntity<String> deleteToken(@PathVariable Long id) {
 		TokenHandler.unregister(id);
 		return new ResponseEntity<>("Unregistered token.", HttpStatus.OK);
 	}

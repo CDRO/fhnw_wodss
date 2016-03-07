@@ -25,11 +25,11 @@ public class TokenHandler {
 		return token;
 	}
 	
-	public static void unregister(String tokenId){
+	public static void unregister(Long tokenId){
 		cache.remove(tokenId);
 	}
 	
-	public static boolean validate(String tokenId){
+	public static boolean validate(Long tokenId){
 		Token token = cache.get(tokenId);
 		if(token == null){
 			return false;
