@@ -1,6 +1,6 @@
 package ch.fhnw.wodss.security;
 
-import java.util.UUID;
+import java.security.SecureRandom;
 
 /**
  * Responsible for creating tokens.
@@ -35,7 +35,7 @@ class TokenFactory {
 	 */
 	public Token createToken() {
 		Token token = new Token();
-		token.setId(UUID.randomUUID().toString());
+		token.setId(new SecureRandom().nextLong());
 		token.setCreatedAt(System.currentTimeMillis());
 		token.setTimeToLive(TTL);
 		return token;

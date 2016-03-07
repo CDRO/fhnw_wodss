@@ -12,7 +12,7 @@ public class TokenHandler {
 	/**
 	 * Cache.
 	 */
-	private static Map<String, Token> cache = new HashMap<>();
+	private static Map<Long, Token> cache = new HashMap<>();
 	
 	
 	private TokenHandler(){

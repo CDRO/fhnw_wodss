@@ -5,7 +5,7 @@ public class Token {
 	/**
 	 * The token id;
 	 */
-	private String id;
+	private Long id;
 
 	/**
 	 * The time when the token was created in millis.
@@ -39,7 +39,7 @@ public class Token {
 	 * 
 	 * @return the id
 	 */
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -49,7 +49,7 @@ public class Token {
 	 * @param id
 	 *            the id to set
 	 */
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
