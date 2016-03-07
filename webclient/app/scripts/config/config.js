@@ -3,6 +3,7 @@
 
   /**
    * Centralize the configuration of the applications
+   * Store the authentication token
    */
   var module = angular.module('services', []);
 
@@ -12,10 +13,24 @@
     this.baseUrl = 'http://localhost:9000/';
     //this.imageBaseUrl = this.baseUrl + 'image/';
 
-    // More config if needed
+    // Represents the logged in user
+    var currentUser = {
+      email: "d.augsburger@gmx.ch",
+      token: "asdfasdfasdf"
+    };
 
+    this.getCurrentUser = function() {
+      return currentUser;
+    };
+
+    this.isLoggedIn = function(){
+      return (currentUser.email !== null && currentUser.token !== null);
+    };
+
+    this.setCurrentUser = function (newCurrentUser) {
+      currentUser = angular.copy(newCurrentUser);
+    };
   };
 
   module.service('ConfigService', Configuration);
-
 })();
