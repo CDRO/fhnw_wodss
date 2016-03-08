@@ -29,7 +29,6 @@
      */
     this.getAll = function(){
       return service.query('tasks');
-      //return dummyData;
     };
 
     this.getByBoard = function(boardId){

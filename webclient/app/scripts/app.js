@@ -59,6 +59,12 @@ angular
         templateUrl: 'views/tasks.html',
         controller: 'TasksCtrl',
         controllerAs: 'tasks'
+      })
+      .state('error', {
+        url: "/error",
+        templateUrl: "views/error.html",
+        controller: "ErrorCtrl",
+        controllerAs: "error"
       });
   }).controller('HeaderCtrl', function ($scope, $location) {
     $scope.isActive = function (viewLocation) {
