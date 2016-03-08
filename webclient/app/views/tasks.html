@@ -1,30 +1,9 @@
 <div class="col-md-12">
-  <h2>Tasks</h2>
+  <h2>Tasks <button ng-click="tasks.create()" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-plus"></span></button></h2>
   <div ng-repeat="task in tasks.list">
     <p>{{task.title}} - {{task.state}}
       <button ng-click="tasks.update(task)" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
       <button ng-click="tasks.remove(task)" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
     </p>
   </div>
-
-  <h2>Task erstellen</h2>
-  <form name="form" ng-submit="tasks.add()" role="form" class="form-inline">
-
-    <div class="form-group" ng-class="{'has-error': form.title.$dirty && form.title.$error.required}">
-      <label for="title">Bezeichnung</label>
-      <input type="input" name="title" id="title" class="form-control" ng-model="title" required />
-      <span ng-show="form.title.$dirty && form.title.$error.required" class="help-block">Bitte geben Sie einen Task Titel an</span>
-    </div>
-    <div class="form-group">
-      <label for="person">Person</label>
-      <input type="input" name="person" id="person" class="form-control" ng-model="person" required />
-    </div>
-    <div class="form-group">
-      <label for="attachment">Attachments</label>
-      <input type="input" name="attachment" id="attachment" class="form-control" ng-model="attachment" required />
-    </div>
-
-    <button type="submit" ng-disabled="form.$invalid || tasks.dataLoading" class="btn btn-primary">Erstellen</button>
-
-  </form>
 </div>
