@@ -1,11 +1,13 @@
 package ch.fhnw.wodss.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Token {
 
 	/**
 	 * The token id;
 	 */
-	private Long id;
+	private String id;
 
 	/**
 	 * The time when the token was created in millis.
@@ -29,6 +31,7 @@ public class Token {
 	 * 
 	 * @return whether this token is expired or not.
 	 */
+	@JsonIgnore
 	public boolean isExpired() {
 		Long current = System.currentTimeMillis();
 		return current >= createdAt + timeToLive;
@@ -39,7 +42,7 @@ public class Token {
 	 * 
 	 * @return the id
 	 */
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
@@ -49,7 +52,7 @@ public class Token {
 	 * @param id
 	 *            the id to set
 	 */
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -77,7 +80,7 @@ public class Token {
 	 * 
 	 * @return the time to live.
 	 */
-	public Long getExpiringAt() {
+	public Long getTimeToLive() {
 		return timeToLive;
 	}
 

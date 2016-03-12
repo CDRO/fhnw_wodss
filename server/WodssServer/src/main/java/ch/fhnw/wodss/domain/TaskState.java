@@ -5,12 +5,12 @@ public enum TaskState {
 	/**
 	 * A task to do.
 	 */
-	TO_DO,
+	TODO,
 
 	/**
 	 * A task in progress.
 	 */
-	IN_PROGRESS,
+	DOING,
 
 	/**
 	 * A task that has been completed.

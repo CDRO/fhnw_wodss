@@ -25,7 +25,7 @@ public class User {
 	private boolean isValidated;
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "assignee")
 	private List<Task> tasks;
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Board> boards;
 
 	User() {

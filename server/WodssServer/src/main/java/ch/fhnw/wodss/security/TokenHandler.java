@@ -12,7 +12,7 @@ public class TokenHandler {
 	/**
 	 * Cache.
 	 */
-	private static Map<Long, Token> cache = new HashMap<>();
+	private static Map<String, Token> cache = new HashMap<>();
 	
 	
 	private TokenHandler(){
@@ -25,11 +25,11 @@ public class TokenHandler {
 		return token;
 	}
 	
-	public static void unregister(Long tokenId){
+	public static void unregister(String tokenId){
 		cache.remove(tokenId);
 	}
 	
-	public static boolean validate(Long tokenId){
+	public static boolean validate(String tokenId){
 		Token token = cache.get(tokenId);
 		if(token == null){
 			return false;

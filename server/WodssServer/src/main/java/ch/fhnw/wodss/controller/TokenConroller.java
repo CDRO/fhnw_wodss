@@ -2,7 +2,7 @@ package ch.fhnw.wodss.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,16 +13,16 @@ import ch.fhnw.wodss.security.TokenHandler;
 @RestController
 public class TokenConroller {
 	
-	@RequestMapping(path = "/token", method = RequestMethod.POST)
+	@RequestMapping(path = "/token", method = RequestMethod.GET)
 	public ResponseEntity<Token> createToken() {
 		 Token token = TokenHandler.register();
 		 return new ResponseEntity<>(token, HttpStatus.OK);
 	}
 	
-	@RequestMapping(path = "/token/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<String> deleteToken(@PathVariable Long id) {
-		TokenHandler.unregister(id);
-		return new ResponseEntity<>("Unregistered token.", HttpStatus.OK);
+	@RequestMapping(path = "/token", method = RequestMethod.DELETE)
+	public ResponseEntity<Boolean> deleteToken(@RequestHeader(value = "x-session-token") String tokenId) {
+		TokenHandler.unregister(tokenId);
+		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
 	
 }

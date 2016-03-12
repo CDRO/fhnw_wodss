@@ -38,7 +38,7 @@ public class TaskFactory {
 		task.setBoard(board);
 		task.setDescription(description);
 		task.setCreationDate(new Date());
-		task.setState(TaskState.TO_DO);
+		task.setState(TaskState.TODO);
 		return task;
 	}
 
@@ -60,7 +60,7 @@ public class TaskFactory {
 		task.setDescription(description);
 		task.setAssignee(assignee);
 		task.setCreationDate(new Date());
-		task.setState(TaskState.TO_DO);
+		task.setState(TaskState.TODO);
 		return task;
 	}
 

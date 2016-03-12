@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import ch.fhnw.wodss.domain.Task;
+import ch.fhnw.wodss.domain.TaskState;
 import ch.fhnw.wodss.repository.TaskRepository;
 
 @Component
@@ -21,6 +22,9 @@ public class TaskService {
 	}
 
 	public Task saveTask(Task task){
+		if(task.getState() == null){
+			task.setState(TaskState.TODO);
+		}
 		return taskRepository.save(task);
 	}
 	
