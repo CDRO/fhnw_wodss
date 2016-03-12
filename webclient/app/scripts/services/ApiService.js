@@ -8,22 +8,6 @@
 
   var ApiService = function (configService, $http) {
 
-    // this user is logged in
-    var currentUser = {
-      email: null,
-      token: null
-    };
-
-    var helpers = {};
-
-    this.getCurrentUser = function() {
-      return currentUser.email;
-    };
-
-    this.setCurrentUser = function (newCurrentUser) {
-      currentUser = angular.copy(newCurrentUser);
-    };
-
     /**
      * Receive some data from backend
      * @param collection/resource i. e. boards or tasks
@@ -32,11 +16,9 @@
      */
     this.query = function (collection, parameters) {
       parameters = parameters || {};
-      var headers = {'Authorization': helpers.encodeBasicAuth()};
       var uri = configService.baseUrl + collection;
       return $http(
-        {method: "GET", url: uri, params: parameters, headers: headers,
-          cache: false}
+        {method: "GET", url: uri, params: parameters, cache: false}
       );
     };
 
@@ -49,10 +31,8 @@
      */
     this.queryById = function (collection, id, parameters) {
       parameters = parameters || {};
-      var headers = {'Authorization': helpers.encodeBasicAuth()};
       var uri = configService.baseUrl + collection + '/' + id;
-      return $http({method: "GET", url: uri, params: parameters, headers: headers,
-        cache: false});
+      return $http({method: "GET", url: uri, params: parameters, cache: false});
     };
 
     /**
@@ -63,9 +43,8 @@
      */
     this.createObject = function (collection, object) {
       var uri = configService.baseUrl + collection;
-      var headers = {'Authorization': helpers.encodeBasicAuth()};
       return $http({method: "POST", url: uri, data:
-        JSON.stringify(object), cache: false, headers: headers});
+        JSON.stringify(object), cache: false});
     };
 
     /**
@@ -76,9 +55,8 @@
      */
     this.updateObject = function (collection, object) {
       var uri = configService.baseUrl + collection + "/" + object.id;
-      var headers = {'Authorization': helpers.encodeBasicAuth()};
       return $http({method: "PUT", url: uri, data:
-        JSON.stringify(object), cache: false, headers: headers});
+        JSON.stringify(object), cache: false});
     };
 
     /**
@@ -89,28 +67,20 @@
      */
     this.deleteObject = function (collection, object) {
       var uri = configService.baseUrl + collection + "/" +object.id;
-      var headers =  {
+      /*var headers =  {
         'Authorization': helpers.encodeBasicAuth(),
         'Content-Type': 'application/json'
-      };
-      return $http({method: "DELETE", url: uri, cache: false, headers: headers, data: JSON.stringify(object)});
+      };*/
+      return $http({method: "DELETE", url: uri, cache: false, /*headers: headers,*/ data: JSON.stringify(object)});
     };
 
     /**
      * Add Basic Authentication to the Header
      * @returns {string}
      */
-    helpers.encodeBasicAuth = function () {
+    /*helpers.encodeBasicAuth = function () {
       return 'Basic ' + btoa(currentUser.email + ':' + currentUser.token);
-    };
-
-    /* service.createSessionByEMail = function (email, password) {
-     return service.apiRequest('auth', 'POST', null, {
-     'type': 'EMAIL',
-     'email': email,
-     'password': password
-     });
-     };*/
+    };*/
   };
 
   ApiService.$inject = ['ConfigService', '$http'];

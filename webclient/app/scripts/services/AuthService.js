@@ -5,7 +5,8 @@
 
   var module = angular.module('services');
 
-  var AuthService = function (service) {
+  var AuthService = function (service, config) {
+
     /**
      * Login a user
      * @param email from account
@@ -18,7 +19,7 @@
         'password': password}
       ).then(function(response){
         // Save token for future requests
-        service.setCurrentUser(response.data);
+        config.setCurrentUser(response.data);
       });
     };
 
@@ -27,7 +28,7 @@
      */
     this.logout = function(){
       service.deleteObject('token', service.getCurrentUser());
-      service.setCurrentUser({email: null,
+      config.setCurrentUser({email: null,
         token: null});
     };
 
@@ -37,15 +38,16 @@
      * @param password
      */
     this.registerAccount = function (email, password) {
-      return service.createObject('user', {
+      service.createObject('user', {
         'email': email,
         'password': password
       });
+      // Need to be verified first
     };
   };
 
   // Inject Dependencies
-  AuthService.$inject = ['ApiService'];
+  AuthService.$inject = ['ApiService', 'ConfigService'];
 
   // Export
   module.service('AuthService', AuthService);

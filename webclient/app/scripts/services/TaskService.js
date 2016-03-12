@@ -25,11 +25,14 @@
     ];
 
     /**
-     * Get the boards of the logged in user
+     * Get the tasks of the logged in user
      */
     this.getAll = function(){
-      //return service.query('boards');
-      return dummyData;
+      return service.query('tasks');
+    };
+
+    this.getByBoard = function(boardId){
+        return service.query('tasks', {boardId: boardId});
     };
 
     /**
