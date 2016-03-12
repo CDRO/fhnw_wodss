@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>ToDo Application</title>
+    <title>ToDooooo</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -21,29 +21,29 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="header">
+    <div class="header" ng-controller="HeaderCtrl">
       <div class="navbar navbar-default" role="navigation">
         <div class="container">
-          <div class="navbar-header">
+          <div class="navbar-header" >
 
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
-              <span class="sr-only">Navigation</span>
+              <span class="sr-only">{{'app.navigation' | translate}}</span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand" href="#/">ToDo dideli done</a>
+            <a class="navbar-brand" ui-sref="home">{{'app.title' | translate}}</a>
           </div>
 
-          <div class="collapse navbar-collapse" id="js-navbar-collapse" ng-controller="HeaderCtrl">
+          <div class="collapse navbar-collapse" id="js-navbar-collapse">
 
             <ul class="nav navbar-nav">
-              <li ng-class="{ active: isActive('/home')}"><a ui-sref="home">Home</a></li>
-              <li ng-class="{ active: isActive('/boards')}"><a ui-sref="boards">Boards</a></li>
-              <li ng-class="{active: isActive('/tasks')}"><a ui-sref="tasks({})">Tasks</a></li>
-              <li ng-class="{ active: isActive('/register')}"><a ui-sref="register">Registrieren</a></li>
-              <li ng-class="{ active: isActive('/login')}"><a ui-sref="login">Login</a></li>
+              <li ng-class="{ active: isActive('/home')}"><a ui-sref="home">{{'nav.home' | translate}}</a></li>
+              <li ng-class="{ active: isActive('/boards')}"><a ui-sref="boards">{{'nav.boards' | translate}}</a></li>
+              <li ng-class="{active: isActive('/tasks')}"><a ui-sref="tasks({})">{{'nav.tasks' | translate}}</a></li>
+              <li ng-class="{ active: isActive('/register')}"><a ui-sref="register">{{'nav.register' | translate}}</a></li>
+              <li ng-class="{ active: isActive('/login')}"><a ui-sref="login">{{'nav.login' | translate}}</a></li>
             </ul>
           </div>
         </div>
@@ -56,7 +56,7 @@
 
     <div class="footer">
       <div class="container">
-        <p class="text-center"><span class="glyphicon glyphicon-star"></span> Let's <b>do</b> the work </p>
+        <p class="text-center"><span class="glyphicon glyphicon-star"></span> {{'app.footer' | translate}} </p>
       </div>
     </div>
 
@@ -84,6 +84,7 @@
     <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/angular-translate/angular-translate.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -96,6 +97,7 @@
         <script src="scripts/services/TaskService.js"></script>
         <script src="scripts/services/NotAuthorizedInterceptor.js"></script>
         <script src="scripts/services/ServerErrorInterceptor.js"></script>
+        <script src="scripts/i18n/de/translations.js"></script>
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/login.js"></script>

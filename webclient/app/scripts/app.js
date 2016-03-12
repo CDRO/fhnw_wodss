@@ -17,10 +17,11 @@ angular
     'ui.router',
     'ui.bootstrap',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'pascalprecht.translate'
   ])
-  .config(function ($stateProvider, $urlRouterProvider) {
-    // For any unmatched url, redirect to /state1
+  .config(function ($stateProvider, $urlRouterProvider, $translateProvider, translations_DE) {
+    // For any unmatched url, redirect to home
     $urlRouterProvider.otherwise("/home");
 
     $stateProvider
@@ -66,6 +67,13 @@ angular
         controller: "ErrorCtrl",
         controllerAs: "error"
       });
+
+      // Add Translations
+      $translateProvider
+        .translations('de', translations_DE)
+        .preferredLanguage('de')
+        .useSanitizeValueStrategy('sanitize');
+
   }).controller('HeaderCtrl', function ($scope, $location) {
     $scope.isActive = function (viewLocation) {
       return $location.path().indexOf(viewLocation) == 0;

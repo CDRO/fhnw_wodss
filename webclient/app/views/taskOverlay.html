@@ -5,21 +5,21 @@
 
 <div class="modal-body">
   <div class="form-group" ng-class="{'has-error': form.title.$dirty && form.title.$error.required}">
-    <label for="title">Bezeichnung</label>
+    <label for="title" translate="tasks.form.title"></label>
     <input type="input" name="title" id="title" class="form-control" ng-model="model.title" required />
-    <span ng-show="form.title.$dirty && form.title.$error.required" class="help-block">Bitte geben Sie einen Task Titel an</span>
+    <span ng-show="form.title.$dirty && form.title.$error.required" class="help-block" translate="tasks.form.requiredTitle"></span>
   </div>
   <div class="form-group">
-    <label for="person">Person</label>
+    <label for="person" translate="tasks.form.person">Person</label>
     <input type="input" name="person" id="person" class="form-control" ng-model="model.person" />
   </div>
   <div class="form-group">
-    <label for="attachment">Attachments</label>
+    <label for="attachment" translate="tasks.form.attachment"></label>
     <input type="input" name="attachment" id="attachment" class="form-control" ng-model="model.attachment" />
   </div>
 </form>
 </div>
 
 <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="ok(model)">Erstellen</button>
+    <button class="btn btn-primary" ng-click="ok(model)" trasnlate="btn.create"></button>
 </div>
