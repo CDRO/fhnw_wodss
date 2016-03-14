@@ -12,6 +12,7 @@ public class TokenHandler {
 	/**
 	 * Cache.
 	 */
+	// TODO map tokens to users.
 	private static Map<String, Token> cache = new HashMap<>();
 	
 	

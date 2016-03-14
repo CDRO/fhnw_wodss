@@ -20,15 +20,19 @@ public class TaskIntTest extends AbstractIntegrationTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testTaskAuthorizedCRUD() throws Exception {
-
+		
+		JSONObject json = new JSONObject();
+		json.put("email", "email@fhnw.ch");
+		json.put("password", "password");
+		
 		// REQUEST TOKEN
-		Token token = doGet("http://localhost:8080/token", null, Token.class);
+		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
 
 		// CREATE
-		JSONObject json = new JSONObject();
+		json.clear();
 		json.put("description", "TestTask");
 
-		Task task = doPost("http://localhost:8080/task", token, json, Task.class);
+		Task task = doMulitPartPost("http://localhost:8080/task", token, json, Task.class);
 		Assert.assertEquals(1, task.getId().intValue());
 		Task taskFromDb = taskService.getById(task.getId());
 		Assert.assertEquals("TestTask", taskFromDb.getDescription());
@@ -43,7 +47,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		json = new JSONObject();
 		json.put("id", task.getId());
 		json.put("description", "TestTask2");
-		task = doPut("http://localhost:8080/task/{0}", token, json, Task.class, task.getId());
+		task = doMulitPartPut("http://localhost:8080/task/{0}", token, json, Task.class, task.getId());
 		taskFromDb = taskService.getById(task.getId());
 		Assert.assertEquals("TestTask2", taskFromDb.getDescription());
 		Assert.assertEquals("TestTask2", task.getDescription());

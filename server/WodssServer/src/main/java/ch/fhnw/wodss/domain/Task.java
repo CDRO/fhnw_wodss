@@ -1,12 +1,17 @@
 package ch.fhnw.wodss.domain;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -25,9 +30,12 @@ public class Task {
 	private Date dueDate;
 	private Date doneDate;
 	private String description;
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+	private List<Attachment> attachments;
 	
 	Task(){
 		super();
+		setAttachments(new LinkedList<>());
 	}
 	
 	/**
@@ -203,7 +211,22 @@ public class Task {
 				append(dueDate). 
 				append(doneDate). 
 				append(description). 
+				append(attachments).
 				toHashCode();
+	}
+
+	/**
+	 * @return the attachments
+	 */
+	public List<Attachment> getAttachments() {
+		return attachments;
+	}
+
+	/**
+	 * @param attachments the attachments to set
+	 */
+	public void setAttachments(List<Attachment> attachments) {
+		this.attachments = attachments;
 	}
 
 }

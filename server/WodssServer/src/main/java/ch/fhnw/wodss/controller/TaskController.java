@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import ch.fhnw.wodss.domain.Board;
 import ch.fhnw.wodss.domain.Task;
@@ -40,8 +42,8 @@ public class TaskController {
 
 	@RequestMapping(path = "/task", method = RequestMethod.POST)
 	public ResponseEntity<Task> createTask(@RequestHeader(value = "x-session-token") String tokenId,
-			@RequestBody Task task) {
-		Task savedTask = taskService.saveTask(task);
+			@RequestPart("task") Task task, @RequestPart(name = "attachment", required = false) MultipartFile file) {
+		Task savedTask = taskService.saveTask(task, file);
 		return new ResponseEntity<>(savedTask, HttpStatus.OK);
 	}
 
@@ -54,8 +56,9 @@ public class TaskController {
 
 	@RequestMapping(path = "/task/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Task> updateTask(@RequestHeader(value = "x-session-token") String tokenId,
-			@RequestBody Task task, @PathVariable Integer id) {
-		Task updatedTask = taskService.saveTask(task);
+			@RequestPart("task") Task task, @PathVariable Integer id,
+			@RequestPart(name = "attachment", required = false) MultipartFile file) {
+		Task updatedTask = taskService.saveTask(task, file);
 		return new ResponseEntity<>(updatedTask, HttpStatus.OK);
 	}
 

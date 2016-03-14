@@ -21,23 +21,26 @@ public class UserIntTest extends AbstractIntegrationTest {
 	@Test
 	public void testUserAuthorizedCRUD() throws Exception {
 
+		JSONObject json = new JSONObject();
+		json.put("email", "email@fhnw.ch");
+		json.put("password", "password");
+		
 		// REQUEST TOKEN
-		Token token = doGet("http://localhost:8080/token", null, Token.class);
+		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
 
 		// CREATE
-		JSONObject json = new JSONObject();
+		json.clear();
 		json.put("name", "TestUser");
 
 		User user = doPost("http://localhost:8080/user", token, json, User.class);
-		Assert.assertEquals(1, user.getId().intValue());
 		User userFromDb = userService.getById(user.getId());
 		Assert.assertEquals("TestUser", userFromDb.getName());
+		Assert.assertNotNull(user.getId());
 
 		// READ
 		user = doGet("http://localhost:8080/user/{0}", token, User.class, userFromDb.getId());
 		Assert.assertNotNull(user);
 		Assert.assertEquals("TestUser", user.getName());
-		Assert.assertEquals(1, user.getId().intValue());
 
 		// UPDATE
 		json = new JSONObject();
@@ -47,7 +50,6 @@ public class UserIntTest extends AbstractIntegrationTest {
 		userFromDb = userService.getById(user.getId());
 		Assert.assertEquals("TestUser2", userFromDb.getName());
 		Assert.assertEquals("TestUser2", user.getName());
-		Assert.assertEquals(1, user.getId().intValue());
 
 		// DELETE
 		doDelete("http://localhost:8080/user/{0}", token, Boolean.class, user.getId());
@@ -71,8 +73,8 @@ public class UserIntTest extends AbstractIntegrationTest {
 		try {
 			// CREATE
 			doPost("http://localhost:8080/user", token, json, User.class);
-			Assert.fail();
 		} catch (IOException e) {
+			Assert.fail();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Assert.fail();

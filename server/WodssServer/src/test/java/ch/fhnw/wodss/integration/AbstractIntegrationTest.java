@@ -6,6 +6,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.MessageFormat;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.json.simple.JSONObject;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
@@ -117,7 +126,52 @@ public abstract class AbstractIntegrationTest {
 		T readValue = objectMapper.readValue(is, type);
 
 		return readValue;
-		
+
 	}
 
+	protected <T> T doMulitPartPost(String url, Token token, JSONObject json, Class<T> type, Object... urlParameters)
+			throws Exception {
+		
+		HttpClient httpClient = HttpClientBuilder.create().build();
+
+		MultipartEntityBuilder mpBuilder = MultipartEntityBuilder.create();
+		mpBuilder.addTextBody("task", json.toJSONString(), ContentType.APPLICATION_JSON);
+		HttpEntity entity = mpBuilder.build();
+
+		String formattedUrl = MessageFormat.format(url, urlParameters);
+
+		HttpPost httpPost = new HttpPost(formattedUrl);
+		httpPost.setHeader("x-session-token", token.getId());
+		httpPost.setEntity(entity);
+		HttpResponse response = httpClient.execute(httpPost);
+		HttpEntity result = response.getEntity();
+		
+		InputStream is = result.getContent();
+		T readValue = objectMapper.readValue(is, type);
+		return readValue;
+
+	}
+	
+	protected <T> T doMulitPartPut(String url, Token token, JSONObject json, Class<T> type, Object... urlParameters)
+			throws Exception {
+		
+		HttpClient httpClient = HttpClientBuilder.create().build();
+
+		MultipartEntityBuilder mpBuilder = MultipartEntityBuilder.create();
+		mpBuilder.addTextBody("task", json.toJSONString(), ContentType.APPLICATION_JSON);
+		HttpEntity entity = mpBuilder.build();
+
+		String formattedUrl = MessageFormat.format(url, urlParameters);
+
+		HttpPut httpPut = new HttpPut(formattedUrl);
+		httpPut.setHeader("x-session-token", token.getId());
+		httpPut.setEntity(entity);
+		HttpResponse response = httpClient.execute(httpPut);
+		HttpEntity result = response.getEntity();
+		
+		InputStream is = result.getContent();
+		T readValue = objectMapper.readValue(is, type);
+		return readValue;
+
+	}
 }

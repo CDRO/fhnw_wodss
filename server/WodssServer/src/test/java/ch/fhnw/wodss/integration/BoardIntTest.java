@@ -21,11 +21,15 @@ public class BoardIntTest extends AbstractIntegrationTest {
 	@Test
 	public void testBoardAuthorizedCRUD() throws Exception {
 
+		JSONObject json = new JSONObject();
+		json.put("email", "email@fhnw.ch");
+		json.put("password", "password");
+		
 		// REQUEST TOKEN
-		Token token = doGet("http://localhost:8080/token", null, Token.class);
+		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
 
 		// CREATE
-		JSONObject json = new JSONObject();
+		json.clear();
 		json.put("title", "TestBoard");
 
 		Board board = doPost("http://localhost:8080/board", token, json, Board.class);

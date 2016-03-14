@@ -13,7 +13,7 @@ class TokenFactory {
 	/**
 	 * The time to live.
 	 */
-	private static final long TTL = 360000;
+	private static final long TTL = 3600000;
 
 	private static TokenFactory instance;
 
