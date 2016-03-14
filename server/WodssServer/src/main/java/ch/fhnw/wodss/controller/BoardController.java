@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -16,6 +17,7 @@ import ch.fhnw.wodss.domain.Board;
 import ch.fhnw.wodss.service.BoardService;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:9000")
 public class BoardController {
 
 	@Autowired
