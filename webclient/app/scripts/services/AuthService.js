@@ -38,7 +38,7 @@
      * @param password
      */
     this.registerAccount = function (email, password) {
-      service.createObject('user', {
+      return service.createObject('user', {
         'email': email,
         'password': password
       });
