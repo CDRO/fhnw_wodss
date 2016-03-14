@@ -21,6 +21,9 @@ public class TokenHandler {
 		
 	public static Token register(){
 		Token token = TokenFactory.getInstance().createToken();
+		if(cache.containsKey(token.getId())){
+			return register();
+		}
 		cache.put(token.getId(), token);
 		return token;
 	}
