@@ -24,8 +24,7 @@ public class UserController {
 	private UserService userService;
 
 	@RequestMapping(path = "/users", method = RequestMethod.GET)
-	public ResponseEntity<List<User>> getAllUsers(@RequestHeader(value = "x-session-token") String tokenId,
-			@RequestBody User user) {
+	public ResponseEntity<List<User>> getAllUsers(@RequestHeader(value = "x-session-token") String tokenId) {
 		List<User> users = userService.getAll();
 		return new ResponseEntity<>(users, HttpStatus.OK);
 	}

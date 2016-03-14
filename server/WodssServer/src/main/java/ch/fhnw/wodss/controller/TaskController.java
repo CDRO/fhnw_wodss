@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import ch.fhnw.wodss.domain.Board;
 import ch.fhnw.wodss.domain.Task;
 import ch.fhnw.wodss.service.TaskService;
 
@@ -25,7 +26,7 @@ public class TaskController {
 
 	@RequestMapping(path = "/tasks", method = RequestMethod.GET)
 	public ResponseEntity<List<Task>> getAllTasks(@RequestHeader(value = "x-session-token") String tokenId,
-			@RequestBody Task task) {
+			@RequestBody(required = false) Board board) {
 		List<Task> tasks = taskService.getAll();
 		return new ResponseEntity<>(tasks, HttpStatus.OK);
 	}

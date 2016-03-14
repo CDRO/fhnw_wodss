@@ -24,8 +24,7 @@ public class BoardController {
 	private BoardService boardService;
 
 	@RequestMapping(path = "/boards", method = RequestMethod.GET)
-	public ResponseEntity<List<Board>> getAllBoards(@RequestHeader(value = "x-session-token") String tokenId,
-			@RequestBody Board board) {
+	public ResponseEntity<List<Board>> getAllBoards(@RequestHeader(value = "x-session-token") String tokenId) {
 		List<Board> boards = boardService.getAll();
 		return new ResponseEntity<>(boards, HttpStatus.OK);
 	}
