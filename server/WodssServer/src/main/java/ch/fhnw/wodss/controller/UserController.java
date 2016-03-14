@@ -37,8 +37,7 @@ public class UserController {
 	}
 
 	@RequestMapping(path = "/user", method = RequestMethod.POST)
-	public ResponseEntity<User> createUser(@RequestHeader(value = "x-session-token") String tokenId,
-			@RequestBody User user) {
+	public ResponseEntity<User> createUser(@RequestBody User user) {
 		User savedUser = userService.saveUser(user);
 		return new ResponseEntity<>(savedUser, HttpStatus.OK);
 	}
