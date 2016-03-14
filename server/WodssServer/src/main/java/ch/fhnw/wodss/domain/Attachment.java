@@ -6,13 +6,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.springframework.beans.factory.annotation.Value;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Attachment {
 	
-	@Value("${wodss.attachment.root.path}")
-	private String attachmentRootPath;
+	private static final String ATTACHMENT_ROOT_PATH = "target";
 
 	/**
 	 * The id of the attachment. A UUID.
@@ -24,6 +24,11 @@ public class Attachment {
 	 * The name of the document for display layer.
 	 */
 	private String documentName;
+	
+	/**
+	 * The file extension.
+	 */
+	private String extension;
 	
 	Attachment(){
 		super();
@@ -46,12 +51,14 @@ public class Attachment {
 	/**
 	 * @return the file that can be determined via id.
 	 */
+	@JsonIgnore
 	public File getFile(){
 		
 		StringBuilder sb = new StringBuilder();
 		
 		// append attachments root path
-		sb.append(attachmentRootPath);
+		sb.append(ATTACHMENT_ROOT_PATH);
+		sb.append(File.separator);
 		
 		// get first part of the UUID
 		String firstPart = id.split("-")[0];
@@ -103,6 +110,20 @@ public class Attachment {
 				append(id). 
 				append(documentName). 
 				toHashCode();
+	}
+
+	/**
+	 * @return the extension
+	 */
+	public String getExtension() {
+		return extension;
+	}
+
+	/**
+	 * @param extension the extension to set
+	 */
+	public void setExtension(String extension) {
+		this.extension = extension;
 	}
 	
 }

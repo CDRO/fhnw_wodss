@@ -37,7 +37,14 @@ public class TaskService {
 			task.setState(TaskState.TODO);
 		}
 		if (file != null) {
-			Attachment anAttachment = AttachmentFactory.getInstance().createAttachment();
+			// get extension
+			String extension = null;
+			String[] split = file.getOriginalFilename().split("\\.");
+			if(split.length > 0){
+				extension = split[split.length - 1];
+			}
+			
+			Attachment anAttachment = AttachmentFactory.getInstance().createAttachment(extension);
 			anAttachment.setDocumentName(file.getOriginalFilename());
 
 			// add attachment to task when saving to file system was successful.

@@ -30,7 +30,7 @@ public class Task {
 	private Date dueDate;
 	private Date doneDate;
 	private String description;
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Attachment> attachments;
 	
 	Task(){

@@ -28,13 +28,25 @@ public class AttachmentFactory {
 	 * @return the attachment to create.
 	 */
 	public Attachment createAttachment() {
+		return createAttachment(null);
+	}
+	
+	/**
+	 * Creates an attachment;
+	 * 
+	 * @return the attachment to create.
+	 */
+	public Attachment createAttachment(String extension) {
 		Attachment attachment = new Attachment();
 		String id = UUID.randomUUID().toString();
 		attachment.setId(id);
 		if(attachment.getFile().exists()){
 			// in the seldom case the
 			// generated id is already reserved.
-			return createAttachment();
+			return createAttachment(extension);
+		}
+		if(extension != null){
+			attachment.setExtension(extension);
 		}
 		return attachment;
 	}
