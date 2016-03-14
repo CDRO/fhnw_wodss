@@ -16,7 +16,7 @@
     // Represents the logged in user
     var currentUser = {
       email: "d.augsburger@gmx.ch",
-      token: "d643053d-4759-44dc-b7d3-144f6b72a3d9"
+      token: "c410d717-09ab-4bc4-8e45-c0b6ee023988"
     };
 
     this.getCurrentUser = function() {

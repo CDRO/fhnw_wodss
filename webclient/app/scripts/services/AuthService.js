@@ -5,7 +5,7 @@
 
   var module = angular.module('services');
 
-  var AuthService = function (service, config) {
+  var AuthService = function (service, config, $log) {
 
     /**
      * Login a user
@@ -13,13 +13,15 @@
      * @param password for account
      */
     this.login = function(email, password){
-      return service.createObject('token', {
-        'type': 'EMAIL',
+      return service.createObject('login', {
         'email': email,
-        'password': password}
-      ).then(function(response){
+        'password': password
+      }).then(function(response){
         // Save token for future requests
         config.setCurrentUser(response.data);
+      },
+      function(error){
+        config.setCurrentUser({email: null, token: null});
       });
     };
 
@@ -27,9 +29,12 @@
      * Logout the user
      */
     this.logout = function(){
-      service.deleteObject('token', service.getCurrentUser());
-      config.setCurrentUser({email: null,
-        token: null});
+      service.deleteObject('logout', service.getCurrentUser()).then(function(response){
+        config.setCurrentUser({email: null, token: null});
+      }, function(error){
+        $log.error("Log out was not possible cause %s", response);
+      });
+
     };
 
     /**
@@ -47,7 +52,7 @@
   };
 
   // Inject Dependencies
-  AuthService.$inject = ['ApiService', 'ConfigService'];
+  AuthService.$inject = ['ApiService', 'ConfigService', '$log'];
 
   // Export
   module.service('AuthService', AuthService);

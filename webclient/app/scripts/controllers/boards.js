@@ -9,8 +9,12 @@
  */
 
 var boardController = function(boardService, $scope) {
+  var self = this;
+  this.list = [];
 
-  this.list = boardService.getAll();
+  boardService.getAll(this.list).then(function(data){
+      self.list = data;
+  });
 
   this.add = function(){
     boardService.add({title: $scope.title});
