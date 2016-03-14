@@ -7,29 +7,20 @@
 
   var BoardService = function (service) {
 
-    var dummyData = [{
-      id: 23,
-      title: "Mein Board"
-    },{
-      id: 25,
-      title: "Zweite Board"
-    }
-    ];
-
     /**
      * Get the boards of the logged in user
      */
     this.getAll = function(){
-      //return service.query('boards');
-      return dummyData;
+        return service.query('boards').then(function(response){
+            return response.data;
+        });
     };
 
     /**
      * Save the specified Board
      */
     this.add = function(board){
-      //return service.createObject('board', board);
-      dummyData.push(board);
+      return service.createObject('board', board);
     };
 
       /**

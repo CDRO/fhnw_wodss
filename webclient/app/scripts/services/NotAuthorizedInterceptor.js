@@ -12,7 +12,7 @@
         if(response.status === 401){
           //$state.go('login');
           $log("Not logged in yet");
-          return $q.reject(response);
+          return response;
         }
         else{
           return $q.reject(response);

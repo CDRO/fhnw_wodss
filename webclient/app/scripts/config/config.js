@@ -10,13 +10,13 @@
   var Configuration = function(){
 
     // Declare the backend, with an ending slash
-    this.baseUrl = 'http://localhost:9000/';
+    this.baseUrl = 'http://localhost:8080/';
     //this.imageBaseUrl = this.baseUrl + 'image/';
 
     // Represents the logged in user
     var currentUser = {
       email: "d.augsburger@gmx.ch",
-      token: "asdf-qwer-1234-51324"
+      token: "c410d717-09ab-4bc4-8e45-c0b6ee023988"
     };
 
     this.getCurrentUser = function() {
