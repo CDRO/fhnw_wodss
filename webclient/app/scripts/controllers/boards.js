@@ -8,7 +8,7 @@
  * Controller of the angularWebclientApp
  */
 
-var boardController = function(boardService, $scope) {
+var boardController = function(boardService) {
   var self = this;
   this.list = [];
 
@@ -17,7 +17,9 @@ var boardController = function(boardService, $scope) {
   });
 
   this.add = function(){
-    boardService.add({title: $scope.title});
+    boardService.add({title: self.title}).then(function(data){
+        self.list.push(data);
+    });
   };
 
   this.update = function(board){
@@ -29,7 +31,7 @@ var boardController = function(boardService, $scope) {
   }
 };
 
-boardController.$inject = ['BoardService', '$scope'];
+boardController.$inject = ['BoardService'];
 
 angular.module('angularWebclientApp').controller('BoardsCtrl', boardController);
 

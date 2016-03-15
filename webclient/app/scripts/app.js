@@ -51,7 +51,7 @@ angular
       })
       .state('tasksFromBoard', {
         url: "/tasks/board/:boardId",
-        templateUrl: 'views/boards/boardOverview.html',
+        templateUrl: 'views/tasks.html',
         controller: 'TasksCtrl',
         controllerAs: 'tasks'
       })

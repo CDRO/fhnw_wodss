@@ -20,7 +20,9 @@
      * Save the specified Board
      */
     this.add = function(board){
-      return service.createObject('board', board);
+      return service.createObject('board', board).then(function(response){
+        return response.data;
+      });
     };
 
       /**

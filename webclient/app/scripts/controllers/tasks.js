@@ -10,15 +10,25 @@
 var module = angular.module('angularWebclientApp');
 
 var taskController = function(taskService, params, $uibModal){
+  var self = this;
   this.list = [];
+
+  this.selectedBoard = params.boardId;
+
   if(params.boardId){
-    this.list = taskService.getByBoard(params.boardId);
+    taskService.getByBoard(params.boardId).then(function(data){
+        self.list = data;
+    });
   }else{
-    this.list = taskService.getAll();
+    taskService.getAll().then(function(data){
+      self.list = data;
+    });
   }
 
   this.add = function(task){
-      taskService.add(task);
+      taskService.add(task).then(function(data){
+          self.list.push(data);
+      });
   };
 
   this.remove = function(task){

@@ -67,20 +67,8 @@
      */
     this.deleteObject = function (collection, object) {
       var uri = configService.baseUrl + collection + "/" +object.id;
-      /*var headers =  {
-        'Authorization': helpers.encodeBasicAuth(),
-        'Content-Type': 'application/json'
-      };*/
-      return $http({method: "DELETE", url: uri, cache: false, /*headers: headers,*/ data: JSON.stringify(object)});
+      return $http({method: "DELETE", url: uri, cache: false, data: JSON.stringify(object)});
     };
-
-    /**
-     * Add Basic Authentication to the Header
-     * @returns {string}
-     */
-    /*helpers.encodeBasicAuth = function () {
-      return 'Basic ' + btoa(currentUser.email + ':' + currentUser.token);
-    };*/
   };
 
   ApiService.$inject = ['ConfigService', '$http'];
