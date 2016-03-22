@@ -1,25 +1,43 @@
 <div class="modal-header">
     <button type="button" class="close" ng-click="cancel()">&times;</button>
-    <h2>Task erstellen</h2>
+    <h2 ng-show="isNew" translate="tasks.createTitle"></h2>
+    <h2 ng-show="!isNew" translate="tasks.updateTitle"></h2>
 </div>
 
 <div class="modal-body">
+  <!-- selected Board -->
+  <div class="form-group">
+    <select name="boardSelection" id="boardSelect" ng-model="model.boardId">
+      <option ng-repeat="board in boards" ng-selected="board.selected" value="{{board.id}}">{{board.title}}</option>
+    </select>
+  </div>
+
+  <!-- title -->
   <div class="form-group" ng-class="{'has-error': form.title.$dirty && form.title.$error.required}">
     <label for="title" translate="tasks.form.title"></label>
     <input type="input" name="title" id="title" class="form-control" ng-model="model.title" required />
     <span ng-show="form.title.$dirty && form.title.$error.required" class="help-block" translate="tasks.form.requiredTitle"></span>
   </div>
+
+  <!-- Person -->
   <div class="form-group">
     <label for="person" translate="tasks.form.person">Person</label>
+    <select name="peopleSelection" id="peopleSelect" ng-model="model.person">
+      <option ng-repeat="person in people" value="{{person.id}}">{{person.name}}</option>
+    </select>
     <input type="input" name="person" id="person" class="form-control" ng-model="model.person" />
   </div>
+
+  <!-- Attachment -->
   <div class="form-group">
     <label for="attachment" translate="tasks.form.attachment"></label>
     <input type="input" name="attachment" id="attachment" class="form-control" ng-model="model.attachment" />
   </div>
+
 </form>
 </div>
 
+<!-- Buttons -->
 <div class="modal-footer">
     <button class="btn btn-primary" ng-click="ok(model)" translate="btn.create"></button>
 </div>

@@ -14,6 +14,8 @@
       }
     },
     tasks: {
+      createTitle: "Task erstellen",
+      updateTitle: "Task updaten",
       form: {
           title: "Bezeichnung",
           requiredTitle: "Bitte geben Sie einen Task Titel an",
