@@ -45,7 +45,7 @@ public class TaskController {
 	// TODO: upload multiple attachment.
 	@RequestMapping(path = "/task", method = RequestMethod.POST)
 	public ResponseEntity<Task> createTask(@RequestHeader(value = "x-session-token") Token token,
-			@RequestPart("task") Task task, @RequestPart(name = "file", required = false) List<MultipartFile> files) {
+			@RequestPart("info") Task task, @RequestPart(name = "file", required = false) List<MultipartFile> files) {
 		Task savedTask = taskService.saveTask(task, files);
 		return new ResponseEntity<>(savedTask, HttpStatus.OK);
 	}
@@ -62,7 +62,7 @@ public class TaskController {
 	// TODO: how to delete a single attachment --> attachment resource with delete
 	@RequestMapping(path = "/task/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Task> updateTask(@RequestHeader(value = "x-session-token") Token token,
-			@RequestPart("task") Task task, @PathVariable Integer id,
+			@RequestPart("info") Task task, @PathVariable Integer id,
 			@RequestPart(name = "file", required = false) List<MultipartFile> files) {
 		Task updatedTask = taskService.saveTask(task, files);
 		return new ResponseEntity<>(updatedTask, HttpStatus.OK);

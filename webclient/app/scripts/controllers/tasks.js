@@ -90,7 +90,7 @@ var taskController = function(taskService, params, $uibModal){
   this.create = function(){
     var selectedBoard = {};
     if(self.selectedBoard){
-      selectedBoard.boardId = self.selectedBoard;
+      selectedBoard.board = self.selectedBoard;
     }
 
     openModal(true, selectedBoard);

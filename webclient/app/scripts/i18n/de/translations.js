@@ -18,8 +18,8 @@
       updateTitle: "Task updaten",
       form: {
           boardSelection: "Board",
-          title: "Bezeichnung",
-          requiredTitle: "Bitte geben Sie einen Task Titel an",
+          description: "Bezeichnung",
+          requiredDescription: "Bitte geben Sie einen Task Beschreibung an",
           person: "Person",
           attachment: "Anhang",
           addAttachment: "Hinzufügen"
