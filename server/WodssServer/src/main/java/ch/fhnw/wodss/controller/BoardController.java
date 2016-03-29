@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import ch.fhnw.wodss.domain.Board;
+import ch.fhnw.wodss.security.Token;
 import ch.fhnw.wodss.service.BoardService;
 
 @RestController
@@ -24,34 +25,34 @@ public class BoardController {
 	private BoardService boardService;
 
 	@RequestMapping(path = "/boards", method = RequestMethod.GET)
-	public ResponseEntity<List<Board>> getAllBoards(@RequestHeader(value = "x-session-token") String tokenId) {
+	public ResponseEntity<List<Board>> getAllBoards(@RequestHeader(value = "x-session-token") Token token) {
 		List<Board> boards = boardService.getAll();
 		return new ResponseEntity<>(boards, HttpStatus.OK);
 	}
 
 	@RequestMapping(path = "/board/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Board> getBoard(@RequestHeader(value = "x-session-token") String tokenId,
+	public ResponseEntity<Board> getBoard(@RequestHeader(value = "x-session-token") Token token,
 			@PathVariable Integer id) {
 		Board board = boardService.getById(id);
 		return new ResponseEntity<>(board, HttpStatus.OK);
 	}
 
 	@RequestMapping(path = "/board", method = RequestMethod.POST)
-	public ResponseEntity<Board> createBoard(@RequestHeader(value = "x-session-token") String tokenId,
+	public ResponseEntity<Board> createBoard(@RequestHeader(value = "x-session-token") Token token,
 			@RequestBody Board board) {
 		Board savedBoard = boardService.saveBoard(board);
 		return new ResponseEntity<>(savedBoard, HttpStatus.OK);
 	}
 
 	@RequestMapping(path = "/board/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Boolean> deleteBoard(@RequestHeader(value = "x-session-token") String tokenId,
+	public ResponseEntity<Boolean> deleteBoard(@RequestHeader(value = "x-session-token") Token token,
 			@PathVariable Integer id) {
 		boardService.deleteBoard(id);
 		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
 
 	@RequestMapping(path = "/board/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<Board> updateBoard(@RequestHeader(value = "x-session-token") String tokenId,
+	public ResponseEntity<Board> updateBoard(@RequestHeader(value = "x-session-token") Token token,
 			@RequestBody Board board, @PathVariable Integer id) {
 		Board updatedBoard = boardService.saveBoard(board);
 		return new ResponseEntity<>(updatedBoard, HttpStatus.OK);

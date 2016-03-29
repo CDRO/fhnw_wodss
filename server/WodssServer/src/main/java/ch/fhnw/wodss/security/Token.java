@@ -22,8 +22,12 @@ public class Token {
 	/**
 	 * Default constructor.
 	 */
-	Token(){
+	public Token(){
 		super();
+	}
+	
+	public Token(String id){
+		this.id = id;
 	}
 
 	/**

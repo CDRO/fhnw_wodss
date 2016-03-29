@@ -3,6 +3,8 @@ package ch.fhnw.wodss.domain;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -10,8 +12,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class User {
@@ -20,9 +25,11 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
+	@Column(unique = true)
 	private String email;
-	private String hashedPassword;
-	private boolean isValidated;
+	@JsonIgnore
+	@OneToOne(cascade = CascadeType.ALL)
+	private LoginData loginData;
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "assignee")
 	private List<Task> tasks;
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -92,48 +99,6 @@ public class User {
 	}
 
 	/**
-	 * Whether the user has successfully validated his email address.
-	 * 
-	 * @return <code>true</code> if user's email address has been successfully
-	 *         validated.<br>
-	 *         <code>false</code> otherwise.
-	 */
-	public boolean isValidated() {
-		return isValidated;
-	}
-
-	/**
-	 * Sets whether the user has been validated or not.
-	 * 
-	 * @param isValidated
-	 *            <code>true</code> for user has successfully validated his
-	 *            email address.<br>
-	 *            <code>false</code> otherwise.
-	 */
-	public void setValidated(boolean isValidated) {
-		this.isValidated = isValidated;
-	}
-
-	/**
-	 * Gets the user's hashed password.
-	 * 
-	 * @return the user's hashed password.
-	 */
-	public String getHashedPassword() {
-		return hashedPassword;
-	}
-
-	/**
-	 * Sets the user's hashed password.
-	 * 
-	 * @param hashedPassword
-	 *            The hashed password to set.
-	 */
-	public void setHashedPassword(String hashedPassword) {
-		this.hashedPassword = hashedPassword;
-	}
-
-	/**
 	 * Get's the tasks the user is assigned to.
 	 * 
 	 * @return the tasks the user is assigned to.
@@ -160,7 +125,6 @@ public class User {
 	public void setBoards(List<Board> boards) {
 		this.boards = boards;
 	}
-	
 
 	/**
 	 * Sets the list of tasks.
@@ -170,6 +134,20 @@ public class User {
 	 */
 	public void setTasks(List<Task> tasks) {
 		this.tasks = tasks;
+	}
+
+	/**
+	 * @return the loginData
+	 */
+	public LoginData getLoginData() {
+		return loginData;
+	}
+
+	/**
+	 * @param loginData the loginData to set
+	 */
+	public void setLoginData(LoginData loginData) {
+		this.loginData = loginData;
 	}
 
 	@Override
@@ -183,7 +161,6 @@ public class User {
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(17, 31).append(id).append(name).append(email).append(hashedPassword)
-				.append(isValidated).toHashCode();
+		return new HashCodeBuilder(17, 31).append(id).append(name).append(email).append(loginData).toHashCode();
 	}
 }

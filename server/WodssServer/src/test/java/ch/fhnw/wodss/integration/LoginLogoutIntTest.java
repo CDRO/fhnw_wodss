@@ -8,7 +8,7 @@ import ch.fhnw.wodss.security.Token;
 import ch.fhnw.wodss.security.TokenHandler;
 
 public class LoginLogoutIntTest extends AbstractIntegrationTest {
-
+	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testTokenCRUD() throws Exception {

@@ -29,6 +29,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 	@Autowired
 	private TaskService taskService;
 
+
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testTaskAuthorizedCRUD() throws Exception {
@@ -145,6 +146,8 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		Assert.assertEquals(1, task.getId().intValue());
 		Task taskFromDb = taskService.getById(task.getId());
 		Assert.assertEquals("TestTask", taskFromDb.getDescription());
+		
+		// TODO test delete task with attachment!!
 	}
 
 	private Task doMulitPartPostTask(String url, Token token, JSONObject json, File file, Object... urlParameters)
