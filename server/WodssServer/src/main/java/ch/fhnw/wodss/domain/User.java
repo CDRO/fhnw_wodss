@@ -13,8 +13,6 @@ import javax.persistence.OneToMany;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import ch.fhnw.wodss.security.Password;
-
 @Entity
 public class User {
 
@@ -23,7 +21,7 @@ public class User {
 	private Integer id;
 	private String name;
 	private String email;
-	private Password password;
+	private String hashedPassword;
 	private boolean isValidated;
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "assignee")
 	private List<Task> tasks;
@@ -121,18 +119,18 @@ public class User {
 	 * 
 	 * @return the user's hashed password.
 	 */
-	public Password getPassword() {
-		return password;
+	public String getHashedPassword() {
+		return hashedPassword;
 	}
 
 	/**
 	 * Sets the user's hashed password.
 	 * 
-	 * @param password
+	 * @param hashedPassword
 	 *            The hashed password to set.
 	 */
-	public void setPassword(Password password) {
-		this.password = password;
+	public void setHashedPassword(String hashedPassword) {
+		this.hashedPassword = hashedPassword;
 	}
 
 	/**
@@ -185,7 +183,7 @@ public class User {
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(17, 31).append(id).append(name).append(email).append(password)
+		return new HashCodeBuilder(17, 31).append(id).append(name).append(email).append(hashedPassword)
 				.append(isValidated).toHashCode();
 	}
 }
