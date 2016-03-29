@@ -55,10 +55,12 @@ public class LoginLogoutConroller {
 	public ResponseEntity<Boolean> validate(@RequestParam("email") String email,
 			@RequestParam("validationCode") String validationCode) {
 		User user = userService.getByEmail(email);
-		if (validationCode.equals(user.getLoginData().getValidationCode())) {
-			user.getLoginData().setValidated(true);
-			userService.saveUser(user);
-			return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+		if(user != null){			
+			if (validationCode.equals(user.getLoginData().getValidationCode())) {
+				user.getLoginData().setValidated(true);
+				userService.saveUser(user);
+				return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+			}
 		}
 		return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED);
 	}
