@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.text.MessageFormat;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -128,8 +130,13 @@ public class TaskIntTest extends AbstractIntegrationTest {
 	public void testCreateDeleteTaskWithAttachment() throws Exception {
 
 		// load file
-		URL resource = getClass().getClassLoader().getResource("ch/fhnw/wodss/integration/Trello_1.1.pdf");
-		File file = new File(resource.toURI());
+		URL resource1 = getClass().getClassLoader().getResource("ch/fhnw/wodss/integration/Trello_1.1.pdf");
+		URL resource2 = getClass().getClassLoader().getResource("ch/fhnw/wodss/integration/Trello_1.1.pdf");
+		File file1 = new File(resource1.toURI());
+		File file2 = new File(resource2.toURI());
+		List<File> files = new LinkedList<File>();
+		files.add(file1);
+		files.add(file2);
 
 		JSONObject json = new JSONObject();
 		json.put("email", "email@fhnw.ch");
@@ -142,7 +149,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		json.clear();
 		json.put("description", "TestTask");
 
-		Task task = doMulitPartPostTask("http://localhost:8080/task", token, json, file);
+		Task task = doMulitPartPostTask("http://localhost:8080/task", token, json, files);
 		Assert.assertEquals(1, task.getId().intValue());
 		Task taskFromDb = taskService.getById(task.getId());
 		Assert.assertEquals("TestTask", taskFromDb.getDescription());
@@ -150,15 +157,17 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		// TODO test delete task with attachment!!
 	}
 
-	private Task doMulitPartPostTask(String url, Token token, JSONObject json, File file, Object... urlParameters)
+	private Task doMulitPartPostTask(String url, Token token, JSONObject json, List<File> files, Object... urlParameters)
 			throws Exception {
 
 		HttpClient httpClient = HttpClientBuilder.create().build();
 
 		MultipartEntityBuilder mpBuilder = MultipartEntityBuilder.create();
 		mpBuilder.addTextBody("task", json.toJSONString(), ContentType.APPLICATION_JSON);
-		if(file != null){
-			mpBuilder.addBinaryBody("attachment", file);
+		if(files != null){
+			for(File file : files){
+				mpBuilder.addBinaryBody("attachment", file);
+			}
 		}
 		HttpEntity entity = mpBuilder.build();
 
