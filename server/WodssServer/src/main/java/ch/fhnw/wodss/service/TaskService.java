@@ -1,11 +1,7 @@
 package ch.fhnw.wodss.service;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +19,9 @@ public class TaskService {
 
 	@Autowired
 	private TaskRepository taskRepository;
+	
+	@Autowired
+	private AttachmentService attachmentService;
 
 	public TaskService() {
 		super();
@@ -49,7 +48,7 @@ public class TaskService {
 				anAttachment.setDocumentName(file.getOriginalFilename());
 				
 				// add attachment to task when saving to file system was successful.
-				if (saveAttachmentToFileSystem(anAttachment, file)) {
+				if (attachmentService.saveAttachmentToFileSystem(anAttachment, file)) {
 					task.getAttachments().add(anAttachment);
 				}
 			}
@@ -60,7 +59,7 @@ public class TaskService {
 	public void deleteTask(Task task) {
 		taskRepository.delete(task);
 		for(Attachment attachment : task.getAttachments()){
-			deleteAttachmentFromFileSystem(attachment);
+			attachmentService.deleteAttachmentFromFileSystem(attachment);
 		}
 	}
 
@@ -77,44 +76,5 @@ public class TaskService {
 		return taskRepository.findOne(id);
 	}
 
-	/**
-	 * Saved the uploaded file to file system
-	 * @param attachment the attachment object to retrieve path from uuid
-	 * @param file the file to save.
-	 * @return success
-	 */
-	private boolean saveAttachmentToFileSystem(Attachment attachment, MultipartFile file) {
-		FileOutputStream fos = null;
-		try {
-			FileUtils.forceMkdir(attachment.getFile().getParentFile());
-			fos = new FileOutputStream(attachment.getFile());
-			fos.write(file.getBytes());
-			return true;
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if(fos != null){
-				try {
-					fos.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-					return false;
-				}
-			}
-		}
-		return false;
-	}
-
 	
-	private boolean deleteAttachmentFromFileSystem(Attachment attachment) {
-		try {
-			FileUtils.forceDelete(attachment.getFile());
-			return true;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
 }

@@ -21,9 +21,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import ch.fhnw.wodss.domain.Board;
+import ch.fhnw.wodss.domain.BoardFactory;
 import ch.fhnw.wodss.domain.Task;
 import ch.fhnw.wodss.security.Token;
 import ch.fhnw.wodss.security.TokenHandler;
+import ch.fhnw.wodss.service.BoardService;
 import ch.fhnw.wodss.service.TaskService;
 
 public class TaskIntTest extends AbstractIntegrationTest {
@@ -31,13 +34,48 @@ public class TaskIntTest extends AbstractIntegrationTest {
 	@Autowired
 	private TaskService taskService;
 
+	@Autowired
+	private BoardService boardService;
 
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testCreatTaskWithBoard() throws Exception {
+		
+		Board board = BoardFactory.getInstance().createBoard("BoardTitle");
+		board = boardService.saveBoard(board);
+
+		JSONObject json = new JSONObject();
+		json.put("email", "hans.muster@fhnw.ch");
+		json.put("password", "password");
+
+		// REQUEST TOKEN
+		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
+
+		// CREATE
+		json.clear();
+		json.put("description", "TestTask");
+		
+		// Board
+		JSONObject jsonBoard = new JSONObject();
+		jsonBoard.put("id", board.getId());
+		jsonBoard.put("title", board.getTitle());
+		json.put("board", jsonBoard);
+		
+		System.out.println(json.toJSONString());
+
+		Task task = doMulitPartPostTask("http://localhost:8080/task", token, json, null);
+		Assert.assertNotNull(task.getId());
+		Assert.assertEquals(board.getTitle(), task.getBoard().getTitle());
+		Task taskFromDb = taskService.getById(task.getId());
+		Assert.assertEquals("TestTask", taskFromDb.getDescription());
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testTaskAuthorizedCRUD() throws Exception {
 
 		JSONObject json = new JSONObject();
-		json.put("email", "email@fhnw.ch");
+		json.put("email", "hans.muster@fhnw.ch");
 		json.put("password", "password");
 
 		// REQUEST TOKEN
@@ -139,7 +177,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		files.add(file2);
 
 		JSONObject json = new JSONObject();
-		json.put("email", "email@fhnw.ch");
+		json.put("email", "hans.muster@fhnw.ch");
 		json.put("password", "password");
 
 		// REQUEST TOKEN

@@ -42,7 +42,6 @@ public class TaskController {
 	}
 
 	// TODO: restrict attachment mime types.
-	// TODO: upload multiple attachment.
 	@RequestMapping(path = "/task", method = RequestMethod.POST)
 	public ResponseEntity<Task> createTask(@RequestHeader(value = "x-session-token") Token token,
 			@RequestPart("task") Task task, @RequestPart(name = "file", required = false) List<MultipartFile> files) {
@@ -58,8 +57,6 @@ public class TaskController {
 		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
 
-	// TODO: put with multiple attachments.
-	// TODO: how to delete a single attachment --> attachment resource with delete
 	@RequestMapping(path = "/task/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Task> updateTask(@RequestHeader(value = "x-session-token") Token token,
 			@RequestPart("task") Task task, @PathVariable Integer id,

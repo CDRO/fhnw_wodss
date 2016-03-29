@@ -22,7 +22,7 @@ public class BoardIntTest extends AbstractIntegrationTest {
 	public void testBoardAuthorizedCRUD() throws Exception {
 
 		JSONObject json = new JSONObject();
-		json.put("email", "email@fhnw.ch");
+		json.put("email", "hans.muster@fhnw.ch");
 		json.put("password", "password");
 		
 		// REQUEST TOKEN
