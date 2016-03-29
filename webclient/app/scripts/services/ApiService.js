@@ -53,7 +53,8 @@
           url: uri,
           headers: headers,
           method: method,
-          data: {files: attachments, info: object},
+          fields: object,
+          file: attachments,
           cache: false
         });
       }else{

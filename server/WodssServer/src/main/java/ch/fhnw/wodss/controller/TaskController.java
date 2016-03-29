@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,8 +45,8 @@ public class TaskController {
 	// TODO: upload multiple attachment.
 	@RequestMapping(path = "/task", method = RequestMethod.POST)
 	public ResponseEntity<Task> createTask(@RequestHeader(value = "x-session-token") Token token,
-			@RequestPart("task") Task task, @RequestPart(name = "file", required = false) MultipartFile file) {
-		Task savedTask = taskService.saveTask(task, file);
+			@RequestPart("task") Task task, @RequestPart(name = "file", required = false) List<MultipartFile> files) {
+		Task savedTask = taskService.saveTask(task, files);
 		return new ResponseEntity<>(savedTask, HttpStatus.OK);
 	}
 
@@ -64,8 +63,8 @@ public class TaskController {
 	@RequestMapping(path = "/task/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Task> updateTask(@RequestHeader(value = "x-session-token") Token token,
 			@RequestPart("task") Task task, @PathVariable Integer id,
-			@RequestPart(name = "attachment", required = false) MultipartFile file) {
-		Task updatedTask = taskService.saveTask(task, file);
+			@RequestPart(name = "file", required = false) List<MultipartFile> files) {
+		Task updatedTask = taskService.saveTask(task, files);
 		return new ResponseEntity<>(updatedTask, HttpStatus.OK);
 	}
 

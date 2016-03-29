@@ -32,24 +32,26 @@ public class TaskService {
 		return saveTask(task, null);
 	}
 
-	public Task saveTask(Task task, MultipartFile file) {
+	public Task saveTask(Task task, List<MultipartFile> files) {
 		if (task.getState() == null) {
 			task.setState(TaskState.TODO);
 		}
-		if (file != null) {
-			// get extension
-			String extension = null;
-			String[] split = file.getOriginalFilename().split("\\.");
-			if(split.length > 0){
-				extension = split[split.length - 1];
-			}
-			
-			Attachment anAttachment = AttachmentFactory.getInstance().createAttachment(extension);
-			anAttachment.setDocumentName(file.getOriginalFilename());
-
-			// add attachment to task when saving to file system was successful.
-			if (saveAttachmentToFileSystem(anAttachment, file)) {
-				task.getAttachments().add(anAttachment);
+		if (files != null) {
+			for(MultipartFile file : files){				
+				// get extension
+				String extension = null;
+				String[] split = file.getOriginalFilename().split("\\.");
+				if(split.length > 0){
+					extension = split[split.length - 1];
+				}
+				
+				Attachment anAttachment = AttachmentFactory.getInstance().createAttachment(extension);
+				anAttachment.setDocumentName(file.getOriginalFilename());
+				
+				// add attachment to task when saving to file system was successful.
+				if (saveAttachmentToFileSystem(anAttachment, file)) {
+					task.getAttachments().add(anAttachment);
+				}
 			}
 		}
 		return taskRepository.save(task);
@@ -57,10 +59,14 @@ public class TaskService {
 
 	public void deleteTask(Task task) {
 		taskRepository.delete(task);
+		for(Attachment attachment : task.getAttachments()){
+			deleteAttachmentFromFileSystem(attachment);
+		}
 	}
 
 	public void deleteTask(Integer id) {
-		taskRepository.delete(id);
+		Task task = taskRepository.getOne(id);
+		deleteTask(task);
 	}
 
 	public List<Task> getAll() {
