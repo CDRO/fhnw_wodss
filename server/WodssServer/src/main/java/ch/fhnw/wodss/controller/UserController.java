@@ -47,6 +47,11 @@ public class UserController {
 		String name = (String) json.get("name");
 		String email = (String) json.get("email");
 		String password = (String) json.get("password");
+		// check if user already exists
+		User user = userService.getByEmail(email);
+		if(user != null){
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
 		User newUser = UserFactory.getInstance().createUser(name, email);
 		LoginData loginData = LoginDataFactory.getInstance().createLoginData(password);
 		newUser.setLoginData(loginData);
