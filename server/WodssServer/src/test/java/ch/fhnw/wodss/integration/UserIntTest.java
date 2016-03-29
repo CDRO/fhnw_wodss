@@ -22,21 +22,28 @@ public class UserIntTest extends AbstractIntegrationTest {
 	public void testUserAuthorizedCRUD() throws Exception {
 
 		JSONObject json = new JSONObject();
-		json.put("email", "email@fhnw.ch");
+		
+		// CREATE / REGISTER
+		json.put("name", "TestUser");
+		json.put("email", "hans.muster@fhnw.ch");
 		json.put("password", "password");
+
+		User user = doPost("http://localhost:8080/user", null, json, User.class);
+		User userFromDb = userService.getById(user.getId());
+		Assert.assertEquals("TestUser", userFromDb.getName());
+		Assert.assertEquals("hans.muster@fhnw.ch", userFromDb.getEmail());
+		Assert.assertNotNull(user.getId());
+		
+		// VALIDATE EMAIL ADDRESS
+		Boolean success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class, userFromDb.getEmail(), userFromDb.getLoginData().getValidationCode());
+		Assert.assertTrue(success);
+		userFromDb = userService.getById(user.getId());
+		Assert.assertTrue(userFromDb.getLoginData().isValidated());
 		
 		// REQUEST TOKEN
 		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
 
-		// CREATE
-		json.clear();
-		json.put("name", "TestUser");
-
-		User user = doPost("http://localhost:8080/user", token, json, User.class);
-		User userFromDb = userService.getById(user.getId());
-		Assert.assertEquals("TestUser", userFromDb.getName());
-		Assert.assertNotNull(user.getId());
-
+				
 		// READ
 		user = doGet("http://localhost:8080/user/{0}", token, User.class, userFromDb.getId());
 		Assert.assertNotNull(user);
@@ -69,16 +76,6 @@ public class UserIntTest extends AbstractIntegrationTest {
 		JSONObject json = new JSONObject();
 		json.put("name", "TestUser");
 
-
-		try {
-			// CREATE
-			doPost("http://localhost:8080/user", token, json, User.class);
-		} catch (IOException e) {
-			Assert.fail();
-		} catch (Exception e) {
-			e.printStackTrace();
-			Assert.fail();
-		}
 
 		try {
 			// READ

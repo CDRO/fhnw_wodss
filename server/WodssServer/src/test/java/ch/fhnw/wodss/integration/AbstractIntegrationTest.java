@@ -43,6 +43,7 @@ public abstract class AbstractIntegrationTest {
 		LoginData loginData = new LoginData();
 		loginData.setPassword(pass.getHash());
 		loginData.setSalt(pass.getSalt());
+		loginData.setValidated(true);
 		user.setLoginData(loginData);
 		user = userService.saveUser(user);
 	}
