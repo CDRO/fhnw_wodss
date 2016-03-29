@@ -18,7 +18,11 @@
         'password': password
       }).then(function(response){
         // Save token for future requests
-        config.setCurrentUser(response.data);
+        config.setCurrentUser({
+            email: email,
+            token: response.data.id,
+            timeToLive: response.data.timeToLive
+        });
       },
       function(error){
         config.setCurrentUser({email: null, token: null});

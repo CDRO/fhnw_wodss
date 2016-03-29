@@ -7,40 +7,33 @@
 
   var TaskService = function (service) {
 
-    var dummyData = [{
-      id: 23,
-      title: "Mein Task",
-      state: "Erledigt"
-    },{
-      id: 25,
-      title: "Zweiter Task",
-      state: "Offen"
-    },
-    {
-      id: 27,
-      title: "Task",
-      state: "In Bearbeitung"
-    }
-
-    ];
-
     /**
      * Get the tasks of the logged in user
      */
     this.getAll = function(){
-      return service.query('tasks');
+      return service.query('tasks').then(function(response){
+        return response.data;
+      });
     };
 
+    /**
+     * Get the tasks from specified Board
+     * @param boardId
+     * @returns Tasks
+       */
     this.getByBoard = function(boardId){
-        return service.query('tasks', {boardId: boardId});
+        return service.query('tasks', {boardId: boardId}).then(function(response){
+          return response.data;
+        });
     };
 
     /**
      * Save the specified Board
      */
     this.add = function(board){
-      //return service.createObject('task', board);
-      dummyData.push(board);
+      return service.createObject('task', board).then(function(response){
+          return response.data;
+      });
     };
 
       /**
