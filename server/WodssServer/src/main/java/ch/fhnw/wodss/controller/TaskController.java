@@ -46,7 +46,7 @@ public class TaskController {
 	// TODO: upload multiple attachment.
 	@RequestMapping(path = "/task", method = RequestMethod.POST)
 	public ResponseEntity<Task> createTask(@RequestHeader(value = "x-session-token") Token token,
-			@RequestPart("task") Task task, @RequestPart(name = "attachment", required = false) MultipartFile file) {
+			@RequestPart("task") Task task, @RequestPart(name = "file", required = false) MultipartFile file) {
 		Task savedTask = taskService.saveTask(task, file);
 		return new ResponseEntity<>(savedTask, HttpStatus.OK);
 	}
