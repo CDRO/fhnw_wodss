@@ -36,6 +36,7 @@
         files = task.files;
         delete task.files;
       }
+
       return service.createObject('task', task, files).then(function(response){
           return response.data;
       });

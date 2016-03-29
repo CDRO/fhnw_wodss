@@ -53,8 +53,7 @@
           url: uri,
           headers: headers,
           method: method,
-          fields: object,
-          file: attachments,
+          data: {file: attachments, info: Upload.jsonBlob(object)},
           cache: false
         });
       }else{
