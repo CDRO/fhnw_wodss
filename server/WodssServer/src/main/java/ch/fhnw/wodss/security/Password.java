@@ -43,6 +43,21 @@ public final class Password {
 	private final int iterationCount;
 	private final int keyLength;
 	private final byte[] hash;
+	
+	public Password(char[] password) {
+		salt = new byte[32];
+		random.nextBytes(salt);
+		iterationCount = 12000;
+		keyLength = 512;
+		hash = pbkdf2(password, salt, iterationCount, keyLength);
+	}
+	
+	public Password(char[] password, byte[] salt) {
+		this.salt = salt;
+		iterationCount = 12000;
+		keyLength = 512;
+		hash = pbkdf2(password, salt, iterationCount, keyLength);
+	}
 
 	public Password(byte[] salt, int iterationCount, int keyLength, byte[] hash) {
 		this.salt = salt;
@@ -60,14 +75,6 @@ public final class Password {
 			assert false;
 			throw new RuntimeException(e);
 		}
-	}
-
-	public Password(char[] password) {
-		salt = new byte[32];
-		random.nextBytes(salt);
-		iterationCount = 120000;
-		keyLength = 512;
-		hash = pbkdf2(password, salt, iterationCount, keyLength);
 	}
 
 	public byte[] getSalt() {

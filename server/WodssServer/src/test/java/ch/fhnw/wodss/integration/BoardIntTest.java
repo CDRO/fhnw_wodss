@@ -16,7 +16,7 @@ public class BoardIntTest extends AbstractIntegrationTest {
 
 	@Autowired
 	private BoardService boardService;
-
+	
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testBoardAuthorizedCRUD() throws Exception {
