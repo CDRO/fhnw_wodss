@@ -6,7 +6,7 @@
 
   var module = angular.module('services');
 
-  var ApiService = function (configService, $http) {
+  var ApiService = function (configService, $http, Upload) {
 
     /**
      * Receive some data from backend
@@ -39,12 +39,30 @@
      * Create / Save Object
      * @param collection
      * @param object
-     * @returns true
+     * @param attachments files to upload
+     * @returns
      */
-    this.createObject = function (collection, object) {
+    this.createObject = function (collection, object, attachments) {
       var uri = configService.baseUrl + collection;
-      return $http({method: "POST", url: uri, data:
-        JSON.stringify(object), cache: false});
+      var method = "POST";
+      var headers = {};
+
+      // Attachments as form data with Uploader
+      if(attachments){
+        return Upload.upload({
+          url: uri,
+          headers: headers,
+          method: method,
+          data: {files: attachments, info: object},
+          cache: false
+        });
+      }else{
+        var data = JSON.stringify(object);
+        // Request without attachments
+        return $http({method: "POST", url: uri, data:data,
+          headers: headers, cache: false
+        });
+      }
     };
 
     /**
@@ -53,7 +71,12 @@
      * @param object
      * @returns true/false
      */
-    this.updateObject = function (collection, object) {
+    this.updateObject = function (collection, object, attachments) {
+      // files as form data
+      if(attachments){
+
+      }
+
       var uri = configService.baseUrl + collection + "/" + object.id;
       return $http({method: "PUT", url: uri, data:
         JSON.stringify(object), cache: false});
@@ -71,7 +94,7 @@
     };
   };
 
-  ApiService.$inject = ['ConfigService', '$http'];
+  ApiService.$inject = ['ConfigService', '$http', 'Upload'];
 
   module.service('ApiService', ApiService);
 })();

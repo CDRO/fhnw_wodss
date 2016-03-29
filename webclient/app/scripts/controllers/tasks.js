@@ -76,11 +76,11 @@ var taskController = function(taskService, params, $uibModal){
       }
     });
 
-    modalInstance.result.then(function(isNew, model) {
-      if(isNew){
-        taskService.add(model);
-      }else{
+    modalInstance.result.then(function(model) {
+      if(model.id){
         taskService.update(model);
+      }else{
+        taskService.add(model);
       }
     }, function () {
 

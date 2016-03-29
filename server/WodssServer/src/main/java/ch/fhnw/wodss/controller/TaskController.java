@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,8 +57,8 @@ public class TaskController {
 
 	@RequestMapping(path = "/task/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Task> updateTask(@RequestHeader(value = "x-session-token") String tokenId,
-			@RequestPart("task") Task task, @PathVariable Integer id,
-			@RequestPart(name = "attachment", required = false) MultipartFile file) {
+			@RequestPart("info") Task task, @PathVariable Integer id,
+			@RequestPart(name = "file", required = false) MultipartFile file) {
 		Task updatedTask = taskService.saveTask(task, file);
 		return new ResponseEntity<>(updatedTask, HttpStatus.OK);
 	}

@@ -18,7 +18,9 @@ angular
     'ui.bootstrap',
     'ngSanitize',
     'ngTouch',
-    'pascalprecht.translate'
+    'pascalprecht.translate',
+    'angularFileUpload',
+    'ngFileUpload'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $translateProvider, translations_DE) {
     // For any unmatched url, redirect to home

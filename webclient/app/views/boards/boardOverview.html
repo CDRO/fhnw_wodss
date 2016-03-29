@@ -12,7 +12,7 @@
 
     <div class="form-group" ng-class="{'has-error': form.title.$dirty && form.title.$error.required}">
         <label for="title" translate="boards.form.title"></label>
-        <input type="input" name="title" id="title" class="form-control" ng-model="title" required />
+        <input type="input" name="title" id="title" class="form-control" ng-model="boards.title" required />
         <span ng-show="form.title.$dirty && form.title.$error.required" class="help-block">
           {{'boards.form.requiredTitle' | translate}}</span>
     </div>

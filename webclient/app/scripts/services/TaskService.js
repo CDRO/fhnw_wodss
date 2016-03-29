@@ -28,10 +28,15 @@
     };
 
     /**
-     * Save the specified Board
+     * Save the specified Task
      */
-    this.add = function(board){
-      return service.createObject('task', board).then(function(response){
+    this.add = function(task){
+      var files = null;
+      if(task.files){
+        files = task.files;
+        delete task.files;
+      }
+      return service.createObject('task', task, files).then(function(response){
           return response.data;
       });
     };

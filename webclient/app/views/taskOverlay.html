@@ -7,6 +7,7 @@
 <div class="modal-body">
   <!-- selected Board -->
   <div class="form-group">
+    <label for="boardSelect" translate="tasks.form.boardSelection"></label>
     <select name="boardSelection" id="boardSelect" ng-model="model.boardId">
       <option ng-repeat="board in boards" ng-selected="board.selected" value="{{board.id}}">{{board.title}}</option>
     </select>
@@ -30,8 +31,14 @@
 
   <!-- Attachment -->
   <div class="form-group">
-    <label for="attachment" translate="tasks.form.attachment"></label>
-    <input type="input" name="attachment" id="attachment" class="form-control" ng-model="model.attachment" />
+    <label for="files" translate="tasks.form.attachment"></label>
+
+    <!--ngf-pattern="'image/*'" ngf-multiple="true"-->
+    <button class="btn btn-primary" ngf-select ng-model="model.files" name="files"
+         ngf-accept="'image/*'" ngf-max-size="20MB" ngf-multiple="true" translate="tasks.form.addAttachment" multiple></button>
+
+    Drop files: <div ngf-drop ng-model="model.files" class="drop-box">Drop</div>
+
   </div>
 
 </form>

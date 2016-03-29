@@ -17,10 +17,12 @@
       createTitle: "Task erstellen",
       updateTitle: "Task updaten",
       form: {
+          boardSelection: "Board",
           title: "Bezeichnung",
           requiredTitle: "Bitte geben Sie einen Task Titel an",
           person: "Person",
-          attachment: "Anhang"
+          attachment: "Anhang",
+          addAttachment: "Hinzufügen"
       }
     },
     app: {
