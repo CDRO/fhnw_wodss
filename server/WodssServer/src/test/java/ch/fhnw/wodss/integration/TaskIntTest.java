@@ -166,7 +166,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		mpBuilder.addTextBody("task", json.toJSONString(), ContentType.APPLICATION_JSON);
 		if(files != null){
 			for(File file : files){
-				mpBuilder.addBinaryBody("attachment", file);
+				mpBuilder.addBinaryBody("file", file);
 			}
 		}
 		HttpEntity entity = mpBuilder.build();
@@ -193,7 +193,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		MultipartEntityBuilder mpBuilder = MultipartEntityBuilder.create();
 		mpBuilder.addTextBody("task", json.toJSONString(), ContentType.APPLICATION_JSON);
 		if(file != null){
-			mpBuilder.addBinaryBody("attachment", file);
+			mpBuilder.addBinaryBody("file", file);
 		}
 		HttpEntity entity = mpBuilder.build();
 
