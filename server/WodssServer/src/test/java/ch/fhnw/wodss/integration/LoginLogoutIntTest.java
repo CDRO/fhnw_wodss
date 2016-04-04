@@ -14,7 +14,7 @@ public class LoginLogoutIntTest extends AbstractIntegrationTest {
 	public void testTokenCRUD() throws Exception {
 		
 		JSONObject json = new JSONObject();
-		json.put("email", "email@fhnw.ch");
+		json.put("email", "hans.muster@fhnw.ch");
 		json.put("password", "password");
 		
 		// CREATE

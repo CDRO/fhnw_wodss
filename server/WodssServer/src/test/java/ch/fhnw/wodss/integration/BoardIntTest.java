@@ -33,7 +33,7 @@ public class BoardIntTest extends AbstractIntegrationTest {
 		json.put("title", "TestBoard");
 
 		Board board = doPost("http://localhost:8080/board", token, json, Board.class);
-		Assert.assertEquals(1, board.getId().intValue());
+		Assert.assertNotNull(board.getId().intValue());
 		Board boardFromDb = boardService.getById(board.getId());
 		Assert.assertEquals("TestBoard", boardFromDb.getTitle());
 
@@ -41,7 +41,7 @@ public class BoardIntTest extends AbstractIntegrationTest {
 		board = doGet("http://localhost:8080/board/{0}", token, Board.class, boardFromDb.getId());
 		Assert.assertNotNull(board);
 		Assert.assertEquals("TestBoard", board.getTitle());
-		Assert.assertEquals(1, board.getId().intValue());
+		Assert.assertNotNull(board.getId().intValue());
 
 		// UPDATE
 		json = new JSONObject();
@@ -51,7 +51,7 @@ public class BoardIntTest extends AbstractIntegrationTest {
 		boardFromDb = boardService.getById(board.getId());
 		Assert.assertEquals("TestBoard2", boardFromDb.getTitle());
 		Assert.assertEquals("TestBoard2", board.getTitle());
-		Assert.assertEquals(1, board.getId().intValue());
+		Assert.assertNotNull(board.getId().intValue());;
 
 		// DELETE
 		doDelete("http://localhost:8080/board/{0}", token, Boolean.class, board.getId());

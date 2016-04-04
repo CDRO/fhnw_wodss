@@ -25,13 +25,13 @@ public class UserIntTest extends AbstractIntegrationTest {
 		
 		// CREATE / REGISTER
 		json.put("name", "TestUser");
-		json.put("email", "hans.muster@fhnw.ch");
+		json.put("email", "email@fhnw.ch");
 		json.put("password", "password");
 
 		User user = doPost("http://localhost:8080/user", null, json, User.class);
 		User userFromDb = userService.getById(user.getId());
 		Assert.assertEquals("TestUser", userFromDb.getName());
-		Assert.assertEquals("hans.muster@fhnw.ch", userFromDb.getEmail());
+		Assert.assertEquals("email@fhnw.ch", userFromDb.getEmail());
 		Assert.assertNotNull(user.getId());
 		
 		// VALIDATE EMAIL ADDRESS

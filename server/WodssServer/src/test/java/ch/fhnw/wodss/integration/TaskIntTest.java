@@ -188,7 +188,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		json.put("description", "TestTask");
 
 		Task task = doMulitPartPostTask("http://localhost:8080/task", token, json, files);
-		Assert.assertEquals(1, task.getId().intValue());
+		Assert.assertNotNull(task.getId().intValue());
 		Task taskFromDb = taskService.getById(task.getId());
 		Assert.assertEquals("TestTask", taskFromDb.getDescription());
 		
@@ -201,7 +201,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		HttpClient httpClient = HttpClientBuilder.create().build();
 
 		MultipartEntityBuilder mpBuilder = MultipartEntityBuilder.create();
-		mpBuilder.addTextBody("task", json.toJSONString(), ContentType.APPLICATION_JSON);
+		mpBuilder.addTextBody("info", json.toJSONString(), ContentType.APPLICATION_JSON);
 		if(files != null){
 			for(File file : files){
 				mpBuilder.addBinaryBody("file", file);
@@ -218,6 +218,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		HttpEntity result = response.getEntity();
 
 		InputStream is = result.getContent();
+		
 		Task readValue = objectMapper.readValue(is, Task.class);
 		return readValue;
 
@@ -229,7 +230,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		HttpClient httpClient = HttpClientBuilder.create().build();
 
 		MultipartEntityBuilder mpBuilder = MultipartEntityBuilder.create();
-		mpBuilder.addTextBody("task", json.toJSONString(), ContentType.APPLICATION_JSON);
+		mpBuilder.addTextBody("info", json.toJSONString(), ContentType.APPLICATION_JSON);
 		if(file != null){
 			mpBuilder.addBinaryBody("file", file);
 		}
