@@ -2,6 +2,8 @@ package ch.fhnw.wodss.security;
 
 import java.util.UUID;
 
+import ch.fhnw.wodss.domain.User;
+
 /**
  * Responsible for creating tokens.
  * 
@@ -9,7 +11,7 @@ import java.util.UUID;
  *
  */
 class TokenFactory {
-	
+
 	/**
 	 * The time to live.
 	 */
@@ -31,13 +33,16 @@ class TokenFactory {
 	/**
 	 * Creates a new token.
 	 * 
+	 * @param user
+	 *            the user bound to the token.
 	 * @return a new token.
 	 */
-	public Token createToken() {
+	public Token createToken(User user) {
 		Token token = new Token();
 		token.setId(UUID.randomUUID().toString());
 		token.setCreatedAt(System.currentTimeMillis());
 		token.setTimeToLive(TTL);
+		token.setUser(user);
 		return token;
 	}
 }

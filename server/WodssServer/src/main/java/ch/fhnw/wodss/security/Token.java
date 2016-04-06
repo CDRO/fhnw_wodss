@@ -1,6 +1,10 @@
 package ch.fhnw.wodss.security;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import ch.fhnw.wodss.domain.User;
 
 public class Token {
 
@@ -18,15 +22,20 @@ public class Token {
 	 * The time to live in millis.
 	 */
 	private Long timeToLive;
-	
+
+	/**
+	 * The user to which this token is bound.
+	 */
+	private User user;
+
 	/**
 	 * Default constructor.
 	 */
-	public Token(){
+	public Token() {
 		super();
 	}
-	
-	public Token(String id){
+
+	public Token(String id) {
 		this.id = id;
 	}
 
@@ -96,6 +105,39 @@ public class Token {
 	 */
 	public void setTimeToLive(Long expiringAt) {
 		this.timeToLive = expiringAt;
+	}
+
+	/**
+	 * Gets the user bound to this token.
+	 * 
+	 * @return the user bound to this token.
+	 */
+	public User getUser() {
+		return user;
+	}
+
+	/**
+	 * Sets the user bound to this token.
+	 * 
+	 * @param user
+	 *            the user bound to this token.
+	 */
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (!(object instanceof Token)) {
+			return false;
+		}
+		Token token = (Token) object;
+		return token.getId() == this.id;
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17, 31).append(id).append(createdAt).append(timeToLive).append(user).toHashCode();
 	}
 
 }
