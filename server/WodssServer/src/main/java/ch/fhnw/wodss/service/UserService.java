@@ -10,7 +10,6 @@ import ch.fhnw.wodss.domain.User;
 import ch.fhnw.wodss.repository.UserRepository;
 
 @Component
-@Transactional
 public class UserService {
 
 	@Autowired
@@ -20,14 +19,17 @@ public class UserService {
 		super();
 	}
 
+	@Transactional
 	public User saveUser(User user){
 		return userRepository.save(user);
 	}
 	
+	@Transactional
 	public void deleteUser(User user){
 		userRepository.delete(user);
 	}
 	
+	@Transactional
 	public void deleteUser(Integer id){
 		userRepository.delete(id);
 	}

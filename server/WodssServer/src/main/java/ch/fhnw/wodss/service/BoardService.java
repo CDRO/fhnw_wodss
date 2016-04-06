@@ -10,7 +10,6 @@ import ch.fhnw.wodss.domain.Board;
 import ch.fhnw.wodss.repository.BoardRepository;
 
 @Component
-@Transactional
 public class BoardService {
 	
 	@Autowired
@@ -20,14 +19,17 @@ public class BoardService {
 		super();
 	}
 
+	@Transactional
 	public Board saveBoard(Board board){
 		return boardRepository.save(board);
 	}
 	
+	@Transactional
 	public void deleteBoard(Board board){
 		boardRepository.delete(board);
 	}
 	
+	@Transactional
 	public void deleteBoard(Integer id){
 		boardRepository.delete(id);
 	}
@@ -39,6 +41,5 @@ public class BoardService {
 	public Board getById(Integer id){
 		return boardRepository.findOne(id);
 	}
-
-
+	
 }

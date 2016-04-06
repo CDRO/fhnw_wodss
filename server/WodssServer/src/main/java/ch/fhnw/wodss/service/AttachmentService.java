@@ -14,7 +14,6 @@ import ch.fhnw.wodss.domain.Attachment;
 import ch.fhnw.wodss.repository.AttachmentRepository;
 
 @Component
-@Transactional
 public class AttachmentService {
 
 	@Autowired
@@ -28,6 +27,7 @@ public class AttachmentService {
 		return attachmentRepository.getOne(id);
 	}
 	
+	@Transactional
 	public void deleteAttachment(Attachment attachment){
 		attachmentRepository.delete(attachment);
 	}

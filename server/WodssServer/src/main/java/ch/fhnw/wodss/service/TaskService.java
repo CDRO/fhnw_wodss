@@ -14,7 +14,6 @@ import ch.fhnw.wodss.domain.TaskState;
 import ch.fhnw.wodss.repository.TaskRepository;
 
 @Component
-@Transactional
 public class TaskService {
 
 	@Autowired
@@ -31,6 +30,7 @@ public class TaskService {
 		return saveTask(task, null);
 	}
 
+	@Transactional
 	public Task saveTask(Task task, List<MultipartFile> files) {
 		if (task.getState() == null) {
 			task.setState(TaskState.TODO);
@@ -56,6 +56,7 @@ public class TaskService {
 		return taskRepository.save(task);
 	}
 
+	@Transactional
 	public void deleteTask(Task task) {
 		taskRepository.delete(task);
 		for(Attachment attachment : task.getAttachments()){
@@ -63,6 +64,7 @@ public class TaskService {
 		}
 	}
 
+	@Transactional
 	public void deleteTask(Integer id) {
 		Task task = taskRepository.getOne(id);
 		deleteTask(task);
