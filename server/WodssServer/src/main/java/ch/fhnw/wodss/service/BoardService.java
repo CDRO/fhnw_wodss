@@ -34,12 +34,15 @@ public class BoardService {
 		boardRepository.delete(id);
 	}
 	
+	@Transactional(readOnly=true)
 	public List<Board> getAll(){
 		return boardRepository.findAll();
 	}
 	
+	@Transactional(readOnly=true)
 	public Board getById(Integer id){
 		return boardRepository.findOne(id);
 	}
+	
 	
 }

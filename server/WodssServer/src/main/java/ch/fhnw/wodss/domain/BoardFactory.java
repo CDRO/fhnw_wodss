@@ -33,9 +33,11 @@ public class BoardFactory {
 	 *            the title to set.
 	 * @return the board to create.
 	 */
-	public Board createBoard(String title) {
+	public Board createBoard(String title, User owner) {
 		Board board = new Board();
 		board.setTitle(title);
+		board.setOwner(owner);
+		board.addUser(owner);
 		return board;
 	}
 

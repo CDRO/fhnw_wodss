@@ -1,35 +1,43 @@
 package ch.fhnw.wodss.domain;
 
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Board {
-
+	// TODO check what should be not nullable.
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@NotNull
 	private String title;
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "board", cascade = CascadeType.REMOVE)
+	@ManyToOne
+	@NotNull
+	private User owner;
+	@OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
+	@JsonIgnore
 	private List<Task> tasks;
-	@ManyToMany(fetch = FetchType.EAGER, mappedBy = "boards")
-	private List<User> users;
+	@ManyToMany(fetch = FetchType.EAGER)
+	private Set<User> users;
 
 	Board() {
 		super();
-		tasks = new LinkedList<>();
-		users = new LinkedList<>();
+		users = new HashSet<>();
 	}
 
 	/**
@@ -71,12 +79,22 @@ public class Board {
 	}
 
 	/**
-	 * Gets all tasks of this board.
+	 * Sets the owner of this board.
 	 * 
-	 * @return the list of all tasks.
+	 * @param owner
+	 *            the owner to set.
 	 */
-	public List<Task> getTasks() {
-		return tasks;
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
+
+	/**
+	 * Returns the owner of this user.
+	 * 
+	 * @return the owner.
+	 */
+	public User getOwner() {
+		return owner;
 	}
 
 	/**
@@ -94,7 +112,7 @@ public class Board {
 	 * 
 	 * @return the list of users that have permission to see this board.
 	 */
-	public List<User> getUsers() {
+	public Set<User> getUsers() {
 		return users;
 	}
 
@@ -104,7 +122,7 @@ public class Board {
 	 * @param users
 	 *            the list of users to set.
 	 */
-	public void setUsers(List<User> users) {
+	public void setUsers(Set<User> users) {
 		this.users = users;
 	}
 
@@ -115,9 +133,7 @@ public class Board {
 	 *            the user to give permission for this board.
 	 */
 	public void addUser(User user) {
-		if (!users.contains(user)) {
-			users.add(user);
-		}
+		users.add(user);
 	}
 
 	/**
@@ -163,7 +179,8 @@ public class Board {
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(17, 31).append(id).append(title).append(tasks).append(users).toHashCode();
+		return new HashCodeBuilder(17, 31).append(id).append(title).append(owner).append(tasks).append(users)
+				.toHashCode();
 	}
 
 }
