@@ -37,7 +37,7 @@ public class LoginLogoutConroller {
 			if (aDbUser.getLoginData().isValidated()) {
 				Password pass = new Password(password.toCharArray(), aDbUser.getLoginData().getSalt());
 				if (Arrays.equals(pass.getHash(), aDbUser.getLoginData().getPassword())) {
-					Token token = TokenHandler.register();
+					Token token = TokenHandler.register(aDbUser);
 					return new ResponseEntity<>(token, HttpStatus.OK);
 				}
 			}
