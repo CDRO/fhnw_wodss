@@ -12,7 +12,7 @@ import ch.fhnw.wodss.domain.User;
  *
  */
 public class TokenHandler {
-
+	
 	/**
 	 * Token Cache.
 	 */
@@ -67,7 +67,7 @@ public class TokenHandler {
 	public static boolean validate(String tokenId) {
 		return validate(tokenId, null);
 	}
-
+	
 	/**
 	 * Validates whether the token is existing and not expired and if the token
 	 * is correctly mapped to the specified user.

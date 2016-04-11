@@ -25,7 +25,9 @@ public class Token {
 
 	/**
 	 * The user to which this token is bound.
+	 * Should be ignored by JSON in order not to prevent token user mapping on client.
 	 */
+	@JsonIgnore
 	private User user;
 
 	/**

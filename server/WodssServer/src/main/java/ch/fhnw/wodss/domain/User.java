@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 public class User {
 
+	// TODO check what should be not nullable.
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -30,9 +31,11 @@ public class User {
 	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL)
 	private LoginData loginData;
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "assignee")
+	@OneToMany(mappedBy="board", fetch = FetchType.EAGER)
+	@JsonIgnore
 	private List<Task> tasks;
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(mappedBy="users", fetch = FetchType.EAGER)
+	@JsonIgnore
 	private List<Board> boards;
 
 	User() {
@@ -108,6 +111,16 @@ public class User {
 	}
 
 	/**
+	 * Sets the list of tasks.
+	 * 
+	 * @param tasks
+	 *            the list of tasks to set.
+	 */
+	public void setTasks(List<Task> tasks) {
+		this.tasks = tasks;
+	}
+
+	/**
 	 * Gets all boards of this user.
 	 * 
 	 * @return the boards of this user.
@@ -124,16 +137,6 @@ public class User {
 	 */
 	public void setBoards(List<Board> boards) {
 		this.boards = boards;
-	}
-
-	/**
-	 * Sets the list of tasks.
-	 * 
-	 * @param tasks
-	 *            the list of tasks to set.
-	 */
-	public void setTasks(List<Task> tasks) {
-		this.tasks = tasks;
 	}
 
 	/**
@@ -163,4 +166,5 @@ public class User {
 	public int hashCode() {
 		return new HashCodeBuilder(17, 31).append(id).append(name).append(email).append(loginData).toHashCode();
 	}
+	
 }

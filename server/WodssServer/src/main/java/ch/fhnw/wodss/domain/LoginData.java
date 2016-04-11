@@ -8,7 +8,7 @@ import javax.persistence.Lob;
 
 @Entity
 public class LoginData {
-
+	// TODO check what should be not nullable.
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
