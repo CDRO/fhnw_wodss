@@ -150,7 +150,6 @@ public class TaskController {
 	 *            The attachments of the task.
 	 * @return The modified task.
 	 */
-	// TODO only be able to delete or modify task of boards i am in.
 	@RequestMapping(path = "/task/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Task> updateTask(@RequestHeader(value = "x-session-token") Token token,
 			@RequestPart("info") Task task, @PathVariable Integer id,
