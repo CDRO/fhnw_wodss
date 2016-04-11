@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import ch.fhnw.wodss.security.Password;
 
-public class ExtractPasswordSalt {
+public class ExtractPasswordSaltTest {
 
 	@Test
 	public void extract() throws IOException, URISyntaxException {

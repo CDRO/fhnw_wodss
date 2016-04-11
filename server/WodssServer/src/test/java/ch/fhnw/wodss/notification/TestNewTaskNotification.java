@@ -14,7 +14,7 @@ public class TestNewTaskNotification {
 	@Test
 	public void testNotification(){
 		User user = UserFactory.getInstance().createUser("TestUser", "test@email.com");
-		Board board = BoardFactory.getInstance().createBoard("TestBaoard");
+		Board board = BoardFactory.getInstance().createBoard("TestBaoard", user);
 		Task task = TaskFactory.getInstance().createTask(board, "TestTask", user);
 		NewTaskNotification notification = new NewTaskNotification(task);
 		notification.setTestMode(true);

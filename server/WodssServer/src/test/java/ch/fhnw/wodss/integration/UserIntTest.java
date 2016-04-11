@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ch.fhnw.wodss.domain.Board;
 import ch.fhnw.wodss.domain.BoardFactory;
 import ch.fhnw.wodss.domain.User;
-import ch.fhnw.wodss.domain.UserFactory;
 import ch.fhnw.wodss.security.Token;
-import ch.fhnw.wodss.security.TokenHandler;
 import ch.fhnw.wodss.service.BoardService;
 import ch.fhnw.wodss.service.UserService;
 
@@ -26,19 +24,19 @@ public class UserIntTest extends AbstractIntegrationTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testUserAuthorizedCRUD() throws Exception {
+	public void testCreateUser() throws Exception {
 
 		JSONObject json = new JSONObject();
 
 		// CREATE / REGISTER
-		json.put("name", "TestUser");
-		json.put("email", "email@fhnw.ch");
+		json.put("name", "TestUserL");
+		json.put("email", "emailL@fhnw.ch");
 		json.put("password", "password");
 
 		User user = doPost("http://localhost:8080/user", null, json, User.class);
 		User userFromDb = userService.getById(user.getId());
-		Assert.assertEquals("TestUser", userFromDb.getName());
-		Assert.assertEquals("email@fhnw.ch", userFromDb.getEmail());
+		Assert.assertEquals("TestUserL", userFromDb.getName());
+		Assert.assertEquals("emailL@fhnw.ch", userFromDb.getEmail());
 		Assert.assertNotNull(user.getId());
 
 		// VALIDATE EMAIL ADDRESS
@@ -54,175 +52,7 @@ public class UserIntTest extends AbstractIntegrationTest {
 		// READ
 		user = doGet("http://localhost:8080/user/{0}", token, User.class, userFromDb.getId());
 		Assert.assertNotNull(user);
-		Assert.assertEquals("TestUser", user.getName());
-
-		// UPDATE
-		json = new JSONObject();
-		json.put("id", user.getId());
-		json.put("name", "TestUser2");
-		user = doPut("http://localhost:8080/user/{0}", token, json, User.class, user.getId());
-		userFromDb = userService.getById(user.getId());
-		Assert.assertEquals("TestUser2", userFromDb.getName());
-		Assert.assertEquals("TestUser2", user.getName());
-
-		// DELETE
-		doDelete("http://localhost:8080/user/{0}", token, Boolean.class, user.getId());
-		userFromDb = userService.getById(user.getId());
-		Assert.assertNull(userFromDb);
-
-	}
-
-	/**
-	 * Tests that a user cannot update another user's profile.
-	 * 
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testUnauthorizedUpdate() throws Exception {
-		JSONObject json = new JSONObject();
-
-		// CREATE / REGISTER
-		json.put("name", "TestUser");
-		json.put("email", "email@fhnw.ch");
-		json.put("password", "password");
-
-		User user = doPost("http://localhost:8080/user", null, json, User.class);
-		User userFromDb = userService.getById(user.getId());
-		Assert.assertEquals("TestUser", userFromDb.getName());
-		Assert.assertEquals("email@fhnw.ch", userFromDb.getEmail());
-		Assert.assertNotNull(user.getId());
-
-		json = new JSONObject();
-
-		// CREATE / REGISTER
-		json.put("name", "TestUser2");
-		json.put("email", "email2@fhnw.ch");
-		json.put("password", "password2");
-
-		User user2 = doPost("http://localhost:8080/user", null, json, User.class);
-		User userFromDb2 = userService.getById(user2.getId());
-		Assert.assertEquals("TestUser2", userFromDb2.getName());
-		Assert.assertEquals("email2@fhnw.ch", userFromDb2.getEmail());
-		Assert.assertNotNull(user.getId());
-
-		// VALIDATE EMAIL ADDRESS
-		Boolean success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class,
-				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
-		Assert.assertTrue(success);
-		userFromDb2 = userService.getById(user2.getId());
-		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
-
-		// REQUEST TOKEN
-		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
-
-		try {
-			// UPDATE
-			json = new JSONObject();
-			json.put("id", user.getId());
-			json.put("name", "TestUser2");
-			user = doPut("http://localhost:8080/user/{0}", token, json, User.class, user.getId());
-			Assert.fail();
-		} catch (IOException e) {
-			// expected
-		}
-	}
-
-	/**
-	 * Tests that a user cannot delete another user's profile;
-	 * 
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testUnauthorizedDelete() throws Exception {
-		JSONObject json = new JSONObject();
-
-		// CREATE / REGISTER
-		json.put("name", "TestUser");
-		json.put("email", "email@fhnw.ch");
-		json.put("password", "password");
-
-		User user = doPost("http://localhost:8080/user", null, json, User.class);
-		User userFromDb = userService.getById(user.getId());
-		Assert.assertEquals("TestUser", userFromDb.getName());
-		Assert.assertEquals("email@fhnw.ch", userFromDb.getEmail());
-		Assert.assertNotNull(user.getId());
-
-		json = new JSONObject();
-
-		// CREATE / REGISTER
-		json.put("name", "TestUser2");
-		json.put("email", "email2@fhnw.ch");
-		json.put("password", "password2");
-
-		User user2 = doPost("http://localhost:8080/user", null, json, User.class);
-		User userFromDb2 = userService.getById(user2.getId());
-		Assert.assertEquals("TestUser2", userFromDb2.getName());
-		Assert.assertEquals("email2@fhnw.ch", userFromDb2.getEmail());
-		Assert.assertNotNull(user.getId());
-
-		// VALIDATE EMAIL ADDRESS
-		Boolean success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class,
-				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
-		Assert.assertTrue(success);
-		userFromDb2 = userService.getById(user2.getId());
-		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
-
-		// REQUEST TOKEN
-		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
-
-		try {
-			// DELETE
-			doDelete("http://localhost:8080/user/{0}", token, Boolean.class, user.getId());
-			Assert.fail();
-		} catch (IOException e) {
-			// expected
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testUserUnauthorizedCRUD() {
-
-		User user = UserFactory.getInstance().createUser("test", "test");
-
-		// INVALID TOKEN
-		Token token = TokenHandler.register(user);
-		token.setId("asdf-asdf-asdf-asdf");
-
-		JSONObject json = new JSONObject();
-		json.put("name", "TestUser");
-
-		try {
-			// READ
-			doGet("http://localhost:8080/user/{0}", token, User.class, 1);
-			Assert.fail();
-		} catch (IOException e) {
-		} catch (Exception e) {
-			e.printStackTrace();
-			Assert.fail();
-		}
-
-		try {
-			// UPDATE
-			doPut("http://localhost:8080/user/{0}", token, json, User.class, 1);
-			Assert.fail();
-		} catch (IOException e) {
-		} catch (Exception e) {
-			e.printStackTrace();
-			Assert.fail();
-		}
-
-		try {
-			// DELETE
-			doDelete("http://localhost:8080/user/{0}", token, Boolean.class, 1);
-			Assert.fail();
-		} catch (IOException e) {
-		} catch (Exception e) {
-			e.printStackTrace();
-			Assert.fail();
-		}
+		Assert.assertEquals("TestUserL", user.getName());
 	}
 
 	/**
@@ -237,27 +67,27 @@ public class UserIntTest extends AbstractIntegrationTest {
 		JSONObject json = new JSONObject();
 
 		// CREATE / REGISTER
-		json.put("name", "TestUser");
-		json.put("email", "email@fhnw.ch");
+		json.put("name", "TestUserD");
+		json.put("email", "emailD@fhnw.ch");
 		json.put("password", "password");
 
 		User user = doPost("http://localhost:8080/user", null, json, User.class);
 		User userFromDb = userService.getById(user.getId());
-		Assert.assertEquals("TestUser", userFromDb.getName());
-		Assert.assertEquals("email@fhnw.ch", userFromDb.getEmail());
+		Assert.assertEquals("TestUserD", userFromDb.getName());
+		Assert.assertEquals("emailD@fhnw.ch", userFromDb.getEmail());
 		Assert.assertNotNull(user.getId());
 
 		json = new JSONObject();
 
 		// CREATE / REGISTER
-		json.put("name", "TestUser2");
-		json.put("email", "email2@fhnw.ch");
+		json.put("name", "TestUserE");
+		json.put("email", "emailE@fhnw.ch");
 		json.put("password", "password2");
 
 		User user2 = doPost("http://localhost:8080/user", null, json, User.class);
 		User userFromDb2 = userService.getById(user2.getId());
-		Assert.assertEquals("TestUser2", userFromDb2.getName());
-		Assert.assertEquals("email2@fhnw.ch", userFromDb2.getEmail());
+		Assert.assertEquals("TestUserE", userFromDb2.getName());
+		Assert.assertEquals("emailE@fhnw.ch", userFromDb2.getEmail());
 		Assert.assertNotNull(user2.getId());
 
 		// VALIDATE EMAIL ADDRESS
@@ -313,27 +143,27 @@ public class UserIntTest extends AbstractIntegrationTest {
 		JSONObject json = new JSONObject();
 
 		// CREATE / REGISTER
-		json.put("name", "TestUser");
-		json.put("email", "email@fhnw.ch");
+		json.put("name", "TestUserF");
+		json.put("email", "emailF@fhnw.ch");
 		json.put("password", "password");
 
 		User user = doPost("http://localhost:8080/user", null, json, User.class);
 		User userFromDb = userService.getById(user.getId());
-		Assert.assertEquals("TestUser", userFromDb.getName());
-		Assert.assertEquals("email@fhnw.ch", userFromDb.getEmail());
+		Assert.assertEquals("TestUserF", userFromDb.getName());
+		Assert.assertEquals("emailF@fhnw.ch", userFromDb.getEmail());
 		Assert.assertNotNull(user.getId());
 
 		json = new JSONObject();
 
 		// CREATE / REGISTER
-		json.put("name", "TestUser2");
-		json.put("email", "email2@fhnw.ch");
+		json.put("name", "TestUserG");
+		json.put("email", "emailG@fhnw.ch");
 		json.put("password", "password2");
 
 		User user2 = doPost("http://localhost:8080/user", null, json, User.class);
 		User userFromDb2 = userService.getById(user2.getId());
-		Assert.assertEquals("TestUser2", userFromDb2.getName());
-		Assert.assertEquals("email2@fhnw.ch", userFromDb2.getEmail());
+		Assert.assertEquals("TestUserG", userFromDb2.getName());
+		Assert.assertEquals("emailG@fhnw.ch", userFromDb2.getEmail());
 		Assert.assertNotNull(user2.getId());
 
 		// VALIDATE EMAIL ADDRESS
@@ -376,27 +206,27 @@ public class UserIntTest extends AbstractIntegrationTest {
 		JSONObject json = new JSONObject();
 
 		// CREATE / REGISTER
-		json.put("name", "TestUser");
-		json.put("email", "email@fhnw.ch");
+		json.put("name", "TestUserJ");
+		json.put("email", "emailJ@fhnw.ch");
 		json.put("password", "password");
 
 		User user = doPost("http://localhost:8080/user", null, json, User.class);
 		User userFromDb = userService.getById(user.getId());
-		Assert.assertEquals("TestUser", userFromDb.getName());
-		Assert.assertEquals("email@fhnw.ch", userFromDb.getEmail());
+		Assert.assertEquals("TestUserJ", userFromDb.getName());
+		Assert.assertEquals("emailJ@fhnw.ch", userFromDb.getEmail());
 		Assert.assertNotNull(user.getId());
 
 		json = new JSONObject();
 
 		// CREATE / REGISTER
-		json.put("name", "TestUser2");
-		json.put("email", "email2@fhnw.ch");
+		json.put("name", "TestUserK");
+		json.put("email", "emailK@fhnw.ch");
 		json.put("password", "password2");
 
 		User user2 = doPost("http://localhost:8080/user", null, json, User.class);
 		User userFromDb2 = userService.getById(user2.getId());
-		Assert.assertEquals("TestUser2", userFromDb2.getName());
-		Assert.assertEquals("email2@fhnw.ch", userFromDb2.getEmail());
+		Assert.assertEquals("TestUserK", userFromDb2.getName());
+		Assert.assertEquals("emailK@fhnw.ch", userFromDb2.getEmail());
 		Assert.assertNotNull(user2.getId());
 
 		// VALIDATE EMAIL ADDRESS
@@ -439,27 +269,27 @@ public class UserIntTest extends AbstractIntegrationTest {
 		JSONObject json = new JSONObject();
 
 		// CREATE / REGISTER
-		json.put("name", "TestUser");
-		json.put("email", "email@fhnw.ch");
+		json.put("name", "TestUserH");
+		json.put("email", "emailH@fhnw.ch");
 		json.put("password", "password");
 
 		User user = doPost("http://localhost:8080/user", null, json, User.class);
 		User userFromDb = userService.getById(user.getId());
-		Assert.assertEquals("TestUser", userFromDb.getName());
-		Assert.assertEquals("email@fhnw.ch", userFromDb.getEmail());
+		Assert.assertEquals("TestUserH", userFromDb.getName());
+		Assert.assertEquals("emailH@fhnw.ch", userFromDb.getEmail());
 		Assert.assertNotNull(user.getId());
 
 		json = new JSONObject();
 
 		// CREATE / REGISTER
-		json.put("name", "TestUser2");
-		json.put("email", "email2@fhnw.ch");
+		json.put("name", "TestUserI");
+		json.put("email", "emailI@fhnw.ch");
 		json.put("password", "password2");
 
 		User user2 = doPost("http://localhost:8080/user", null, json, User.class);
 		User userFromDb2 = userService.getById(user2.getId());
-		Assert.assertEquals("TestUser2", userFromDb2.getName());
-		Assert.assertEquals("email2@fhnw.ch", userFromDb2.getEmail());
+		Assert.assertEquals("TestUserI", userFromDb2.getName());
+		Assert.assertEquals("emailI@fhnw.ch", userFromDb2.getEmail());
 		Assert.assertNotNull(user2.getId());
 
 		// VALIDATE EMAIL ADDRESS

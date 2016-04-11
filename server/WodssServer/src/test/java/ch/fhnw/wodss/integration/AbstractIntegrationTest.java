@@ -91,6 +91,31 @@ public abstract class AbstractIntegrationTest {
 
 	}
 
+	protected <T> T doGet(String url, Token token, Object obj, Class<T> type, Object... urlParameters) throws Exception {
+		String formattedUrl = MessageFormat.format(url, urlParameters);
+		URL u = new URL(formattedUrl);
+		HttpURLConnection con = (HttpURLConnection) u.openConnection();
+
+		con.setRequestMethod("GET");
+
+		if (token != null) {
+			con.setRequestProperty("x-session-token", token.getId());
+		}
+
+		con.connect();
+		
+		OutputStream outputStream = con.getOutputStream();
+		outputStream.write(objectMapper.writeValueAsBytes(obj));
+		outputStream.flush();
+
+		InputStream is = con.getInputStream();
+
+		T readValue = objectMapper.readValue(is, type);
+
+		return readValue;
+
+	}
+	
 	protected <T> T doGet(String url, Token token, Class<T> type, Object... urlParameters) throws Exception {
 		String formattedUrl = MessageFormat.format(url, urlParameters);
 		URL u = new URL(formattedUrl);
