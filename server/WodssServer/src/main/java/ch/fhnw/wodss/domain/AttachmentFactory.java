@@ -27,30 +27,27 @@ public class AttachmentFactory {
 	 * 
 	 * @return the attachment to create.
 	 */
-	public Attachment createAttachment() {
-		return createAttachment(null);
+	public Attachment createAttachment(Task task) {
+		return createAttachment(task, null);
 	}
-	
+
 	/**
 	 * Creates an attachment;
 	 * 
 	 * @return the attachment to create.
 	 */
-	public Attachment createAttachment(String extension) {
+	public Attachment createAttachment(Task task, String extension) {
 		Attachment attachment = new Attachment();
 		String id = UUID.randomUUID().toString();
 		attachment.setId(id);
-		if(attachment.getFile().exists()){
+		if (attachment.getFile().exists()) {
 			// in the seldom case the
 			// generated id is already reserved.
-			return createAttachment(extension);
+			return createAttachment(task, extension);
 		}
-		if(extension != null){
-			attachment.setExtension(extension);
-		}
+		attachment.setExtension(extension);
+		attachment.setTask(task);
 		return attachment;
 	}
-	
-	
 
 }

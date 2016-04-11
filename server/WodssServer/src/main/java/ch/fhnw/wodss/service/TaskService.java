@@ -46,7 +46,7 @@ public class TaskService {
 					extension = split[split.length - 1];
 				}
 
-				Attachment anAttachment = AttachmentFactory.getInstance().createAttachment(extension);
+				Attachment anAttachment = AttachmentFactory.getInstance().createAttachment(task, extension);
 				anAttachment.setDocumentName(file.getOriginalFilename());
 
 				// add attachment to task when saving to file system was

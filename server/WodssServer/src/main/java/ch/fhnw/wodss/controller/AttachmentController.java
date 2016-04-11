@@ -13,33 +13,73 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import ch.fhnw.wodss.domain.Attachment;
+import ch.fhnw.wodss.domain.User;
 import ch.fhnw.wodss.security.Token;
+import ch.fhnw.wodss.security.TokenHandler;
 import ch.fhnw.wodss.service.AttachmentService;
+import ch.fhnw.wodss.service.UserService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:9000")
 public class AttachmentController {
-	
+
 	@Autowired
 	private AttachmentService attachmentService;
-	
+
+	@Autowired
+	private UserService userService;
+
+	/**
+	 * Gets the attachment of a task, only if the user is subscribed to the
+	 * board which contains this task.
+	 * 
+	 * @param token
+	 *            The security token to verify that the user is logged in.
+	 * @param id
+	 *            The attachment id (UUID)
+	 * @return The attachament if any.
+	 */
 	@RequestMapping(path = "/attachment/{id}", method = RequestMethod.GET)
-	public ResponseEntity<File> getAttachment(@RequestHeader(value = "x-session-token") Token token, @PathVariable String id) {
+	public ResponseEntity<File> getAttachment(@RequestHeader(value = "x-session-token") Token token,
+			@PathVariable String id) {
+		User user = TokenHandler.getUser(token.getId());
+		// Reload user from database
+		user = userService.getById(user.getId());
 		Attachment attachment = attachmentService.getAttachment(id);
-		if(attachment == null){
+		if (attachment == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(attachment.getFile(), HttpStatus.OK);
+		if (user.getBoards().contains(attachment.getTask().getBoard())) {
+			return new ResponseEntity<>(attachment.getFile(), HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
-	
+
+	/**
+	 * Deletes the attachment of a task, only if the user is subscribed to the
+	 * board which contains this task.
+	 * 
+	 * @param token
+	 *            The security token to verify the user is logged in.
+	 * @param id
+	 *            The attachment id to delete.
+	 * @return <code>true</code> if successful, <code>false</code> otherwise.
+	 */
 	@RequestMapping(path = "/attachment/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Boolean> deleteAttachment(@RequestHeader(value = "x-session-token") Token token, @PathVariable String id) {
+	public ResponseEntity<Boolean> deleteAttachment(@RequestHeader(value = "x-session-token") Token token,
+			@PathVariable String id) {
+		User user = TokenHandler.getUser(token.getId());
+		// Reload user from database
+		user = userService.getById(user.getId());
 		Attachment attachment = attachmentService.getAttachment(id);
-		if(attachment == null){
+		if (attachment == null) {
 			return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
 		}
-		attachmentService.deleteAttachment(attachment);
-		return new ResponseEntity<>(true, HttpStatus.OK);
+		if (user.getBoards().contains(attachment.getTask().getBoard())) {
+			attachmentService.deleteAttachment(attachment);
+			return new ResponseEntity<>(true, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
 	}
 
 }

@@ -2,21 +2,13 @@ package ch.fhnw.wodss.integration;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
-import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ch.fhnw.wodss.domain.Board;
 import ch.fhnw.wodss.domain.BoardFactory;
 import ch.fhnw.wodss.domain.Task;
+import ch.fhnw.wodss.domain.TaskFactory;
+import ch.fhnw.wodss.domain.User;
+import ch.fhnw.wodss.domain.UserFactory;
 import ch.fhnw.wodss.security.Token;
 import ch.fhnw.wodss.security.TokenHandler;
 import ch.fhnw.wodss.service.BoardService;
 import ch.fhnw.wodss.service.TaskService;
+import ch.fhnw.wodss.service.UserService;
 
 public class TaskIntTest extends AbstractIntegrationTest {
 
@@ -37,11 +33,16 @@ public class TaskIntTest extends AbstractIntegrationTest {
 	@Autowired
 	private BoardService boardService;
 
+	@Autowired
+	private UserService userService;
+
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testCreatTaskWithBoard() throws Exception {
-		
-		Board board = BoardFactory.getInstance().createBoard("BoardTitle");
+
+		User user = UserFactory.getInstance().createUser("Hans", "hans.muster@fhnw.ch");
+
+		Board board = BoardFactory.getInstance().createBoard("BoardTitle", user);
 		board = boardService.saveBoard(board);
 
 		JSONObject json = new JSONObject();
@@ -54,13 +55,13 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		// CREATE
 		json.clear();
 		json.put("description", "TestTask");
-		
+
 		// Board
 		JSONObject jsonBoard = new JSONObject();
 		jsonBoard.put("id", board.getId());
 		jsonBoard.put("title", board.getTitle());
 		json.put("board", jsonBoard);
-		
+
 		System.out.println(json.toJSONString());
 
 		Task task = doMulitPartPostTask("http://localhost:8080/task", token, json, null);
@@ -69,7 +70,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		Task taskFromDb = taskService.getById(task.getId());
 		Assert.assertEquals("TestTask", taskFromDb.getDescription());
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testTaskAuthorizedCRUD() throws Exception {
@@ -115,8 +116,10 @@ public class TaskIntTest extends AbstractIntegrationTest {
 	@Test
 	public void testTaskUnauthorizedCRUD() {
 
-		// IVALID TOKEN
-		Token token = TokenHandler.register();
+		User user = UserFactory.getInstance().createUser("test", "test");
+
+		// INVALID TOKEN
+		Token token = TokenHandler.register(user);
 		token.setId("asdf-asdf-asdf-asdf");
 
 		JSONObject json = new JSONObject();
@@ -191,62 +194,439 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(task.getId().intValue());
 		Task taskFromDb = taskService.getById(task.getId());
 		Assert.assertEquals("TestTask", taskFromDb.getDescription());
-		
+
 		// TODO test delete task with attachment!!
 	}
 
-	private Task doMulitPartPostTask(String url, Token token, JSONObject json, List<File> files, Object... urlParameters)
-			throws Exception {
+	/**
+	 * Tests getting the all tasks of all boards the user is owner or has been
+	 * invited.
+	 * 
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetTasks() throws Exception {
+		JSONObject json = new JSONObject();
 
-		HttpClient httpClient = HttpClientBuilder.create().build();
+		// CREATE / REGISTER
+		json.put("name", "TestUser10");
+		json.put("email", "email10@fhnw.ch");
+		json.put("password", "password");
 
-		MultipartEntityBuilder mpBuilder = MultipartEntityBuilder.create();
-		mpBuilder.addTextBody("info", json.toJSONString(), ContentType.APPLICATION_JSON);
-		if(files != null){
-			for(File file : files){
-				mpBuilder.addBinaryBody("file", file);
-			}
+		User user = doPost("http://localhost:8080/user", null, json, User.class);
+		User userFromDb = userService.getById(user.getId());
+		Assert.assertEquals("TestUser10", userFromDb.getName());
+		Assert.assertEquals("email10@fhnw.ch", userFromDb.getEmail());
+		Assert.assertNotNull(user.getId());
+
+		json = new JSONObject();
+
+		// CREATE / REGISTER
+		json.put("name", "TestUser11");
+		json.put("email", "email11@fhnw.ch");
+		json.put("password", "password2");
+
+		User user2 = doPost("http://localhost:8080/user", null, json, User.class);
+		User userFromDb2 = userService.getById(user2.getId());
+		Assert.assertEquals("TestUser11", userFromDb2.getName());
+		Assert.assertEquals("email11@fhnw.ch", userFromDb2.getEmail());
+		Assert.assertNotNull(user.getId());
+
+		// VALIDATE EMAIL ADDRESS
+		Boolean success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class,
+				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
+		Assert.assertTrue(success);
+		userFromDb2 = userService.getById(user2.getId());
+		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
+
+		// REQUEST TOKEN
+		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
+
+		Board board1 = BoardFactory.getInstance().createBoard("Board1", user);
+		board1 = boardService.saveBoard(board1);
+		Assert.assertNotNull(board1.getId());
+
+		Board board2 = BoardFactory.getInstance().createBoard("Board2", user2);
+		board2 = boardService.saveBoard(board2);
+		Assert.assertNotNull(board2.getId());
+
+		Board board3 = BoardFactory.getInstance().createBoard("Board3", user2);
+		board3 = boardService.saveBoard(board3);
+		Assert.assertNotNull(board3.getId());
+
+		Task task1 = TaskFactory.getInstance().createTask(board1, "Task1");
+		task1 = taskService.saveTask(task1);
+		Assert.assertNotNull(task1.getId());
+
+		Task task2 = TaskFactory.getInstance().createTask(board2, "Task2");
+		task2 = taskService.saveTask(task2);
+		Assert.assertNotNull(task2.getId());
+
+		Task task3 = TaskFactory.getInstance().createTask(board3, "Task3");
+		task3 = taskService.saveTask(task3);
+		Assert.assertNotNull(task3.getId());
+
+		Task[] alltasks = doGet("http://localhost:8080/tasks", token, Task[].class);
+		List<Task> alltasksList = Arrays.asList(alltasks);
+		Assert.assertEquals(2, alltasksList.size());
+		Assert.assertTrue(alltasksList.contains(task2));
+		Assert.assertTrue(alltasksList.contains(task3));
+
+	}
+
+	/**
+	 * Tests getting a single task by id. The taks should only be returned, if
+	 * the task belongs to the board the user is subscribed to.
+	 * 
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testGetTask() throws Exception {
+		JSONObject json = new JSONObject();
+
+		// CREATE / REGISTER
+		json.put("name", "TestUser12");
+		json.put("email", "email12@fhnw.ch");
+		json.put("password", "password");
+
+		User user = doPost("http://localhost:8080/user", null, json, User.class);
+		User userFromDb = userService.getById(user.getId());
+		Assert.assertEquals("TestUser12", userFromDb.getName());
+		Assert.assertEquals("email12@fhnw.ch", userFromDb.getEmail());
+		Assert.assertNotNull(user.getId());
+
+		json = new JSONObject();
+
+		// CREATE / REGISTER
+		json.put("name", "TestUser13");
+		json.put("email", "email13@fhnw.ch");
+		json.put("password", "password2");
+
+		User user2 = doPost("http://localhost:8080/user", null, json, User.class);
+		User userFromDb2 = userService.getById(user2.getId());
+		Assert.assertEquals("TestUser13", userFromDb2.getName());
+		Assert.assertEquals("email13@fhnw.ch", userFromDb2.getEmail());
+		Assert.assertNotNull(user.getId());
+
+		// VALIDATE EMAIL ADDRESS
+		Boolean success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class,
+				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
+		Assert.assertTrue(success);
+		userFromDb2 = userService.getById(user2.getId());
+		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
+
+		// REQUEST TOKEN
+		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
+
+		Board board1 = BoardFactory.getInstance().createBoard("Board1", user);
+		board1 = boardService.saveBoard(board1);
+		Assert.assertNotNull(board1.getId());
+
+		Board board2 = BoardFactory.getInstance().createBoard("Board2", user2);
+		board2 = boardService.saveBoard(board2);
+		Assert.assertNotNull(board2.getId());
+
+		Board board3 = BoardFactory.getInstance().createBoard("Board3", user2);
+		board3 = boardService.saveBoard(board3);
+		Assert.assertNotNull(board3.getId());
+
+		Task task1 = TaskFactory.getInstance().createTask(board1, "Task1");
+		task1 = taskService.saveTask(task1);
+		Assert.assertNotNull(task1.getId());
+
+		Task task2 = TaskFactory.getInstance().createTask(board2, "Task2");
+		task2 = taskService.saveTask(task2);
+		Assert.assertNotNull(task2.getId());
+
+		Task task3 = TaskFactory.getInstance().createTask(board3, "Task3");
+		task3 = taskService.saveTask(task3);
+		Assert.assertNotNull(task3.getId());
+
+		try{
+			task2 = doGet("http://localhost:8080/task/{0}", token, Task.class, task2.getId());
+		} catch (IOException e){
+			Assert.fail();
+		} catch (Exception e){
+			Assert.fail();
 		}
-		HttpEntity entity = mpBuilder.build();
-
-		String formattedUrl = MessageFormat.format(url, urlParameters);
-
-		HttpPost httpPost = new HttpPost(formattedUrl);
-		httpPost.setHeader("x-session-token", token.getId());
-		httpPost.setEntity(entity);
-		HttpResponse response = httpClient.execute(httpPost);
-		HttpEntity result = response.getEntity();
-
-		InputStream is = result.getContent();
 		
-		Task readValue = objectMapper.readValue(is, Task.class);
-		return readValue;
-
-	}
-
-	private Task doMulitPartPutTask(String url, Token token, JSONObject json, File file, Object... urlParameters)
-			throws Exception {
-
-		HttpClient httpClient = HttpClientBuilder.create().build();
-
-		MultipartEntityBuilder mpBuilder = MultipartEntityBuilder.create();
-		mpBuilder.addTextBody("info", json.toJSONString(), ContentType.APPLICATION_JSON);
-		if(file != null){
-			mpBuilder.addBinaryBody("file", file);
+		try{
+			task1 =  doGet("http://localhost:8080/task/{0}", token, Task.class, task1.getId());
+			Assert.fail();
+		} catch (IOException e){
+		} catch (Exception e){
+			Assert.fail();
 		}
-		HttpEntity entity = mpBuilder.build();
-
-		String formattedUrl = MessageFormat.format(url, urlParameters);
-
-		HttpPut httpPut = new HttpPut(formattedUrl);
-		httpPut.setHeader("x-session-token", token.getId());
-		httpPut.setEntity(entity);
-		HttpResponse response = httpClient.execute(httpPut);
-		HttpEntity result = response.getEntity();
-
-		InputStream is = result.getContent();
-		Task readValue = objectMapper.readValue(is, Task.class);
-		return readValue;
 
 	}
+	
+	/**
+	 * Tests creating a single task. The task should only be created, if
+	 * the task belongs to the board the user is subscribed to.
+	 * 
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testCreateTask() throws Exception {
+		JSONObject json = new JSONObject();
+
+		// CREATE / REGISTER
+		json.put("name", "TestUser14");
+		json.put("email", "email14@fhnw.ch");
+		json.put("password", "password");
+
+		User user = doPost("http://localhost:8080/user", null, json, User.class);
+		User userFromDb = userService.getById(user.getId());
+		Assert.assertEquals("TestUser14", userFromDb.getName());
+		Assert.assertEquals("email14@fhnw.ch", userFromDb.getEmail());
+		Assert.assertNotNull(user.getId());
+
+		json = new JSONObject();
+
+		// CREATE / REGISTER
+		json.put("name", "TestUser15");
+		json.put("email", "email15@fhnw.ch");
+		json.put("password", "password2");
+
+		User user2 = doPost("http://localhost:8080/user", null, json, User.class);
+		User userFromDb2 = userService.getById(user2.getId());
+		Assert.assertEquals("TestUser15", userFromDb2.getName());
+		Assert.assertEquals("email15@fhnw.ch", userFromDb2.getEmail());
+		Assert.assertNotNull(user.getId());
+
+		// VALIDATE EMAIL ADDRESS
+		Boolean success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class,
+				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
+		Assert.assertTrue(success);
+		userFromDb2 = userService.getById(user2.getId());
+		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
+
+		// REQUEST TOKEN
+		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
+
+		Board board1 = BoardFactory.getInstance().createBoard("Board1", user);
+		board1 = boardService.saveBoard(board1);
+		Assert.assertNotNull(board1.getId());
+
+		Board board2 = BoardFactory.getInstance().createBoard("Board2", user2);
+		board2 = boardService.saveBoard(board2);
+		Assert.assertNotNull(board2.getId());
+
+		Board board3 = BoardFactory.getInstance().createBoard("Board3", user2);
+		board3 = boardService.saveBoard(board3);
+		Assert.assertNotNull(board3.getId());
+
+		try {
+			Task task1 = TaskFactory.getInstance().createTask(board1, "Task1");
+			JSONParser parser = new JSONParser();
+			JSONObject task1json = (JSONObject) parser.parse(objectMapper.writeValueAsString(task1));
+			task1 = doMulitPartPostTask("http://localhost:8080/task", token, task1json, null);
+			Assert.assertNotNull(task1.getId());
+			Assert.fail();
+		} catch (IOException e) {
+		} catch (Exception e) {
+			Assert.fail();
+		}
+
+		try {
+			Task task2 = TaskFactory.getInstance().createTask(board2, "Task2");
+			JSONParser parser = new JSONParser();
+			JSONObject task1json = (JSONObject) parser.parse(objectMapper.writeValueAsString(task2));
+			task2 = doMulitPartPostTask("http://localhost:8080/task", token, task1json, null);
+			Assert.assertNotNull(task2.getId());
+		} catch (IOException e) {
+			Assert.fail();
+		} catch (Exception e) {
+			Assert.fail();
+		}
+
+	}
+	
+	/**
+	 * Tests deleting a single task by id, if
+	 * the task belongs to the board the user is subscribed to.
+	 * 
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testDeleteTask() throws Exception {
+		JSONObject json = new JSONObject();
+
+		// CREATE / REGISTER
+		json.put("name", "TestUser16");
+		json.put("email", "email16@fhnw.ch");
+		json.put("password", "password");
+
+		User user = doPost("http://localhost:8080/user", null, json, User.class);
+		User userFromDb = userService.getById(user.getId());
+		Assert.assertEquals("TestUser16", userFromDb.getName());
+		Assert.assertEquals("email16@fhnw.ch", userFromDb.getEmail());
+		Assert.assertNotNull(user.getId());
+
+		json = new JSONObject();
+
+		// CREATE / REGISTER
+		json.put("name", "TestUser17");
+		json.put("email", "email17@fhnw.ch");
+		json.put("password", "password2");
+
+		User user2 = doPost("http://localhost:8080/user", null, json, User.class);
+		User userFromDb2 = userService.getById(user2.getId());
+		Assert.assertEquals("TestUser17", userFromDb2.getName());
+		Assert.assertEquals("email17@fhnw.ch", userFromDb2.getEmail());
+		Assert.assertNotNull(user.getId());
+
+		// VALIDATE EMAIL ADDRESS
+		Boolean success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class,
+				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
+		Assert.assertTrue(success);
+		userFromDb2 = userService.getById(user2.getId());
+		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
+
+		// REQUEST TOKEN
+		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
+
+		Board board1 = BoardFactory.getInstance().createBoard("Board1", user);
+		board1 = boardService.saveBoard(board1);
+		Assert.assertNotNull(board1.getId());
+
+		Board board2 = BoardFactory.getInstance().createBoard("Board2", user2);
+		board2 = boardService.saveBoard(board2);
+		Assert.assertNotNull(board2.getId());
+
+		Board board3 = BoardFactory.getInstance().createBoard("Board3", user2);
+		board3 = boardService.saveBoard(board3);
+		Assert.assertNotNull(board3.getId());
+
+		Task task1 = TaskFactory.getInstance().createTask(board1, "Task1");
+		task1 = taskService.saveTask(task1);
+		Assert.assertNotNull(task1.getId());
+
+		Task task2 = TaskFactory.getInstance().createTask(board2, "Task2");
+		task2 = taskService.saveTask(task2);
+		Assert.assertNotNull(task2.getId());
+
+		Task task3 = TaskFactory.getInstance().createTask(board3, "Task3");
+		task3 = taskService.saveTask(task3);
+		Assert.assertNotNull(task3.getId());
+
+		boolean result = false;
+		try{
+			result = doDelete("http://localhost:8080/task/{0}", token, Boolean.class, task1.getId());
+			Assert.fail();
+		} catch (IOException e) {
+		} catch (Exception e){
+			Assert.fail();
+		}
+		Assert.assertFalse(result);
+		
+		try{
+			result = doDelete("http://localhost:8080/task/{0}", token, Boolean.class, task2.getId());
+		} catch (IOException e) {
+			Assert.fail();
+		} catch (Exception e){
+			Assert.fail();
+		}
+		Assert.assertTrue(result);
+
+	}
+
+	/**
+	 * Tests modifying a single task by id, if
+	 * the task belongs to the board the user is subscribed to.
+	 * 
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testModifyTask() throws Exception {
+		JSONObject json = new JSONObject();
+	
+		// CREATE / REGISTER
+		json.put("name", "TestUser18");
+		json.put("email", "email18@fhnw.ch");
+		json.put("password", "password");
+	
+		User user = doPost("http://localhost:8080/user", null, json, User.class);
+		User userFromDb = userService.getById(user.getId());
+		Assert.assertEquals("TestUser18", userFromDb.getName());
+		Assert.assertEquals("email18@fhnw.ch", userFromDb.getEmail());
+		Assert.assertNotNull(user.getId());
+	
+		json = new JSONObject();
+	
+		// CREATE / REGISTER
+		json.put("name", "TestUser19");
+		json.put("email", "email19@fhnw.ch");
+		json.put("password", "password2");
+	
+		User user2 = doPost("http://localhost:8080/user", null, json, User.class);
+		User userFromDb2 = userService.getById(user2.getId());
+		Assert.assertEquals("TestUser19", userFromDb2.getName());
+		Assert.assertEquals("email19@fhnw.ch", userFromDb2.getEmail());
+		Assert.assertNotNull(user.getId());
+	
+		// VALIDATE EMAIL ADDRESS
+		Boolean success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class,
+				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
+		Assert.assertTrue(success);
+		userFromDb2 = userService.getById(user2.getId());
+		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
+	
+		// REQUEST TOKEN
+		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
+	
+		Board board1 = BoardFactory.getInstance().createBoard("Board1", user);
+		board1 = boardService.saveBoard(board1);
+		Assert.assertNotNull(board1.getId());
+	
+		Board board2 = BoardFactory.getInstance().createBoard("Board2", user2);
+		board2 = boardService.saveBoard(board2);
+		Assert.assertNotNull(board2.getId());
+	
+		Board board3 = BoardFactory.getInstance().createBoard("Board3", user2);
+		board3 = boardService.saveBoard(board3);
+		Assert.assertNotNull(board3.getId());
+	
+		Task task1 = TaskFactory.getInstance().createTask(board1, "Task1");
+		task1 = taskService.saveTask(task1);
+		Assert.assertNotNull(task1.getId());
+	
+		Task task2 = TaskFactory.getInstance().createTask(board2, "Task2");
+		task2 = taskService.saveTask(task2);
+		Assert.assertNotNull(task2.getId());
+	
+		Task task3 = TaskFactory.getInstance().createTask(board3, "Task3");
+		task3 = taskService.saveTask(task3);
+		Assert.assertNotNull(task3.getId());
+	
+		JSONParser parser = new JSONParser();
+		
+		try{
+			task1.setDescription("OtherDescription1");
+			JSONObject task1json = (JSONObject) parser.parse(objectMapper.writeValueAsString(task1));
+			task1 = doMulitPartPutTask("http://localhost:8080/task/{0}", token, task1json, null, task1.getId());
+			Assert.fail();
+		} catch (IOException e) {
+		} catch (Exception e){
+			Assert.fail();
+		}
+		
+		try{
+			task2.setDescription("OtherDescription2");
+			JSONObject task2json = (JSONObject) parser.parse(objectMapper.writeValueAsString(task2));
+			task2 = doMulitPartPutTask("http://localhost:8080/task/{0}", token, task2json, null, task2.getId());
+			Assert.assertEquals("OtherDescription2", task2.getDescription());
+		} catch (IOException e) {
+			Assert.fail();
+		} catch (Exception e){
+			Assert.fail();
+		}
+	
+	}
+
 }
