@@ -17,8 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import ch.fhnw.wodss.domain.Board;
 import ch.fhnw.wodss.domain.Task;
+import ch.fhnw.wodss.domain.User;
 import ch.fhnw.wodss.security.Token;
+import ch.fhnw.wodss.security.TokenHandler;
 import ch.fhnw.wodss.service.TaskService;
+import ch.fhnw.wodss.service.UserService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:9000")
@@ -27,42 +30,139 @@ public class TaskController {
 	@Autowired
 	private TaskService taskService;
 
+	@Autowired
+	private UserService userService;
+
+	/**
+	 * Gets the list of tasks of one or all board the user is subscribed to.
+	 * 
+	 * @param token
+	 *            the token to verify that the user is logged in.
+	 * @param board
+	 *            the board for which the tasks should be retrieved. If
+	 *            <code>null</code> all tasks of all user boards will be
+	 *            retrieved.
+	 * @return the list of tasks.
+	 */
 	@RequestMapping(path = "/tasks", method = RequestMethod.GET)
 	public ResponseEntity<List<Task>> getAllTasks(@RequestHeader(value = "x-session-token") Token token,
 			@RequestBody(required = false) Board board) {
-		List<Task> tasks = taskService.getAll();
-		return new ResponseEntity<>(tasks, HttpStatus.OK);
+		User user = TokenHandler.getUser(token.getId());
+		// reload user from db
+		user = userService.getById(user.getId());
+		if (board == null) {
+			// give me all the task of all the boards a I am subscribed.
+			List<Task> tasks = taskService.getByBoards(user.getBoards());
+			return new ResponseEntity<>(tasks, HttpStatus.OK);
+		}
+		if (user.getBoards().contains(board)) {
+			List<Task> tasks = taskService.getByBoard(board);
+			return new ResponseEntity<>(tasks, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
+	/**
+	 * Gets the task specified by id.
+	 * 
+	 * @param token
+	 *            the security token to verify user is logged in.
+	 * @param id
+	 *            the id of the task.
+	 * @return the task.
+	 */
 	@RequestMapping(path = "/task/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Task> getTask(@RequestHeader(value = "x-session-token") Token token,
 			@PathVariable Integer id) {
+		User user = TokenHandler.getUser(token.getId());
+		// reload user from db
+		user = userService.getById(user.getId());
 		Task task = taskService.getById(id);
-		return new ResponseEntity<>(task, HttpStatus.OK);
+		if (user.getBoards().contains(task.getBoard())) {
+			return new ResponseEntity<>(task, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
+	/**
+	 * Creates a new task in a board. To create a new task, the user must be
+	 * subscribed for the board, where the task should be associated with.
+	 * 
+	 * @param token
+	 *            The security token to verify the user is logged in.
+	 * @param task
+	 *            The task to create.
+	 * @param files
+	 *            The attachments for the task.
+	 * @return The saved task that contains an ID from database.
+	 */
 	// TODO: restrict attachment mime types.
 	@RequestMapping(path = "/task", method = RequestMethod.POST)
 	public ResponseEntity<Task> createTask(@RequestHeader(value = "x-session-token") Token token,
 			@RequestPart("info") Task task, @RequestPart(name = "file", required = false) List<MultipartFile> files) {
-		Task savedTask = taskService.saveTask(task, files);
-		return new ResponseEntity<>(savedTask, HttpStatus.OK);
+		User user = TokenHandler.getUser(token.getId());
+		// reload user from db
+		user = userService.getById(user.getId());
+		if (user.getBoards().contains(task.getBoard())) {
+			Task savedTask = taskService.saveTask(task, files);
+			return new ResponseEntity<>(savedTask, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
+	/**
+	 * Deletes a task from its board, but only if the user is subscribed to this
+	 * board.
+	 * 
+	 * @param token
+	 *            The security token to verify whether user is logged in.
+	 * @param id
+	 *            The Task ID
+	 * @return <code>true</code> if the task could be deleted,
+	 *         <code>false</code> otherwise.
+	 */
 	// TODO Test delete attachment
 	@RequestMapping(path = "/task/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Boolean> deleteTask(@RequestHeader(value = "x-session-token") Token token,
 			@PathVariable Integer id) {
-		taskService.deleteTask(id);
-		return new ResponseEntity<>(true, HttpStatus.OK);
+		Task task = taskService.getById(id);
+		User user = TokenHandler.getUser(token.getId());
+		// reload user from db
+		user = userService.getById(user.getId());
+		if (user.getBoards().contains(task.getBoard())) {
+			taskService.deleteTask(id);
+			return new ResponseEntity<>(true, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
 	}
 
+	/**
+	 * Modifies a created task. This should only be possible if the user is
+	 * subscribed to the board that contains the task to modify.
+	 * 
+	 * @param token
+	 *            The security token to verify whether the user is logged in.
+	 * @param task
+	 *            The modified task to save.
+	 * @param id
+	 *            The id of the task to modify.
+	 * @param files
+	 *            The attachments of the task.
+	 * @return The modified task.
+	 */
+	// TODO only be able to delete or modify task of boards i am in.
 	@RequestMapping(path = "/task/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Task> updateTask(@RequestHeader(value = "x-session-token") Token token,
 			@RequestPart("info") Task task, @PathVariable Integer id,
 			@RequestPart(name = "file", required = false) List<MultipartFile> files) {
-		Task updatedTask = taskService.saveTask(task, files);
-		return new ResponseEntity<>(updatedTask, HttpStatus.OK);
+		User user = TokenHandler.getUser(token.getId());
+		// reload user from db
+		user = userService.getById(user.getId());
+		if (user.getBoards().contains(task.getBoard())) {
+			Task updatedTask = taskService.saveTask(task, files);
+			return new ResponseEntity<>(updatedTask, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
 }
