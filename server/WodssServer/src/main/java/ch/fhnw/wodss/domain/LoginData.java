@@ -18,6 +18,8 @@ public class LoginData {
 	private byte[] salt;
 	private boolean validated;
 	private String validationCode;
+	private String resetCode;
+	
 	/**
 	 * @return the id
 	 */
@@ -78,6 +80,11 @@ public class LoginData {
 	public void setValidationCode(String validationCode) {
 		this.validationCode = validationCode;
 	}
-	
+	/**
+	 * @return the resetCode
+	 */
+	public String getResetCode() {
+		return resetCode;
+	}
 	
 }

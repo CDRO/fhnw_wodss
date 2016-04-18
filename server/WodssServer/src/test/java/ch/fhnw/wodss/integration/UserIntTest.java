@@ -40,14 +40,14 @@ public class UserIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(user.getId());
 
 		// VALIDATE EMAIL ADDRESS
-		Boolean success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class,
-				userFromDb.getEmail(), userFromDb.getLoginData().getValidationCode());
+		Boolean success = doPut("http://localhost:8080/user/{0}/logindata?validationCode={1}", null, null, Boolean.class,
+				userFromDb.getId(), userFromDb.getLoginData().getValidationCode());
 		Assert.assertTrue(success);
 		userFromDb = userService.getById(user.getId());
 		Assert.assertTrue(userFromDb.getLoginData().isValidated());
 
 		// REQUEST TOKEN
-		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
+		Token token = doPost("http://localhost:8080/token", null, json, Token.class);
 
 		// READ
 		user = doGet("http://localhost:8080/user/{0}", token, User.class, userFromDb.getId());
@@ -91,14 +91,14 @@ public class UserIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(user2.getId());
 
 		// VALIDATE EMAIL ADDRESS
-		Boolean success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class,
-				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
+		Boolean success = doPut("http://localhost:8080/user/{0}/logindata?validationCode={1}", null, null, Boolean.class,
+				userFromDb2.getId(), userFromDb2.getLoginData().getValidationCode());
 		Assert.assertTrue(success);
 		userFromDb2 = userService.getById(user2.getId());
 		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
 
 		// REQUEST TOKEN
-		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
+		Token token = doPost("http://localhost:8080/token", null, json, Token.class);
 
 		Board board1 = BoardFactory.getInstance().createBoard("Board1", user);
 		board1 = boardService.saveBoard(board1);
@@ -167,14 +167,14 @@ public class UserIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(user2.getId());
 
 		// VALIDATE EMAIL ADDRESS
-		Boolean success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class,
-				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
+		Boolean success = doPut("http://localhost:8080/user/{0}/logindata?validationCode={1}", null, null, Boolean.class,
+				userFromDb2.getId(), userFromDb2.getLoginData().getValidationCode());
 		Assert.assertTrue(success);
 		userFromDb2 = userService.getById(user2.getId());
 		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
 
 		// REQUEST TOKEN
-		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
+		Token token = doPost("http://localhost:8080/token", null, json, Token.class);
 
 		try{
 			doGet("http://localhost:8080/user/{0}", token, User.class, user.getId());
@@ -230,14 +230,14 @@ public class UserIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(user2.getId());
 
 		// VALIDATE EMAIL ADDRESS
-		Boolean success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class,
-				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
+		Boolean success = doPut("http://localhost:8080/user/{0}/logindata?validationCode={1}", null, null, Boolean.class,
+				userFromDb2.getId(), userFromDb2.getLoginData().getValidationCode());
 		Assert.assertTrue(success);
 		userFromDb2 = userService.getById(user2.getId());
 		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
 
 		// REQUEST TOKEN
-		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
+		Token token = doPost("http://localhost:8080/token", null, json, Token.class);
 
 		try{
 			doDelete("http://localhost:8080/user/{0}", token, Boolean.class, user.getId());
@@ -293,14 +293,14 @@ public class UserIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(user2.getId());
 
 		// VALIDATE EMAIL ADDRESS
-		Boolean success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class,
-				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
+		Boolean success = doPut("http://localhost:8080/user/{0}/logindata?validationCode={1}", null, null, Boolean.class,
+				userFromDb2.getId(), userFromDb2.getLoginData().getValidationCode());
 		Assert.assertTrue(success);
 		userFromDb2 = userService.getById(user2.getId());
 		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
 
 		// REQUEST TOKEN
-		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
+		Token token = doPost("http://localhost:8080/token", null, json, Token.class);
 
 		user2.setEmail("newEmail@fhnw.ch");
 		

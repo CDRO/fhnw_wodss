@@ -18,12 +18,12 @@ public class LoginLogoutIntTest extends AbstractIntegrationTest {
 		json.put("password", "password");
 		
 		// CREATE
-		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
+		Token token = doPost("http://localhost:8080/token", null, json, Token.class);
 		Assert.assertNotNull(token.getId());
 		Assert.assertTrue(TokenHandler.validate(token.getId()));
 		
 		// DELETE
-		doDelete("http://localhost:8080/logout", token, Boolean.class);
+		doDelete("http://localhost:8080/token", token, Boolean.class);
 		Assert.assertFalse(TokenHandler.validate(token.getId()));
 	}
 }
