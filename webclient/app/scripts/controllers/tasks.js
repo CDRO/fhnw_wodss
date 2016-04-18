@@ -13,15 +13,16 @@ var taskController = function(taskService, params, $uibModal){
   var self = this;
   this.list = [];
 
-  this.boards = [{id: 2, title:"Test"}, {id: 3, title:"Board2"}];
+  this.boards = params.boards ? params.boards : [];
 
-  this.people = [{id: 3, name: "Person1"}, {id: 4, name:"Person2"}];
+  this.people = params.assignees ? params.assignees : [];
 
-  this.selectedBoard = params.boardId;
-  /* Select the selected Board */
+  this.boardId = parseInt(params.boardId);
+
+  this.selectedBoard = {};
   this.boards.forEach(function(board){
-      if(board.id === self.selectedBoard){
-          board.selected = true;
+      if(self.boardId === board.id){
+          self.selectedBoard = board;
       }
   });
 
@@ -88,12 +89,7 @@ var taskController = function(taskService, params, $uibModal){
   };
 
   this.create = function(){
-    var selectedBoard = {};
-    if(self.selectedBoard){
-      selectedBoard.board = self.selectedBoard;
-    }
-
-    openModal(true, selectedBoard);
+    openModal(true, {board: self.selectedBoard});
   };
 
   this.update = function(model){

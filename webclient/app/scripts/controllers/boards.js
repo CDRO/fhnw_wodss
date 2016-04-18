@@ -11,6 +11,7 @@
 var boardController = function(boardService) {
   var self = this;
   this.list = [];
+  this.assignees = [];
 
   boardService.getAll(this.list).then(function(data){
       self.list = data;

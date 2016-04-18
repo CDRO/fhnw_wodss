@@ -9,7 +9,7 @@
   <div class="form-group">
     <label for="boardSelect" translate="tasks.form.boardSelection"></label>
     <select name="boardSelection" id="boardSelect" ng-model="model.board"
-            ng-options="board.title for board in boards track by board.id">
+            ng-options="board.title for board in boards"> <!--board.id as board.title for board in boards-->
     </select>
   </div>
 
@@ -35,7 +35,8 @@
 
     <!--ngf-pattern="'image/*'" ngf-multiple="true"-->
     <button class="btn btn-primary" ngf-select ng-model="model.files" name="files"
-         ngf-accept="'image/*'" ngf-max-size="20MB" ngf-multiple="true" translate="tasks.form.addAttachment" multiple></button>
+         ngf-accept="'image/*'" ngf-max-size="10MB" ngf-max-total-size="50MB" ngf-multiple="true" translate="tasks.form.addAttachment" multiple></button>
+
 
     Drop files: <div ngf-drop ng-model="model.files" class="drop-box">Drop</div>
 
