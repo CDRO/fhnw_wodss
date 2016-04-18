@@ -40,8 +40,8 @@ public class UserIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(user.getId());
 
 		// VALIDATE EMAIL ADDRESS
-		Boolean success = doGet("http://localhost:8080/user?email={0}&validationCode={1}", null, Boolean.class,
-				userFromDb.getEmail(), userFromDb.getLoginData().getValidationCode());
+		Boolean success = doPut("http://localhost:8080/user/{0}/logindata?validationCode={1}", null, null, Boolean.class,
+				userFromDb.getId(), userFromDb.getLoginData().getValidationCode());
 		Assert.assertTrue(success);
 		userFromDb = userService.getById(user.getId());
 		Assert.assertTrue(userFromDb.getLoginData().isValidated());
@@ -91,8 +91,8 @@ public class UserIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(user2.getId());
 
 		// VALIDATE EMAIL ADDRESS
-		Boolean success = doGet("http://localhost:8080/user?email={0}&validationCode={1}", null, Boolean.class,
-				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
+		Boolean success = doPut("http://localhost:8080/user/{0}/logindata?validationCode={1}", null, null, Boolean.class,
+				userFromDb2.getId(), userFromDb2.getLoginData().getValidationCode());
 		Assert.assertTrue(success);
 		userFromDb2 = userService.getById(user2.getId());
 		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
@@ -167,8 +167,8 @@ public class UserIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(user2.getId());
 
 		// VALIDATE EMAIL ADDRESS
-		Boolean success = doGet("http://localhost:8080/user?email={0}&validationCode={1}", null, Boolean.class,
-				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
+		Boolean success = doPut("http://localhost:8080/user/{0}/logindata?validationCode={1}", null, null, Boolean.class,
+				userFromDb2.getId(), userFromDb2.getLoginData().getValidationCode());
 		Assert.assertTrue(success);
 		userFromDb2 = userService.getById(user2.getId());
 		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
@@ -230,8 +230,8 @@ public class UserIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(user2.getId());
 
 		// VALIDATE EMAIL ADDRESS
-		Boolean success = doGet("http://localhost:8080/user?email={0}&validationCode={1}", null, Boolean.class,
-				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
+		Boolean success = doPut("http://localhost:8080/user/{0}/logindata?validationCode={1}", null, null, Boolean.class,
+				userFromDb2.getId(), userFromDb2.getLoginData().getValidationCode());
 		Assert.assertTrue(success);
 		userFromDb2 = userService.getById(user2.getId());
 		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
@@ -293,8 +293,8 @@ public class UserIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(user2.getId());
 
 		// VALIDATE EMAIL ADDRESS
-		Boolean success = doGet("http://localhost:8080/user?email={0}&validationCode={1}", null, Boolean.class,
-				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
+		Boolean success = doPut("http://localhost:8080/user/{0}/logindata?validationCode={1}", null, null, Boolean.class,
+				userFromDb2.getId(), userFromDb2.getLoginData().getValidationCode());
 		Assert.assertTrue(success);
 		userFromDb2 = userService.getById(user2.getId());
 		Assert.assertTrue(userFromDb2.getLoginData().isValidated());

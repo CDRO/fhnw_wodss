@@ -2,6 +2,8 @@ package ch.fhnw.wodss.controller;
 
 import java.util.Set;
 
+import javax.websocket.server.PathParam;
+
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -80,29 +82,6 @@ public class UserController {
 	}
 
 	/**
-	 * Validates the user's email address.
-	 * 
-	 * @param email
-	 *            the user's email address.
-	 * @param validationCode
-	 *            the validation code.
-	 * @return true or false
-	 */
-	@RequestMapping(path = "/user", method = RequestMethod.GET)
-	public ResponseEntity<Boolean> validate(@RequestParam("email") String email,
-			@RequestParam("validationCode") String validationCode) {
-		User user = userService.getByEmail(email);
-		if (user != null) {
-			if (validationCode.equals(user.getLoginData().getValidationCode())) {
-				user.getLoginData().setValidated(true);
-				userService.saveUser(user);
-				return new ResponseEntity<Boolean>(true, HttpStatus.OK);
-			}
-		}
-		return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED);
-	}
-
-	/**
 	 * Registers a new user.
 	 * 
 	 * @param json
@@ -169,6 +148,66 @@ public class UserController {
 			return new ResponseEntity<>(updatedUser, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}
+
+	/**
+	 * Validates a users email address or resets a users password.
+	 */
+	@RequestMapping(path = "/user/{id}/logindata", method = RequestMethod.PUT)
+	public ResponseEntity<Boolean> validateOrReset(@PathVariable("id") Integer id,
+			@RequestParam(required = false) String validationCode, @RequestParam(required = false) String resetCode,
+			@RequestParam(required = false) String password) {
+		if (validationCode != null && !"".equals(validationCode)) {
+			return validate(id, validationCode);
+		}
+		if (resetCode != null && !"".equals(resetCode) && password != null && !"".equals(password)) {
+			return reset(id, validationCode, password);
+		}
+		return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
+	}
+
+	/**
+	 * Validates the user's email address.
+	 * 
+	 * @param id
+	 *            the user's id.
+	 * @param validationCode
+	 *            the validation code.
+	 * @return true or false
+	 */
+	private ResponseEntity<Boolean> validate(Integer id, String validationCode) {
+		User aCurrUser = userService.getById(id);
+		if (aCurrUser != null) {
+			if (validationCode.equals(aCurrUser.getLoginData().getValidationCode())) {
+				aCurrUser.getLoginData().setValidated(true);
+				userService.saveUser(aCurrUser);
+				return new ResponseEntity<>(true, HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
+	}
+
+	/**
+	 * Resets the user's password.
+	 * 
+	 * @param id
+	 *            the user's id.
+	 * @param resetCode
+	 *            the reset code.
+	 * @return true or false
+	 */
+	private ResponseEntity<Boolean> reset(Integer id, String resetCode, String password) {
+		User aCurrUser = userService.getById(id);
+		if (aCurrUser != null) {
+			if (resetCode.equals(aCurrUser.getLoginData().getResetCode())) {
+				LoginData newLoginData = LoginDataFactory.getInstance().createLoginData(password);
+				aCurrUser.getLoginData().setSalt(newLoginData.getSalt());
+				aCurrUser.getLoginData().setPassword(newLoginData.getPassword());
+				userService.saveUser(aCurrUser);
+				return new ResponseEntity<>(true, HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
 	}
 
 }
