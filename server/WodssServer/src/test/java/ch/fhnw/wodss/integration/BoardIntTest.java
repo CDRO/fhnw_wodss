@@ -34,7 +34,7 @@ public class BoardIntTest extends AbstractIntegrationTest {
 		json.put("password", "password");
 
 		// REQUEST TOKEN
-		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
+		Token token = doPost("http://localhost:8080/token", null, json, Token.class);
 
 		// CREATE
 		json.clear();
@@ -88,14 +88,14 @@ public class BoardIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(user.getId());
 
 		// VALIDATE EMAIL ADDRESS
-		Boolean success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class,
+		Boolean success = doGet("http://localhost:8080/user?email={0}&validationCode={1}", null, Boolean.class,
 				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
 		Assert.assertTrue(success);
 		userFromDb2 = userService.getById(user2.getId());
 		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
 
 		// REQUEST TOKEN
-		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
+		Token token = doPost("http://localhost:8080/token", null, json, Token.class);
 
 		Board board1 = BoardFactory.getInstance().createBoard("Board1", user);
 		board1 = boardService.saveBoard(board1);
@@ -154,14 +154,14 @@ public class BoardIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(user.getId());
 
 		// VALIDATE EMAIL ADDRESS
-		Boolean success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class,
+		Boolean success = doGet("http://localhost:8080/user?email={0}&validationCode={1}", null, Boolean.class,
 				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
 		Assert.assertTrue(success);
 		userFromDb2 = userService.getById(user2.getId());
 		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
 
 		// REQUEST TOKEN
-		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
+		Token token = doPost("http://localhost:8080/token", null, json, Token.class);
 
 		Board board1 = BoardFactory.getInstance().createBoard("Board1", user);
 		board1 = boardService.saveBoard(board1);
@@ -231,14 +231,14 @@ public class BoardIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(user.getId());
 
 		// VALIDATE EMAIL ADDRESS
-		Boolean success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class,
+		Boolean success = doGet("http://localhost:8080/user?email={0}&validationCode={1}", null, Boolean.class,
 				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
 		Assert.assertTrue(success);
 		userFromDb2 = userService.getById(user2.getId());
 		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
 
 		// REQUEST TOKEN
-		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
+		Token token = doPost("http://localhost:8080/token", null, json, Token.class);
 
 		Board board1 = BoardFactory.getInstance().createBoard("Board1", user);
 		board1 = boardService.saveBoard(board1);
@@ -316,14 +316,14 @@ public class BoardIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(user.getId());
 
 		// VALIDATE EMAIL ADDRESS
-		Boolean success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class,
+		Boolean success = doGet("http://localhost:8080/user?email={0}&validationCode={1}", null, Boolean.class,
 				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
 		Assert.assertTrue(success);
 		userFromDb2 = userService.getById(user2.getId());
 		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
 
 		// REQUEST TOKEN
-		Token token = doPost("http://localhost:8080/login", null, json, Token.class);
+		Token token = doPost("http://localhost:8080/token", null, json, Token.class);
 
 		Board board1 = BoardFactory.getInstance().createBoard("Board1", user);
 		board1 = boardService.saveBoard(board1);

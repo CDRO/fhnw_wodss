@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ch.fhnw.wodss.domain.Board;
@@ -76,6 +77,29 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		return new ResponseEntity<>(user, HttpStatus.OK);
+	}
+
+	/**
+	 * Validates the user's email address.
+	 * 
+	 * @param email
+	 *            the user's email address.
+	 * @param validationCode
+	 *            the validation code.
+	 * @return true or false
+	 */
+	@RequestMapping(path = "/user", method = RequestMethod.GET)
+	public ResponseEntity<Boolean> validate(@RequestParam("email") String email,
+			@RequestParam("validationCode") String validationCode) {
+		User user = userService.getByEmail(email);
+		if (user != null) {
+			if (validationCode.equals(user.getLoginData().getValidationCode())) {
+				user.getLoginData().setValidated(true);
+				userService.saveUser(user);
+				return new ResponseEntity<Boolean>(true, HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<Boolean>(false, HttpStatus.UNAUTHORIZED);
 	}
 
 	/**

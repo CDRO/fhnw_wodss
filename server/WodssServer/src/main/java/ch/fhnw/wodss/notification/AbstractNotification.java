@@ -12,6 +12,8 @@ import javax.mail.internet.MimeMessage;
 
 import ch.fhnw.wodss.domain.User;
 
+// TODO multilanguage
+
 public abstract class AbstractNotification {
 
 	/**

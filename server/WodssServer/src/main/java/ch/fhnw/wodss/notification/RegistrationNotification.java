@@ -28,7 +28,7 @@ public class RegistrationNotification extends AbstractNotification {
 
 	@Override
 	String getMessageBody() {
-		return "Please validate your email address by clicking on the following link: <a href=\"https://cs.technik.fhnw.ch/wodss5/validate?email="
+		return "Please validate your email address by clicking on the following link: <a href=\"https://cs.technik.fhnw.ch/wodss5/user?email="
 				+ user.getEmail() + "&validationCode=" + user.getLoginData().getValidationCode() + "\">LINK</a>";
 	}
 

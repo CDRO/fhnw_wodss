@@ -82,20 +82,20 @@ public class AttachmentIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(user2.getId());
 
 		// VALIDATE EMAIL ADDRESS
-		Boolean success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class,
+		Boolean success = doGet("http://localhost:8080/user?email={0}&validationCode={1}", null, Boolean.class,
 				userFromDb1.getEmail(), userFromDb1.getLoginData().getValidationCode());
 		Assert.assertTrue(success);
 		userFromDb1 = userService.getById(user1.getId());
 		Assert.assertTrue(userFromDb1.getLoginData().isValidated());
-		success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class,
+		success = doGet("http://localhost:8080/user?email={0}&validationCode={1}", null, Boolean.class,
 				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
 		Assert.assertTrue(success);
 		userFromDb2 = userService.getById(user2.getId());
 		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
 
 		// REQUEST TOKEN
-		Token token1 = doPost("http://localhost:8080/login", null, jsonUser1, Token.class);
-		Token token2 = doPost("http://localhost:8080/login", null, jsonUser2, Token.class);
+		Token token1 = doPost("http://localhost:8080/token", null, jsonUser1, Token.class);
+		Token token2 = doPost("http://localhost:8080/token", null, jsonUser2, Token.class);
 
 		Board board1 = BoardFactory.getInstance().createBoard("Board1", user1);
 		board1 = boardService.saveBoard(board1);
@@ -175,20 +175,20 @@ public class AttachmentIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(user2.getId());
 
 		// VALIDATE EMAIL ADDRESS
-		Boolean success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class,
+		Boolean success = doGet("http://localhost:8080/user?email={0}&validationCode={1}", null, Boolean.class,
 				userFromDb1.getEmail(), userFromDb1.getLoginData().getValidationCode());
 		Assert.assertTrue(success);
 		userFromDb1 = userService.getById(user1.getId());
 		Assert.assertTrue(userFromDb1.getLoginData().isValidated());
-		success = doGet("http://localhost:8080/validate?email={0}&validationCode={1}", null, Boolean.class,
+		success = doGet("http://localhost:8080/user?email={0}&validationCode={1}", null, Boolean.class,
 				userFromDb2.getEmail(), userFromDb2.getLoginData().getValidationCode());
 		Assert.assertTrue(success);
 		userFromDb2 = userService.getById(user2.getId());
 		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
 
 		// REQUEST TOKEN
-		Token token1 = doPost("http://localhost:8080/login", null, jsonUser1, Token.class);
-		Token token2 = doPost("http://localhost:8080/login", null, jsonUser2, Token.class);
+		Token token1 = doPost("http://localhost:8080/token", null, jsonUser1, Token.class);
+		Token token2 = doPost("http://localhost:8080/token", null, jsonUser2, Token.class);
 
 		Board board1 = BoardFactory.getInstance().createBoard("Board1", user1);
 		board1 = boardService.saveBoard(board1);
