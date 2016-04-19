@@ -69,6 +69,15 @@ angular
         controller: 'TasksCtrl',
         controllerAs: 'tasks'
       })
+      .state('validate', {
+        url: "/validate/:id?validationCode",
+        templateUrl: "views/validate.html",
+        controller: "ValidationCtrl",
+        controllerAs: "validation",
+        params: {
+          validationCode: null,
+        }
+      })
       .state('error', {
         url: "/error",
         templateUrl: "views/error.html",
@@ -84,6 +93,6 @@ angular
 
   }).controller('HeaderCtrl', function ($scope, $location) {
     $scope.isActive = function (viewLocation) {
-      return $location.path().indexOf(viewLocation) == 0;
+      return $location.path().indexOf(viewLocation) === 0;
     };
 });

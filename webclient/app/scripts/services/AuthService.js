@@ -53,6 +53,18 @@
       });
       // Need to be verified first
     };
+
+    /**
+     * Validate User
+     * @param id of the user
+     * @param validationCode from email
+     */
+    this.validateAccount = function(id, validationCode){
+      return service.updateObject('user', {
+        id: id,
+        validationCode: validationCode
+      });
+    }
   };
 
   // Inject Dependencies

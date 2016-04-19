@@ -59,7 +59,7 @@
       }else{
         var data = JSON.stringify(object);
         // Request without attachments
-        return $http({method: "POST", url: uri, data:data,
+        return $http({method: method, url: uri, data:data,
           headers: headers, cache: false
         });
       }
@@ -72,14 +72,26 @@
      * @returns true/false
      */
     this.updateObject = function (collection, object, attachments) {
+      var uri = configService.baseUrl + collection + "/" + object.id;
+      var method = "PUT";
+      var headers = {};
+
       // files as form data
       if(attachments){
-
+        return Upload.upload({
+          url: uri,
+          headers: headers,
+          method: method,
+          data: {file: attachments, info: Upload.jsonBlob(object)},
+          cache: false
+        });
+      }else{
+        var data = JSON.stringify(object);
+        // Request without attachments
+        return $http({method: method, url: uri, data:data,
+          headers: headers, cache: false
+        });
       }
-
-      var uri = configService.baseUrl + collection + "/" + object.id;
-      return $http({method: "PUT", url: uri, data:
-        JSON.stringify(object), cache: false});
     };
 
     /**

@@ -64,6 +64,16 @@
       passwordRequired: "Bitte geben Sie ein Passwort an",
       repeatPassword: "Bitte wiederholen Sie ihr eingegebenes Passwort"
     },
+    validation:{
+        error: {
+          title: "Ihre Validierung ist ungültig",
+          text: "Bitte kontrollieren Sie den Link im erhaltenen Email und rufen Ihn erneut auf"
+        },
+        empty: {
+          title: "Kein Validierungscode angegeben",
+          text: "Bitte kontrollieren Sie den Link im erhaltenen Email und rufen Ihn erneut auf"
+        }
+    },
     error: {
       errorPage: "Fehlerseite"
     }
