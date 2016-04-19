@@ -10,7 +10,9 @@
       createBoard: "Board erstellen",
       form: {
         title: "Bezeichnung",
-        requiredTitle: "Bitte geben Sie einen Board Titel an"
+        requiredTitle: "Bitte geben Sie einen Board Titel an",
+        members: "Mitglieder",
+        addMember: "Mitglied hinzufügen"
       }
     },
     tasks: {
