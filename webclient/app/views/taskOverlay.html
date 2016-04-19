@@ -23,8 +23,19 @@
   <!-- Due date -->
   <div class="form-group" ng-class="{'has-error': form.description.$dirty && form.description.$error.required}">
     <label for="dueDate" translate="tasks.form.dueDate"></label>
-    <input type="input" name="dueDate" id="dueDate" class="form-control" ng-model="model.dueDate" required />
-    <span ng-show="form.description.$dirty && form.description.$error.required" class="help-block" translate="tasks.form.requiredDescription"></span>
+    <div class="input-group">
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+      </span>
+      <input type="text" name="dueDate" id="dueDate" class="form-control" uib-datepicker-popup="dd.MM.yyyy" ng-model="model.dueDate" is-open="popup1.opened"
+             datepicker-options="dateOptions" ng-required="false"
+             close-text="{{ 'btn.close' | translate }}"
+             current-text="{{'btn.today' | translate}}"
+             clear-text="{{'btn.clear' | translate}}"
+      />
+    </div>
+    <!-- optional parameter
+      <span ng-show="form.dueDate.$dirty && form.dueDate.$error.required" class="help-block" translate="tasks.form.requiredDescription"></span>-->
   </div>
 
   <!-- Person -->
@@ -39,12 +50,36 @@
   <div class="form-group">
     <label for="files" translate="tasks.form.attachment"></label>
 
-    <!--ngf-pattern="'image/*'" ngf-multiple="true"-->
+    <!--ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-multiple="true"-->
     <button class="btn btn-primary" ngf-select ng-model="model.files" name="files"
-         ngf-accept="'image/*'" ngf-max-size="10MB" ngf-max-total-size="50MB" ngf-multiple="true" translate="tasks.form.addAttachment" multiple></button>
+           ngf-max-size="10MB" ngf-max-total-size="50MB" ngf-multiple="true" translate="tasks.form.addAttachment"
+           ngf-keep="'distinct'" multiple></button>
+
+    <button class="btn btn-danger" translate="btn.clear" ng-click="clearUpload()" ng-show="model.files.length > 0"></button>
+
+    <div class="row" ng-show="model.files.length > 0">
+      <div class="col-md-12">
+          <p translate="tasks.form.uploadSize" translate-values="{counter: model.files.length}"></p>
+      </div>
+    </div>
+
+    <div class="row" ng-show="model.files.length > 0">
+
+      <div class="col-md-2" ng-repeat="file in model.files">
+        <div class="thumbnail">
+          <img ngf-thumbnail="file" class="uploadThumb">
+          <video controls ngf-src="file" class="uploadThumb"></video>
+          <audio controls ngf-src="file"></audio>
+
+          <div class="caption">
+            <h5>{{ file.name | limitTo: 15 }}{{file.name.length > 15 ? '...' : ''}}</h5>
+            {{ file.size/1024/1024 | number:2 }} MB
+          </div>
+      </div>
+    </div>
 
 
-    Drop files: <div ngf-drop ng-model="model.files" class="drop-box">Drop</div>
+    </div>
 
   </div>
 

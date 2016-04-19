@@ -23,6 +23,36 @@ var ModalInstanceCtrl = function($scope, $uibModalInstance, isNew, people, board
   $scope.cancel = function () {
     modal.dismiss('cancel');
   };
+
+  /* Options for Datepicker */
+/*  $scope.clearDate = function() {
+    $scope.dt = null;
+  };*/
+
+  $scope.inlineOptions = {
+    minDate: new Date(),
+    showWeeks: false
+  };
+
+  $scope.dateOptions = {
+    formatYear: 'yyyy',
+    maxDate: new Date().setFullYear(new Date().getFullYear() + 10),
+    minDate: new Date(),
+    startingDay: 1
+  };
+
+  $scope.popup1 = {
+    opened: false
+  };
+
+  $scope.open1 = function() {
+    $scope.popup1.opened = true;
+  };
+
+  /* Upload */
+  $scope.clearUpload = function() {
+    $scope.model.files = [];
+  }
 };
 
 angular.module('angularWebclientApp').controller('ModalInstanceCtrl', ModalInstanceCtrl);

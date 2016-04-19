@@ -22,7 +22,10 @@
           requiredDescription: "Bitte geben Sie einen Task Beschreibung an",
           person: "Person",
           attachment: "Anhang",
-          addAttachment: "Hinzufügen"
+          uploadSize: "Folgende {{counter}} Dateien werden angehängt",
+          addAttachment: "Hinzufügen",
+          dueDate: "Zu erledigen bis"
+
       }
     },
     app: {
@@ -41,12 +44,14 @@
       login: 'Login',
       tasks: 'Tasks',
       about: 'Über',
-      loginBack: "Zurück zum Login",
+      loginBack: "Zurück zum Login"
     },
     btn: {
       create: "Erstellen",
       register: "Registrieren",
-
+      close: "Schliessen",
+      today: "Heute",
+      clear: "Leeren"
     },
     login: {
       emailRequired: "Bitte geben Sie Ihre Email Adresse ein",
