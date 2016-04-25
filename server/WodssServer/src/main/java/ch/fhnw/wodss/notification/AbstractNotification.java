@@ -19,7 +19,7 @@ public abstract class AbstractNotification {
 	/**
 	 * Flag for test mode.
 	 */
-	private boolean testMode = true;
+	private boolean testMode = false;
 
 	/**
 	 * The mail session.
@@ -34,7 +34,7 @@ public abstract class AbstractNotification {
 	/**
 	 * The local host domain. (HELO)
 	 */
-	private static final String LOCAL_HOST_DOMAIN = "cs.fhnw.ch";
+	private static final String LOCAL_HOST_DOMAIN = "server1070";
 
 	/**
 	 * The port.
