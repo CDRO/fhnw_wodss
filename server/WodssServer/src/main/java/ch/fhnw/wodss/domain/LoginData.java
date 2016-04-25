@@ -86,5 +86,12 @@ public class LoginData {
 	public String getResetCode() {
 		return resetCode;
 	}
+	/**
+	 * @param resetCode the resetCode to set
+	 */
+	public void setResetCode(String resetCode) {
+		this.resetCode = resetCode;
+	}
+	
 	
 }

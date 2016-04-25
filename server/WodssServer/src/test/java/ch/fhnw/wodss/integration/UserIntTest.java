@@ -321,4 +321,61 @@ public class UserIntTest extends AbstractIntegrationTest {
 			Assert.fail();
 		}
 	}
+	
+	/**
+	 * Tests password reset
+	 * @throws Exception 
+	 */
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testResetPassword() throws Exception{
+		JSONObject json = new JSONObject();
+
+		// CREATE / REGISTER
+		json.put("name", "TestUserQ");
+		json.put("email", "emailQ@fhnw.ch");
+		json.put("password", "password");
+
+		User user = doPost("http://localhost:8080/user", null, json, User.class);
+		User userFromDb = userService.getById(user.getId());
+		Assert.assertEquals("TestUserQ", userFromDb.getName());
+		Assert.assertEquals("emailQ@fhnw.ch", userFromDb.getEmail());
+		Assert.assertNotNull(user.getId());
+
+		json = new JSONObject();
+
+		// CREATE / REGISTER
+		json.put("name", "TestUserR");
+		json.put("email", "emailR@fhnw.ch");
+		json.put("password", "password2");
+
+		User user2 = doPost("http://localhost:8080/user", null, json, User.class);
+		User userFromDb2 = userService.getById(user2.getId());
+		Assert.assertEquals("TestUserR", userFromDb2.getName());
+		Assert.assertEquals("emailR@fhnw.ch", userFromDb2.getEmail());
+		Assert.assertNotNull(user2.getId());
+
+		// VALIDATE EMAIL ADDRESS
+		Boolean success = doPut("http://localhost:8080/user/{0}/logindata?validationCode={1}", null, null, Boolean.class,
+				userFromDb2.getId(), userFromDb2.getLoginData().getValidationCode());
+		Assert.assertTrue(success);
+		userFromDb2 = userService.getById(user2.getId());
+		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
+		
+		// RESET PASSWORD
+		success = doPut("http://localhost:8080/user/{0}/logindata?doReset=true", null, null, Boolean.class,
+				userFromDb2.getId());
+		Assert.assertTrue(success);
+		userFromDb2 = userService.getById(user2.getId());
+		Assert.assertNotNull(userFromDb2.getLoginData().getResetCode());
+		json = new JSONObject();
+		json.put("password", "asdf");
+		success = doPut("http://localhost:8080/user/{0}/logindata?resetCode={1}", null, json, Boolean.class,
+				userFromDb2.getId(), userFromDb2.getLoginData().getResetCode());
+		Assert.assertTrue(success);
+		// REQUEST TOKEN
+		json.put("email", "emailR@fhnw.ch");
+		Token token = doPost("http://localhost:8080/token", null, json, Token.class);
+		Assert.assertNotNull(token);
+	}
 }

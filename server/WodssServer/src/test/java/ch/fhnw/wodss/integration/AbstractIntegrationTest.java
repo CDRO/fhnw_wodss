@@ -77,8 +77,8 @@ public abstract class AbstractIntegrationTest {
 			con.setRequestProperty("x-session-token", token.getId());
 		}
 
-		con.connect();
-
+		con.connect();		
+		
 		OutputStream outputStream = con.getOutputStream();
 		outputStream.write(objectMapper.writeValueAsBytes(obj));
 		outputStream.flush();

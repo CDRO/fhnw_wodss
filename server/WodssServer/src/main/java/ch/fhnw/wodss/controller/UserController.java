@@ -1,8 +1,7 @@
 package ch.fhnw.wodss.controller;
 
 import java.util.Set;
-
-import javax.websocket.server.PathParam;
+import java.util.UUID;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,7 @@ import ch.fhnw.wodss.domain.LoginDataFactory;
 import ch.fhnw.wodss.domain.User;
 import ch.fhnw.wodss.domain.UserFactory;
 import ch.fhnw.wodss.notification.RegistrationNotification;
+import ch.fhnw.wodss.notification.ResetPasswordNotification;
 import ch.fhnw.wodss.security.Token;
 import ch.fhnw.wodss.security.TokenHandler;
 import ch.fhnw.wodss.service.BoardService;
@@ -155,13 +155,19 @@ public class UserController {
 	 */
 	@RequestMapping(path = "/user/{id}/logindata", method = RequestMethod.PUT)
 	public ResponseEntity<Boolean> validateOrReset(@PathVariable("id") Integer id,
-			@RequestParam(required = false) String validationCode, @RequestParam(required = false) String resetCode,
-			@RequestParam(required = false) String password) {
+			@RequestParam(name = "validationCode", required = false) String validationCode,
+			@RequestParam(name = "doReset", required = false) Boolean doReset,
+			@RequestParam(name = "resetCode", required = false) String resetCode, 
+			@RequestBody(required = false) JSONObject json) {
 		if (validationCode != null && !"".equals(validationCode)) {
 			return validate(id, validationCode);
 		}
+		if (doReset != null && doReset) {
+			return generateResetCode(id);
+		}
+		String password = (String) json.get("password");
 		if (resetCode != null && !"".equals(resetCode) && password != null && !"".equals(password)) {
-			return reset(id, validationCode, password);
+			return reset(id, resetCode, password);
 		}
 		return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
 	}
@@ -194,6 +200,8 @@ public class UserController {
 	 *            the user's id.
 	 * @param resetCode
 	 *            the reset code.
+	 * @param password
+	 *            the password to set.
 	 * @return true or false
 	 */
 	private ResponseEntity<Boolean> reset(Integer id, String resetCode, String password) {
@@ -206,6 +214,26 @@ public class UserController {
 				userService.saveUser(aCurrUser);
 				return new ResponseEntity<>(true, HttpStatus.OK);
 			}
+		}
+		return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
+	}
+
+	/**
+	 * Generates the user's password reset code.
+	 * 
+	 * @param id
+	 *            the user's id.
+	 * @return true or false
+	 */
+	private ResponseEntity<Boolean> generateResetCode(Integer id) {
+		User aCurrUser = userService.getById(id);
+		if (aCurrUser != null) {
+			String resetCode = UUID.randomUUID().toString();
+			aCurrUser.getLoginData().setResetCode(resetCode);
+			userService.saveUser(aCurrUser);
+			ResetPasswordNotification notification = new ResetPasswordNotification(aCurrUser);
+			notification.send();
+			return new ResponseEntity<>(true, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
 	}
