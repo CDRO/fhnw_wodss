@@ -82,13 +82,16 @@ public class AttachmentIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(user2.getId());
 
 		// VALIDATE EMAIL ADDRESS
-		Boolean success = doPut("http://localhost:8080/user/{0}/logindata?validationCode={1}", null, null, Boolean.class,
-				userFromDb1.getId(), userFromDb1.getLoginData().getValidationCode());
+		JSONObject json = new JSONObject();
+		json.put("validationCode", userFromDb1.getLoginData().getValidationCode());
+		Boolean success = doPut("http://localhost:8080/user/{0}/logindata", null, json, Boolean.class,
+				userFromDb1.getId());
 		Assert.assertTrue(success);
 		userFromDb1 = userService.getById(user1.getId());
 		Assert.assertTrue(userFromDb1.getLoginData().isValidated());
-		success = doPut("http://localhost:8080/user/{0}/logindata?validationCode={1}", null, null, Boolean.class,
-				userFromDb2.getId(), userFromDb2.getLoginData().getValidationCode());
+		json.put("validationCode", userFromDb2.getLoginData().getValidationCode());
+		success = doPut("http://localhost:8080/user/{0}/logindata", null, json, Boolean.class,
+				userFromDb2.getId());
 		Assert.assertTrue(success);
 		userFromDb2 = userService.getById(user2.getId());
 		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
@@ -175,13 +178,16 @@ public class AttachmentIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(user2.getId());
 
 		// VALIDATE EMAIL ADDRESS
-		Boolean success = doPut("http://localhost:8080/user/{0}/logindata?validationCode={1}", null, null, Boolean.class,
-				userFromDb1.getId(), userFromDb1.getLoginData().getValidationCode());
+		JSONObject json = new JSONObject();
+		json.put("validationCode", userFromDb1.getLoginData().getValidationCode());
+		Boolean success = doPut("http://localhost:8080/user/{0}/logindata", null, json, Boolean.class,
+				userFromDb1.getId());
 		Assert.assertTrue(success);
 		userFromDb1 = userService.getById(user1.getId());
 		Assert.assertTrue(userFromDb1.getLoginData().isValidated());
-		success = doPut("http://localhost:8080/user/{0}/logindata?validationCode={1}", null, null, Boolean.class,
-				userFromDb2.getId(), userFromDb2.getLoginData().getValidationCode());
+		json.put("validationCode", userFromDb2.getLoginData().getValidationCode());
+		success = doPut("http://localhost:8080/user/{0}/logindata", null, json, Boolean.class,
+				userFromDb2.getId());
 		Assert.assertTrue(success);
 		userFromDb2 = userService.getById(user2.getId());
 		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
