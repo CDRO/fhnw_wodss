@@ -39,6 +39,9 @@
       toBoards: "Zu deinen Boards!",
       lead: "Bleib immer organisiert!"
     },
+    modal: {
+      sureToDelete: "Sind sie sicher, dass sie {{name}} löschen möchten?"
+    },
     nav: {
       home: "Start",
       register: 'Registrieren',
@@ -53,7 +56,9 @@
       register: "Registrieren",
       close: "Schliessen",
       today: "Heute",
-      clear: "Leeren"
+      clear: "Leeren",
+      yes: "Ja",
+      no: "Nein"
     },
     login: {
       emailRequired: "Bitte geben Sie Ihre Email Adresse ein",

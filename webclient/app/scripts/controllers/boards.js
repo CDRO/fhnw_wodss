@@ -8,7 +8,7 @@
  * Controller of the angularWebclientApp
  */
 
-var boardController = function(boardService) {
+var boardController = function(boardService, $uibModal) {
   var self = this;
   this.list = [];
   this.assignees = [];
@@ -32,6 +32,32 @@ var boardController = function(boardService) {
     boardService.update(board);
   };
 
+  /* Confirmation Dialog */
+  this.confirm = function(model){
+    var board = model;
+    var modalInstance = $uibModal.open({
+      templateUrl: 'views/confirmationOverlay.html',
+      controller: 'ModalConfirmationCtrl',
+      size: "sm",
+      resolve: {
+        model: function(){
+          return model
+        },
+        confirmation: function(){
+          return {text: "Board " + model.title};
+        }
+      }
+    });
+
+    modalInstance.result.then(function(model) {
+        self.remove(model);
+    }, function () {
+        // Dismissed
+    });
+
+  };
+
+  /* Removes the board */
   this.remove = function(board){
     boardService.remove(board);
   };
@@ -43,7 +69,7 @@ var boardController = function(boardService) {
   };
 };
 
-boardController.$inject = ['BoardService'];
+boardController.$inject = ['BoardService', '$uibModal'];
 
 angular.module('angularWebclientApp').controller('BoardsCtrl', boardController);
 
