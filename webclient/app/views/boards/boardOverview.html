@@ -3,7 +3,7 @@
   <div ng-repeat="board in boards.list">
     <p><a ui-sref="tasksFromBoard({boardId: board.id, assignees: board.users, boards: boards.list})">{{board.title}}</a>
       <button ng-click="boards.update(board)" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
-      <button ng-click="boards.remove(board)" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+      <button ng-click="boards.confirm(board)" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
     </p>
   </div>
 
@@ -18,7 +18,7 @@
     </div>
     <div class="form-group" ng-class="{'has-error': form.members.$dirty && form.members.$error.required}">
       <label for="members" translate="boards.form.members"></label>
-      <tags-input ng-model="boards.members" placeholder="Email hinzufügen" add-on-blur="false" on-tag-adding="boards.checkMember($tag)">
+      <tags-input id="members" ng-model="boards.members" placeholder="Email hinzufügen" add-on-blur="false" on-tag-adding="boards.checkMember($tag)">
 
       </tags-input>
     </div>

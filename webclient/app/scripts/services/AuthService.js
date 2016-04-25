@@ -13,7 +13,7 @@
      * @param password for account
      */
     this.login = function(email, password){
-      return service.createObject('login', {
+      return service.createObject('token', {
         'email': email,
         'password': password
       }).then(function(response){
@@ -63,7 +63,7 @@
       return service.updateObject('user', {
         id: id,
         validationCode: validationCode
-      });
+      }, null, 'logindata');
     }
   };
 

@@ -11,7 +11,7 @@
 
     // Declare the backend, with an ending slash
     this.baseUrl = 'http://localhost:8080/';
-    //this.imageBaseUrl = this.baseUrl + 'image/';
+    //this.baseUrl = 'http://server1070.cs.technik.fhnw.ch:8080/';
 
     // Represents the logged in user
     var currentUser = {

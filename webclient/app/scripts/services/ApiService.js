@@ -71,8 +71,11 @@
      * @param object
      * @returns true/false
      */
-    this.updateObject = function (collection, object, attachments) {
+    this.updateObject = function (collection, object, attachments, subResource) {
       var uri = configService.baseUrl + collection + "/" + object.id;
+      if(subResource){
+        uri = uri + "/" + subResource;
+      }
       var method = "PUT";
       var headers = {};
 
