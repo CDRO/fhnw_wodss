@@ -19,7 +19,7 @@ public abstract class AbstractNotification {
 	/**
 	 * Flag for test mode.
 	 */
-	private boolean testMode = false;
+	private boolean testMode = true;
 
 	/**
 	 * The mail session.
