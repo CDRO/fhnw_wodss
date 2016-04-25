@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ch.fhnw.wodss.domain.Board;
@@ -155,17 +154,17 @@ public class UserController {
 	 */
 	@RequestMapping(path = "/user/{id}/logindata", method = RequestMethod.PUT)
 	public ResponseEntity<Boolean> validateOrReset(@PathVariable("id") Integer id,
-			@RequestParam(name = "validationCode", required = false) String validationCode,
-			@RequestParam(name = "doReset", required = false) Boolean doReset,
-			@RequestParam(name = "resetCode", required = false) String resetCode, 
 			@RequestBody(required = false) JSONObject json) {
-		if (validationCode != null && !"".equals(validationCode)) {
+		String validationCode = (String) json.get("validationCode");
+		Boolean doReset = (Boolean) json.get("doReset");
+		String resetCode = (String) json.get("resetCode");
+		String password = (String) json.get("password");
+		if (validationCode != null && !"".equals(validationCode)) {	
 			return validate(id, validationCode);
 		}
 		if (doReset != null && doReset) {
 			return generateResetCode(id);
 		}
-		String password = (String) json.get("password");
 		if (resetCode != null && !"".equals(resetCode) && password != null && !"".equals(password)) {
 			return reset(id, resetCode, password);
 		}
