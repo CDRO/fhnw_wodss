@@ -47,6 +47,7 @@
       register: 'Registrieren',
       boards: 'Boards',
       login: 'Login',
+      logout: "Logout",
       tasks: 'Tasks',
       about: 'Über',
       loginBack: "Zurück zum Login"
