@@ -10,7 +10,7 @@
       return {
         request: function(config){
             if(ConfigService.isLoggedIn()){
-                config.headers['x-session-token'] = ConfigService.getCurrentUser().token;
+                config.headers['x-session-token'] = ConfigService.getCurrentToken().id;
             }
           return config;
         }

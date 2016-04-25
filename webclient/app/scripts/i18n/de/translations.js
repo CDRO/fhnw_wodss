@@ -46,6 +46,7 @@
       home: "Start",
       register: 'Registrieren',
       boards: 'Boards',
+      user: 'Profil bearbeiten',
       login: 'Login',
       logout: "Logout",
       tasks: 'Tasks',
@@ -54,6 +55,7 @@
     },
     btn: {
       create: "Erstellen",
+      update: "Bearbeiten",
       register: "Registrieren",
       close: "Schliessen",
       today: "Heute",
@@ -67,8 +69,10 @@
     },
     user: {
         email: "Email Adresse",
+        name: "Benutzername",
         password: "Passwort",
-        password2: "Passwort wiederholen"
+        password2: "Passwort wiederholen",
+        editProfile: "Profil bearbeiten"
     },
 
     register: {

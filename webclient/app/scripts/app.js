@@ -40,6 +40,10 @@ angular
         controller: 'LoginCtrl',
         controllerAs: 'login'
       })
+      .state('logout', {
+        url: "/logout",
+        controller: "LogoutCtrl"
+      })
       .state('register', {
         url: "/register",
         templateUrl: 'views/register.html',
@@ -78,6 +82,12 @@ angular
         params: {
           validationCode: null,
         }
+      })
+      .state('user', {
+        url: "/user",
+        templateUrl: "views/editUser.html",
+        controller: "UserCtrl",
+        controllerAs: "user"
       })
       .state('error', {
         url: "/error",

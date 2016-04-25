@@ -19,13 +19,15 @@
       }).then(function(response){
         // Save token for future requests
         config.setCurrentUser({
-            email: email,
+            user: response.data.user,
+            id: response.data.id,
             token: response.data.id,
+            email: response.data.user.email,
             timeToLive: response.data.timeToLive
         });
       },
       function(error){
-        config.setCurrentUser({email: null, token: null});
+        config.setCurrentUser({user: null, token: null});
       });
     };
 
@@ -33,10 +35,10 @@
      * Logout the user
      */
     this.logout = function(){
-      service.deleteObject('logout', service.getCurrentUser()).then(function(response){
-        config.setCurrentUser({email: null, token: null});
+      service.deleteObject('token', config.getCurrentToken()).then(function(response){
+        config.setCurrentUser({user: null, id: null, token: null, email: null, timeToLive: null});
       }, function(error){
-        $log.error("Log out was not possible cause %s", response);
+        $log.error("Log out was not possible cause %o", error);
       });
 
     };
@@ -53,6 +55,15 @@
       });
       // Need to be verified first
     };
+
+    /**
+     * Update existing user
+     * @param user User Object
+     */
+    this.updateProfile = function (user) {
+      return service.updateObject('user', user);
+    };
+
 
     /**
      * Validate User
