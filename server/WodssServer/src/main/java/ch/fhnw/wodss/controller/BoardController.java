@@ -2,6 +2,8 @@ package ch.fhnw.wodss.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,8 @@ import ch.fhnw.wodss.service.UserService;
 @CrossOrigin(origins = "http://localhost:9000")
 public class BoardController {
 
+	private final static Logger LOG = LoggerFactory.getLogger(BoardController.class);
+
 	@Autowired
 	private BoardService boardService;
 
@@ -42,6 +46,7 @@ public class BoardController {
 		User user = TokenHandler.getUser(token.getId());
 		// reload from Database
 		user = userService.getById(user.getId());
+		LOG.debug("Getting boards for user <{}>", user.getEmail());
 		return new ResponseEntity<>(user.getBoards(), HttpStatus.OK);
 	}
 
@@ -63,8 +68,10 @@ public class BoardController {
 		user = userService.getById(user.getId());
 		Board board = boardService.getById(id);
 		if (user.getBoards().contains(board)) {
+			LOG.debug("User requested board with id <{}>", board.getId());
 			return new ResponseEntity<>(board, HttpStatus.OK);
 		}
+		LOG.debug("User requested board with id <{}> but is not authorized", board.getId());
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
@@ -77,6 +84,8 @@ public class BoardController {
 	 *            the board that should be created.
 	 * @return the created board, with id not null.
 	 */
+	// TODO: list of members check whether exists if yes add them to board, send
+	// to all a notification.
 	@RequestMapping(path = "/board", method = RequestMethod.POST)
 	public ResponseEntity<Board> createBoard(@RequestHeader(value = "x-session-token") Token token,
 			@RequestBody Board board) {
@@ -84,6 +93,7 @@ public class BoardController {
 		board.setOwner(user);
 		board.addUser(user);
 		Board savedBoard = boardService.saveBoard(board);
+		LOG.info("User <{}> saved board <{}>", user.getEmail(), board.getId());
 		return new ResponseEntity<>(savedBoard, HttpStatus.OK);
 	}
 
@@ -107,8 +117,10 @@ public class BoardController {
 		Board board = boardService.getById(id);
 		if (user.equals(board.getOwner())) {
 			boardService.deleteBoard(id);
+			LOG.info("User <{}> deleted board <{}>", user.getEmail(), board.getId());
 			return new ResponseEntity<>(true, HttpStatus.OK);
 		}
+		LOG.debug("User <{}> wanted to delete board <{}> but is not authorized.", user.getEmail(), board.getId());
 		return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
 	}
 
@@ -133,8 +145,10 @@ public class BoardController {
 		Board aCurrBoard = boardService.getById(id);
 		if (user.equals(aCurrBoard.getOwner())) {
 			Board updatedBoard = boardService.saveBoard(board);
+			LOG.info("User <{}> updated board <{}>", user.getEmail(), board.getId());
 			return new ResponseEntity<>(updatedBoard, HttpStatus.OK);
 		}
+		LOG.debug("User <{}> wanted to update board <{}> but is not authorized.", user.getEmail(), board.getId());
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 

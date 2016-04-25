@@ -4,6 +4,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,8 @@ import ch.fhnw.wodss.service.UserService;
 @CrossOrigin(origins = "http://localhost:9000")
 public class UserController {
 
+	private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
+
 	@Autowired
 	private UserService userService;
 
@@ -56,6 +60,7 @@ public class UserController {
 		if (user.getBoards().contains(board)) {
 			// reload board from db.
 			board = boardService.getById(board.getId());
+			LOG.debug("User <{}> requested all users for board <{}>", user.getEmail(), board.getId());
 			return new ResponseEntity<>(board.getUsers(), HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -77,6 +82,7 @@ public class UserController {
 		if (!TokenHandler.validate(token.getId(), user)) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
+		LOG.debug("User <{}> requested the user profile information", user.getEmail());
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
@@ -103,6 +109,7 @@ public class UserController {
 		User savedUser = userService.saveUser(newUser);
 		RegistrationNotification notification = new RegistrationNotification(savedUser);
 		notification.send();
+		LOG.info("User <{}> has been registered", savedUser.getEmail());
 		return new ResponseEntity<>(savedUser, HttpStatus.OK);
 	}
 
@@ -121,6 +128,7 @@ public class UserController {
 		User user = userService.getById(id);
 		if (TokenHandler.validate(token.getId(), user)) {
 			userService.deleteUser(id);
+			LOG.info("User <{}> has been deleted", user.getEmail());
 			return new ResponseEntity<>(true, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
@@ -144,6 +152,7 @@ public class UserController {
 		User currUser = userService.getById(id);
 		if (TokenHandler.validate(token.getId(), currUser)) {
 			User updatedUser = userService.saveUser(user);
+			LOG.info("User <{}> has updated his user profile", updatedUser.getEmail());
 			return new ResponseEntity<>(updatedUser, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -159,7 +168,7 @@ public class UserController {
 		Boolean doReset = (Boolean) json.get("doReset");
 		String resetCode = (String) json.get("resetCode");
 		String password = (String) json.get("password");
-		if (validationCode != null && !"".equals(validationCode)) {	
+		if (validationCode != null && !"".equals(validationCode)) {
 			return validate(id, validationCode);
 		}
 		if (doReset != null && doReset) {
@@ -186,6 +195,7 @@ public class UserController {
 			if (validationCode.equals(aCurrUser.getLoginData().getValidationCode())) {
 				aCurrUser.getLoginData().setValidated(true);
 				userService.saveUser(aCurrUser);
+				LOG.info("User <{}> has validated his email address", aCurrUser.getEmail());
 				return new ResponseEntity<>(true, HttpStatus.OK);
 			}
 		}
@@ -211,6 +221,7 @@ public class UserController {
 				aCurrUser.getLoginData().setSalt(newLoginData.getSalt());
 				aCurrUser.getLoginData().setPassword(newLoginData.getPassword());
 				userService.saveUser(aCurrUser);
+				LOG.info("User <{}> has resetted his password.", aCurrUser.getEmail());
 				return new ResponseEntity<>(true, HttpStatus.OK);
 			}
 		}
@@ -232,6 +243,7 @@ public class UserController {
 			userService.saveUser(aCurrUser);
 			ResetPasswordNotification notification = new ResetPasswordNotification(aCurrUser);
 			notification.send();
+			LOG.info("User <{}> has requested a password reset code.", aCurrUser.getEmail());
 			return new ResponseEntity<>(true, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);

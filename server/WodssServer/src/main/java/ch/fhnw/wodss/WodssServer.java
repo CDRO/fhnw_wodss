@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -16,8 +17,11 @@ import org.springframework.web.multipart.support.StandardServletMultipartResolve
 @SpringBootApplication
 @EnableAspectJAutoProxy
 public class WodssServer extends SpringBootServletInitializer {
+	
+	private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(WodssServer.class);
 
 	public static void main(String[] args) {
+		LOG.info("Staring WODSS Server...");
 		SpringApplication.run(WodssServer.class, args);
 	}
 

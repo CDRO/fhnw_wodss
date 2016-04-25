@@ -2,6 +2,8 @@ package ch.fhnw.wodss.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,8 @@ import ch.fhnw.wodss.service.UserService;
 @RestController
 @CrossOrigin(origins = "http://localhost:9000")
 public class TaskController {
+
+	private static final Logger LOG = LoggerFactory.getLogger(TaskController.class);
 
 	@Autowired
 	private TaskService taskService;
@@ -53,12 +57,15 @@ public class TaskController {
 		if (board == null) {
 			// give me all the task of all the boards a I am subscribed.
 			List<Task> tasks = taskService.getByBoards(user.getBoards());
+			LOG.debug("User <{}> requested all tasks from all boards", user.getEmail());
 			return new ResponseEntity<>(tasks, HttpStatus.OK);
 		}
 		if (user.getBoards().contains(board)) {
 			List<Task> tasks = taskService.getByBoard(board);
+			LOG.debug("User <{}> requested all tasks of board <{}>", user.getEmail(), board.getId());
 			return new ResponseEntity<>(tasks, HttpStatus.OK);
 		}
+		LOG.debug("User <{}> requested all tasks of board <{}> but is not authorized", user.getEmail(), board.getId());
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
@@ -79,8 +86,10 @@ public class TaskController {
 		user = userService.getById(user.getId());
 		Task task = taskService.getById(id);
 		if (user.getBoards().contains(task.getBoard())) {
+			LOG.debug("User <{}> requested task <{}>", user.getEmail(), task.getId());
 			return new ResponseEntity<>(task, HttpStatus.OK);
 		}
+		LOG.debug("User <{}> requested task <{}> but is not authorized", user.getEmail(), task.getId());
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
@@ -105,6 +114,7 @@ public class TaskController {
 		user = userService.getById(user.getId());
 		if (user.getBoards().contains(task.getBoard())) {
 			Task savedTask = taskService.saveTask(task, files);
+			LOG.info("User <{}> saved task <{}>", user.getEmail(), task.getId());
 			return new ResponseEntity<>(savedTask, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -131,6 +141,7 @@ public class TaskController {
 		user = userService.getById(user.getId());
 		if (user.getBoards().contains(task.getBoard())) {
 			taskService.deleteTask(id);
+			LOG.info("User <{}> deleted task <{}>", user.getEmail(), task.getId());
 			return new ResponseEntity<>(true, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
@@ -159,6 +170,7 @@ public class TaskController {
 		user = userService.getById(user.getId());
 		if (user.getBoards().contains(task.getBoard())) {
 			Task updatedTask = taskService.saveTask(task, files);
+			LOG.info("User <{}> updated task <{}>", user.getEmail(), task.getId());
 			return new ResponseEntity<>(updatedTask, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

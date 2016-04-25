@@ -3,6 +3,8 @@ package ch.fhnw.wodss.controller;
 import java.util.Arrays;
 
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,8 @@ import ch.fhnw.wodss.service.UserService;
 @CrossOrigin(origins = "http://localhost:9000")
 public class TokenController {
 
+	private static final Logger LOG = LoggerFactory.getLogger(TokenController.class);
+	
 	@Autowired
 	private UserService userService;
 
@@ -37,6 +41,7 @@ public class TokenController {
 				Password pass = new Password(password.toCharArray(), aDbUser.getLoginData().getSalt());
 				if (Arrays.equals(pass.getHash(), aDbUser.getLoginData().getPassword())) {
 					Token token = TokenHandler.register(aDbUser);
+					LOG.info("User <{}> has logged in.", aDbUser.getEmail());
 					return new ResponseEntity<>(token, HttpStatus.OK);
 				}
 			}
@@ -46,7 +51,9 @@ public class TokenController {
 
 	@RequestMapping(path = "/token", method = RequestMethod.DELETE)
 	public ResponseEntity<Boolean> logout(@RequestHeader(value = "x-session-token") Token token) {
+		User user = TokenHandler.getUser(token.getId());
 		TokenHandler.unregister(token.getId());
+		LOG.info("User <{}> has logged out", user.getEmail());
 		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
 
