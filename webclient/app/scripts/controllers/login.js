@@ -7,22 +7,21 @@
  * # LoginCtrl
  * Controller of the angularWebclientApp
  */
-var loginController = function(auth, $scope) {
-  var vm = this;
-  vm.dataLoading = false;
+var loginController = function(auth, $scope, $state) {
+  var self = this;
 
   $scope.loginNow = function(){
-    auth.login($scope.email, $scope.password);
+    self.loginError = false;
+    auth.login($scope.email, $scope.password).then(function(response){
+        $state.go('boards');
+        self.loginError = false;
+    }, function(error){
+        self.loginError = true;
+    });
 
-    // Pseudo Implementation, put a User Service here
-    vm.dataLoading = true;
-    //console.log("Going to login");
-    /*setTimeout(function(){
-     vm.dataLoading(false);
-     }, 3000);*/
   };
 };
 
-loginController.$inject = ['AuthService', '$scope'];
+loginController.$inject = ['AuthService', '$scope', '$state'];
 
 angular.module('angularWebclientApp').controller('LoginCtrl', loginController);
