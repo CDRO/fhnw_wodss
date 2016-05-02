@@ -8,7 +8,7 @@
   </div>
 
   <h2 translate="boards.createBoard"></h2>
-  <form name="form" ng-submit="boards.add()" role="form">
+  <form name="form" role="form">
 
     <div class="form-group" ng-class="{'has-error': form.title.$dirty && form.title.$error.required}">
         <label for="title" translate="boards.form.title"></label>
@@ -18,12 +18,12 @@
     </div>
     <div class="form-group" ng-class="{'has-error': form.members.$dirty && form.members.$error.required}">
       <label for="members" translate="boards.form.members"></label>
-      <tags-input id="members" ng-model="boards.members" placeholder="Email hinzufügen" add-on-blur="false" on-tag-adding="boards.checkMember($tag)">
+      <tags-input id="members" ng-model="boards.members" placeholder="Email hinzufügen" add-on-blur="true" on-tag-adding="boards.checkMember($tag)">
 
       </tags-input>
     </div>
 
-    <button type="submit" ng-disabled="form.$invalid || boards.dataLoading" class="btn btn-primary" translate="btn.create"></button>
+    <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary" translate="btn.create" ng-click="boards.add(boards)" ></button>
 
   </form>
 </div>
