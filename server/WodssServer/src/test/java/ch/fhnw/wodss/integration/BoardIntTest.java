@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import ch.fhnw.wodss.domain.Board;
@@ -18,6 +21,8 @@ import ch.fhnw.wodss.service.BoardService;
 import ch.fhnw.wodss.service.UserService;
 
 public class BoardIntTest extends AbstractIntegrationTest {
+	
+	private static final Logger LOG = LoggerFactory.getLogger(BoardIntTest.class);
 
 	@Autowired
 	private BoardService boardService;
@@ -50,6 +55,8 @@ public class BoardIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(board);
 		Assert.assertEquals("TestBoard", board.getTitle());
 		Assert.assertNotNull(board.getId().intValue());
+		
+		LOG.debug(objectMapper.writeValueAsString(board));
 
 	}
 
@@ -374,4 +381,87 @@ public class BoardIntTest extends AbstractIntegrationTest {
 		Assert.assertEquals("Board1", board1.getTitle());
 
 	}
+	
+	/**
+	 * Tests creating a board with unregistered users
+	 * @throws Exception 
+	 */
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testCreateBoardWithUnregisteredUsers() throws Exception{
+		JSONObject json = new JSONObject();
+		json.put("email", "hans.muster@fhnw.ch");
+		json.put("password", "password");
+
+		// REQUEST TOKEN
+		Token token = doPost("http://localhost:8080/token", null, json, Token.class);
+
+		// CREATE
+		json.clear();
+		json.put("title", "TestBoard");
+	
+		JSONObject user1 = new JSONObject();
+		user1.put("email", "ama.zon@amazon.com");
+		
+		JSONObject user2 = new JSONObject();
+		user2.put("email", "fh.nw@fhnw.ch");
+		
+		JSONArray jArray = new JSONArray();
+		jArray.add(user1);
+		jArray.add(user2);
+		
+		json.put("users", jArray);
+		
+		Board board = objectMapper.readValue(json.toJSONString(), Board.class);
+		Assert.assertEquals(2, board.getUsers().size());
+
+		board = doPost("http://localhost:8080/board", token, json, Board.class);
+		Assert.assertNotNull(board.getId().intValue());
+		Board boardFromDb = boardService.getById(board.getId());
+		Assert.assertEquals("TestBoard", boardFromDb.getTitle());
+		Assert.assertEquals(3, boardFromDb.getUsers().size());
+
+		// READ
+		board = doGet("http://localhost:8080/board/{0}", token, Board.class, boardFromDb.getId());
+		Assert.assertNotNull(board);
+		Assert.assertEquals("TestBoard", board.getTitle());
+		Assert.assertNotNull(board.getId().intValue());
+		
+		// LET UNREGISTER USER REGISTER
+		json = new JSONObject();
+
+		// CREATE / REGISTER
+		json.put("name", "AMA.ZON");
+		json.put("email", "ama.zon@amazon.com");
+		json.put("password", "password");
+
+		User user = doPost("http://localhost:8080/user", null, json, User.class);
+		User userFromDb = userService.getById(user.getId());
+		Assert.assertEquals("AMA.ZON", userFromDb.getName());
+		Assert.assertEquals("ama.zon@amazon.com", userFromDb.getEmail());
+		Assert.assertNotNull(user.getId());
+
+		// VALIDATE EMAIL ADDRESS
+		json.put("validationCode", userFromDb.getLoginData().getValidationCode());
+		Boolean success = doPut("http://localhost:8080/user/{0}/logindata", null, json, Boolean.class,
+				userFromDb.getId());
+		Assert.assertTrue(success);
+		userFromDb = userService.getById(user.getId());
+		Assert.assertTrue(userFromDb.getLoginData().isValidated());
+
+		// REQUEST TOKEN
+		token = doPost("http://localhost:8080/token", null, json, Token.class);
+
+		// READ
+		user = doGet("http://localhost:8080/user/{0}", token, User.class, userFromDb.getId());
+		Assert.assertNotNull(user);
+		Assert.assertEquals("AMA.ZON", user.getName());
+	
+		// TEST BOARDS NEW USER IS IN
+		board = doGet("http://localhost:8080/board/{0}", token, Board.class, boardFromDb.getId());
+		Assert.assertTrue(board.getUsers().contains(user));
+
+	}
+	
+	
 }

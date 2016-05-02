@@ -101,12 +101,16 @@ public class UserController {
 		// check if user already exists
 		User user = userService.getByEmail(email);
 		if (user != null) {
-			return new ResponseEntity<>(HttpStatus.CONFLICT);
+			if(user.getLoginData() != null){
+				return new ResponseEntity<>(HttpStatus.CONFLICT);
+			}
+			user.setName(name);
+		} else {
+			user = UserFactory.getInstance().createUser(name, email);
 		}
-		User newUser = UserFactory.getInstance().createUser(name, email);
 		LoginData loginData = LoginDataFactory.getInstance().createLoginData(password);
-		newUser.setLoginData(loginData);
-		User savedUser = userService.saveUser(newUser);
+		user.setLoginData(loginData);
+		User savedUser = userService.saveUser(user);
 		RegistrationNotification notification = new RegistrationNotification(savedUser);
 		notification.send();
 		LOG.info("User <{}> has been registered", savedUser.getEmail());
