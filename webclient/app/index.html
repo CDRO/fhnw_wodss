@@ -43,6 +43,7 @@
               <li ng-class="{ active: isActive('/home')}"><a ui-sref="home">{{'nav.home' | translate}}</a></li>
               <li ng-show="isLoggedIn()" ng-class="{ active: isActive('/boards')}"><a ui-sref="boards">{{'nav.boards' | translate}}</a></li>
               <li ng-show="isLoggedIn()" ng-class="{active: isActive('/tasks')}"><a ui-sref="tasks({})">{{'nav.tasks' | translate}}</a></li>
+              <li ng-show="isLoggedIn()" ng-class="{active: isActive('/user')}"><a ui-sref="user">{{'nav.user' | translate}}</a></li>
               <li ng-show="isLoggedIn()"><a ui-sref="logout">{{'nav.logout' | translate}}</a></li>
               <li ng-show="!isLoggedIn()" ng-class="{ active: isActive('/register')}"><a ui-sref="register">{{'nav.register' | translate}}</a></li>
               <li ng-show="!isLoggedIn()" ng-class="{ active: isActive('/login')}"><a ui-sref="login">{{'nav.login' | translate}}</a></li>
@@ -108,9 +109,11 @@
         <script src="scripts/controllers/header.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/login.js"></script>
+        <script src="scripts/controllers/logout.js"></script>
         <script src="scripts/controllers/register.js"></script>
         <script src="scripts/controllers/boards.js"></script>
         <script src="scripts/controllers/tasks.js"></script>
+        <script src="scripts/controllers/user.js"></script>
         <script src="scripts/controllers/validation.js"></script>
         <script src="scripts/controllers/modalInstanceController.js"></script>
         <script src="scripts/controllers/modalConfirmationController.js"></script>

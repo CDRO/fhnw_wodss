@@ -6,7 +6,6 @@ var HeaderCtrl = function ($scope, $location, config) {
   };
   $scope.isLoggedIn = function () {
     return config.isLoggedIn();
-
   };
 };
 

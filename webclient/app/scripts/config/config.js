@@ -15,16 +15,20 @@
 
     // Represents the logged in user
     var currentUser = {
-      email: null,
+      user: null,
       token: null
     };
 
     this.getCurrentUser = function() {
+      return currentUser.user;
+    };
+
+    this.getCurrentToken = function(){
       return currentUser;
     };
 
     this.isLoggedIn = function(){
-      return (currentUser.email !== null && currentUser.token !== null);
+      return (currentUser.user !== null && currentUser.token !== null);
     };
 
     this.setCurrentUser = function (newCurrentUser) {
