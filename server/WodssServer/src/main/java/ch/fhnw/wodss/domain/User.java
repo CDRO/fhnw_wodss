@@ -14,8 +14,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -154,17 +152,20 @@ public class User {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		return result;
+	}
+
+	@Override
 	public boolean equals(Object object) {
 		if (!(object instanceof User)) {
 			return false;
 		}
 		User user = (User) object;
 		return user.getId() == this.id;
-	}
-
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder(17, 31).append(id).append(name).append(email).append(loginData).toHashCode();
 	}
 	
 }
