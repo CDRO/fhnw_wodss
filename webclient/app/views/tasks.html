@@ -1,6 +1,7 @@
 <div class="col-md-12">
   <h2>Tasks <button ng-click="tasks.create()" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-plus"></span></button></h2>
   <div ng-repeat="task in tasks.list">
+
     <p>{{task.title}} - {{task.state}}
       <button ng-click="tasks.update(task)" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
       <button ng-click="tasks.remove(task)" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-remove"></span></button>

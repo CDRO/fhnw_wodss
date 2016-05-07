@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,7 +51,7 @@ public class TaskController {
 	 */
 	@RequestMapping(path = "/tasks", method = RequestMethod.GET)
 	public ResponseEntity<List<Task>> getAllTasks(@RequestHeader(value = "x-session-token") Token token,
-			@RequestBody(required = false) Board board) {
+			@RequestParam(name = "boardId",required = false) Board board) {
 		User user = TokenHandler.getUser(token.getId());
 		// reload user from db
 		user = userService.getById(user.getId());

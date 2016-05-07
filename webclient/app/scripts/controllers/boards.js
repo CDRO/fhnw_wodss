@@ -24,7 +24,7 @@ var boardController = function(boardService, $uibModal) {
 
   this.add = function(){
     var members = self.members.map(function(member){
-        return member.text;
+        return {email: member.text, name: member.text};
     });
     boardService.add({title: self.title, users: members}).then(function(data){
         self.list.push(data);
