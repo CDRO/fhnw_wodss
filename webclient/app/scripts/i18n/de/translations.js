@@ -22,13 +22,16 @@
           boardSelection: "Board",
           description: "Bezeichnung",
           requiredDescription: "Bitte geben Sie einen Task Beschreibung an",
-          person: "Person",
+          person: "Zuständige Person",
           attachment: "Anhang",
           uploadSize: "Folgende {{counter}} Dateien werden angehängt",
           addAttachment: "Hinzufügen",
           dueDate: "Zu erledigen bis"
-
-      }
+      },
+      doTitle: "Todo",
+      doingTitle: "In Bearbeitung",
+      doneTitle: "Erledigt",
+      filter: "Tasks filtern"
     },
     app: {
       title: "ToDooooo",
@@ -94,8 +97,12 @@
     },
     error: {
       errorPage: "Fehlerseite"
+    },
+    filter:{
+      searchText: "Suche",
+      assignee: "Zuständige Person",
+      selectAssignee: "Alle"
     }
-
   });
 
 })();

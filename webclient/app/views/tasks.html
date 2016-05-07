@@ -1,10 +1,80 @@
-<div class="col-md-12">
-  <h2>Tasks <button ng-click="tasks.create()" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-plus"></span></button></h2>
-  <div ng-repeat="task in tasks.list">
+<div class="row">
+  <button ng-click="tasks.create()" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
+</div>
 
-    <p>{{task.title}} - {{task.state}}
-      <button ng-click="tasks.update(task)" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
-      <button ng-click="tasks.remove(task)" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-    </p>
+<div class="row">
+  <div class="col-md-4">
+      <h3 translate="tasks.doTitle"></h3>
+      <div ng-repeat="task in tasks.list | filter:isState('state', 'TODO') | filter:searchText | filter:filterAssignee">
+        <div class="media">
+          <div class="media-left">
+            <!-- <a href="#">
+               <img class="media-object" src="..." alt="...">
+             </a>-->
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">{{task.description}} <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span></h4>
+            <p>{{task.description}}</p>
+            <p ng-show="task.dueDate > 0">{{task.dueDate | date:'dd.MM.yyyy'}}</p>
+            <button ng-click="tasks.update(task)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
+            <button ng-click="tasks.remove(task)" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <div class="col-md-4">
+      <h3 translate="tasks.doingTitle"></h3>
+    <div ng-repeat="task in tasks.list | filter:isState('state', 'DOING')  | filter:searchText | filter:filterAssignee ">
+        <div class="media">
+          <div class="media-left">
+            <!-- <a href="#">
+               <img class="media-object" src="..." alt="...">
+             </a>-->
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">{{task.description}} <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span></h4>
+
+            <p ng-show="task.dueDate > 0">{{task.dueDate | date:'dd.MM.yyyy'}}</p>
+            <button ng-click="tasks.update(task)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
+            <button ng-click="tasks.remove(task)" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <div class="col-md-4">
+    <h3 translate="tasks.doneTitle"></h3>
+    <div ng-repeat="task in tasks.list | filter:isState('state', 'DONE')  | filter:searchText | filter:filterAssignee">
+      <div class="media">
+        <div class="media-left">
+          <!-- <a href="#">
+             <img class="media-object" src="..." alt="...">
+           </a>-->
+        </div>
+        <div class="media-body">
+          <h4 class="media-heading">{{task.description}} <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span></h4>
+
+          <p ng-show="task.dueDate > 0">{{task.dueDate | date:'dd.MM.yyyy'}}</p>
+          <button ng-click="tasks.update(task)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
+          <button ng-click="tasks.remove(task)" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- end row-->
+
+<div class="row col-md-12">
+  <h2 translate="tasks.filter"></h2>
+  <div class="form-group">
+    <label translate="filter.searchText"></label>
+    <input class="form-control" ng-model="searchText"/>
+  </div>
+  <div class="form-group">
+    <label translate="filter.assignee"></label>
+    <select name="assigneeSelection" id="assigneeSelection" ng-model="search.assignee" class="form-control"
+            ng-options="person as person.email for person in tasks.people">
+      <option value=''>{{'filter.selectAssignee' | translate}}</option>
+    </select>
   </div>
 </div>
