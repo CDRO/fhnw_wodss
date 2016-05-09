@@ -259,6 +259,70 @@ public class UserIntTest extends AbstractIntegrationTest {
 		} catch (Exception e){
 			Assert.fail();
 		}
+		
+		try{
+			// Test do any request after deletion
+			doGet("http://localhost:8080/boards", token, Board[].class);
+			Assert.fail();
+		} catch (IOException e){
+		} catch (Exception e){
+			Assert.fail();
+		}
+	}
+	
+	/**
+	 * Tests deleting the user profile. This should only be able to be done by
+	 * the same logged in user.
+	 * 
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testDeleteUserWithBoards() throws Exception {
+
+		JSONObject json = new JSONObject();
+
+		// CREATE / REGISTER
+		json.put("name", "TestUserK");
+		json.put("email", "emailK@fhnw.ch");
+		json.put("password", "password2");
+
+		User user2 = doPost("http://localhost:8080/user", null, json, User.class);
+		User userFromDb2 = userService.getById(user2.getId());
+		Assert.assertEquals("TestUserK", userFromDb2.getName());
+		Assert.assertEquals("emailK@fhnw.ch", userFromDb2.getEmail());
+		Assert.assertNotNull(user2.getId());
+
+		// VALIDATE EMAIL ADDRESS
+		json.put("validationCode", userFromDb2.getLoginData().getValidationCode());
+		Boolean success = doPut("http://localhost:8080/user/{0}/logindata", null, json, Boolean.class,
+				userFromDb2.getId());
+		Assert.assertTrue(success);
+		userFromDb2 = userService.getById(user2.getId());
+		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
+
+		// REQUEST TOKEN
+		Token token = doPost("http://localhost:8080/token", null, json, Token.class);
+		
+		// CREATE BOARD
+		json.clear();
+		json.put("title", "TestBoard");
+
+		Board board = doPost("http://localhost:8080/board", token, json, Board.class);
+		Assert.assertNotNull(board.getId().intValue());
+		Board boardFromDb = boardService.getById(board.getId());
+		Assert.assertEquals("TestBoard", boardFromDb.getTitle());
+		
+		try{
+			success = doDelete("http://localhost:8080/user/{0}", token, Boolean.class, user2.getId());
+			Assert.assertTrue(success);
+			board = boardService.getById(boardFromDb.getId());
+			Assert.assertNull(board);
+		} catch (IOException e){
+			Assert.fail();
+		} catch (Exception e){
+			Assert.fail();
+		}
 	}
 	
 	/**
