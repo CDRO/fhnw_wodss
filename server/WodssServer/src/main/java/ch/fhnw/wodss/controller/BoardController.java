@@ -93,6 +93,7 @@ public class BoardController {
 		board.setOwner(user);
 		board.addUser(user);
 		Board savedBoard = boardService.saveBoard(board);
+		// notification
 		LOG.info("User <{}> saved board <{}>", user.getEmail(), board.getId());
 		return new ResponseEntity<>(savedBoard, HttpStatus.OK);
 	}

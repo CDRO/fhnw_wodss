@@ -126,7 +126,6 @@ public class UserController {
 	 *            The user id to delete.
 	 * @return <code>true</code> if successful, <code>false</code> otherwise
 	 */
-	// TODO what is with the owned boards?
 	@RequestMapping(path = "/user/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Boolean> deleteUser(@RequestHeader(value = "x-session-token") Token token,
 			@PathVariable Integer id) {
