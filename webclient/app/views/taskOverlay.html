@@ -8,7 +8,7 @@
   <!-- selected Board -->
   <div class="form-group">
     <label for="boardSelect" translate="tasks.form.boardSelection"></label>
-    <select name="boardSelection" id="boardSelect" ng-model="model.board"
+    <select name="boardSelection" id="boardSelect" ng-model="model.board" class="form-control"
             ng-options="board.title for board in boards"> <!--board.id as board.title for board in boards-->
     </select>
   </div>
@@ -40,9 +40,9 @@
 
   <!-- Person -->
   <div class="form-group">
-    <label for="peopleSelect" translate="tasks.form.person">Person</label>
-    <select name="peopleSelection" id="peopleSelect" ng-model="model.person">
-      <option ng-repeat="person in people" value="{{person.id}}">{{person.name}}</option>
+    <label for="peopleSelect" translate="tasks.form.person"></label>
+    <select name="peopleSelection" id="peopleSelect" ng-model="model.assignee"
+         ng-options="person as person.name for person in people">
     </select>
   </div>
 

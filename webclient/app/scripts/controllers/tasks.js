@@ -9,14 +9,13 @@
  */
 var module = angular.module('angularWebclientApp');
 
-var taskController = function(taskService, params, $uibModal){
+var taskController = function(taskService, params, $uibModal, $scope){
   var self = this;
   this.list = [];
 
   this.boards = params.boards ? params.boards : [];
 
   this.people = params.assignees ? params.assignees : [];
-
   this.boardId = parseInt(params.boardId);
 
   this.selectedBoard = {};
@@ -25,6 +24,22 @@ var taskController = function(taskService, params, $uibModal){
           self.selectedBoard = board;
       }
   });
+
+  // Custom Filters for Tasks
+  $scope.isState = function(prop, state) {
+    return function (item) {
+      return item[prop] == state;
+    }
+  };
+
+  $scope.filterAssignee = function(assignee){
+      if($scope.search && $scope.search.assignee){
+        return assignee.id === $scope.search.assignee.id;
+      }else{
+        return true;
+      }
+
+  };
 
   /* Show tasks from board or all tasks */
   if(params.boardId){
@@ -97,6 +112,6 @@ var taskController = function(taskService, params, $uibModal){
   };
 };
 
-taskController.$inject = ['TaskService', '$stateParams', '$uibModal'];
+taskController.$inject = ['TaskService', '$stateParams', '$uibModal', '$scope'];
 
 module.controller('TasksCtrl', taskController);

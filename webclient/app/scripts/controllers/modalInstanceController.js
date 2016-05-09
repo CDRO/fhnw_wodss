@@ -16,7 +16,7 @@ var ModalInstanceCtrl = function($scope, $uibModalInstance, isNew, people, board
 
   var modal = $uibModalInstance;
 
-  $scope.ok = function () {
+  $scope.ok = function (){
     modal.close($scope.model);
   };
 

@@ -23,7 +23,10 @@ var boardController = function(boardService, $uibModal) {
   };
 
   this.add = function(){
-    boardService.add({title: self.title}).then(function(data){
+    var members = self.members.map(function(member){
+        return {email: member.text, name: member.text};
+    });
+    boardService.add({title: self.title, users: members}).then(function(data){
         self.list.push(data);
     });
   };
