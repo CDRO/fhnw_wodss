@@ -32,7 +32,7 @@ public class User {
 	@OneToMany(mappedBy="board", fetch = FetchType.EAGER)
 	@JsonIgnore
 	private List<Task> tasks;
-	@ManyToMany(mappedBy="users", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+	@ManyToMany(mappedBy="users", fetch = FetchType.EAGER)
 	@JsonIgnore
 	private List<Board> boards;
 

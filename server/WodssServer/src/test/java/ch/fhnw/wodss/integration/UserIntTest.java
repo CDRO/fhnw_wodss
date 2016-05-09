@@ -283,14 +283,14 @@ public class UserIntTest extends AbstractIntegrationTest {
 		JSONObject json = new JSONObject();
 
 		// CREATE / REGISTER
-		json.put("name", "TestUserK");
-		json.put("email", "emailK@fhnw.ch");
+		json.put("name", "TestUserV");
+		json.put("email", "emailV@fhnw.ch");
 		json.put("password", "password2");
 
 		User user2 = doPost("http://localhost:8080/user", null, json, User.class);
 		User userFromDb2 = userService.getById(user2.getId());
-		Assert.assertEquals("TestUserK", userFromDb2.getName());
-		Assert.assertEquals("emailK@fhnw.ch", userFromDb2.getEmail());
+		Assert.assertEquals("TestUserV", userFromDb2.getName());
+		Assert.assertEquals("emailV@fhnw.ch", userFromDb2.getEmail());
 		Assert.assertNotNull(user2.getId());
 
 		// VALIDATE EMAIL ADDRESS
@@ -315,11 +315,8 @@ public class UserIntTest extends AbstractIntegrationTest {
 		
 		try{
 			success = doDelete("http://localhost:8080/user/{0}", token, Boolean.class, user2.getId());
-			Assert.assertTrue(success);
-			board = boardService.getById(boardFromDb.getId());
-			Assert.assertNull(board);
-		} catch (IOException e){
 			Assert.fail();
+		} catch (IOException e){
 		} catch (Exception e){
 			Assert.fail();
 		}

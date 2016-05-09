@@ -132,6 +132,9 @@ public class UserController {
 			@PathVariable Integer id) {
 		User user = userService.getById(id);
 		if (TokenHandler.validate(token.getId(), user)) {
+			if(user.getBoards().size() > 0){
+				return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+			}
 			userService.deleteUser(id);
 			LOG.info("User <{}> has been deleted", user.getEmail());
 			TokenHandler.unregister(token.getId());
