@@ -107,7 +107,7 @@ public class TaskController {
 	 * @return The saved task that contains an ID from database.
 	 */
 	// TODO: restrict attachment mime types.
-	@RequestMapping(path = "/task", method = RequestMethod.POST)
+	@RequestMapping(path = "/task", method = RequestMethod.POST, headers="content-type=multipart/*")
 	public ResponseEntity<Task> createTask(@RequestHeader(value = "x-session-token") Token token,
 			@RequestPart("info") Task task, @RequestPart(name = "file", required = false) List<MultipartFile> files) {
 		User user = TokenHandler.getUser(token.getId());
@@ -115,6 +115,31 @@ public class TaskController {
 		user = userService.getById(user.getId());
 		if (user.getBoards().contains(task.getBoard())) {
 			Task savedTask = taskService.saveTask(task, files);
+			LOG.info("User <{}> saved task <{}>", user.getEmail(), task.getId());
+			return new ResponseEntity<>(savedTask, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	/**
+	 * Creates a new task in a board. To create a new task, the user must be
+	 * subscribed for the board, where the task should be associated with.
+	 * 
+	 * @param token
+	 *            The security token to verify the user is logged in.
+	 * @param task
+	 *            The task to create.
+	 * @return The saved task that contains an ID from database.
+	 */
+	// TODO: restrict attachment mime types.
+	@RequestMapping(path = "/task", method = RequestMethod.POST)
+	public ResponseEntity<Task> createTaskWithoutMultiPart(@RequestHeader(value = "x-session-token") Token token,
+			@RequestBody Task task) {
+		User user = TokenHandler.getUser(token.getId());
+		// reload user from db
+		user = userService.getById(user.getId());
+		if (user.getBoards().contains(task.getBoard())) {
+			Task savedTask = taskService.saveTask(task);
 			LOG.info("User <{}> saved task <{}>", user.getEmail(), task.getId());
 			return new ResponseEntity<>(savedTask, HttpStatus.OK);
 		}
@@ -162,15 +187,41 @@ public class TaskController {
 	 *            The attachments of the task.
 	 * @return The modified task.
 	 */
-	@RequestMapping(path = "/task/{id}", method = RequestMethod.PUT)
+	@RequestMapping(path = "/task/{id}", method = RequestMethod.PUT, headers="content-type=multipart/*")
 	public ResponseEntity<Task> updateTask(@RequestHeader(value = "x-session-token") Token token,
-			@RequestPart("info") Task task, @PathVariable Integer id,
+			@RequestPart(name = "info") Task task, @PathVariable Integer id,
 			@RequestPart(name = "file", required = false) List<MultipartFile> files) {
 		User user = TokenHandler.getUser(token.getId());
 		// reload user from db
 		user = userService.getById(user.getId());
 		if (user.getBoards().contains(task.getBoard())) {
 			Task updatedTask = taskService.saveTask(task, files);
+			LOG.info("User <{}> updated task <{}>", user.getEmail(), task.getId());
+			return new ResponseEntity<>(updatedTask, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}
+	
+	/**
+	 * Modifies a created task. This should only be possible if the user is
+	 * subscribed to the board that contains the task to modify.
+	 * 
+	 * @param token
+	 *            The security token to verify whether the user is logged in.
+	 * @param task
+	 *            The modified task to save.
+	 * @param id
+	 *            The id of the task to modify.
+	 * @return The modified task.
+	 */
+	@RequestMapping(path = "/task/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<Task> updateTaskWithoutMultiPart(@RequestHeader(value = "x-session-token") Token token,
+			@RequestBody Task task) {
+		User user = TokenHandler.getUser(token.getId());
+		// reload user from db
+		user = userService.getById(user.getId());
+		if (user.getBoards().contains(task.getBoard())) {
+			Task updatedTask = taskService.saveTask(task);
 			LOG.info("User <{}> updated task <{}>", user.getEmail(), task.getId());
 			return new ResponseEntity<>(updatedTask, HttpStatus.OK);
 		}

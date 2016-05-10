@@ -58,27 +58,27 @@ public class AttachmentIntTest extends AbstractIntegrationTest {
 		JSONObject jsonUser1 = new JSONObject();
 
 		// CREATE / REGISTER
-		jsonUser1.put("name", "TestUser20");
-		jsonUser1.put("email", "email20@fhnw.ch");
+		jsonUser1.put("name", "TestUser24");
+		jsonUser1.put("email", "email24@fhnw.ch");
 		jsonUser1.put("password", "password");
 
 		User user1 = doPost("http://localhost:8080/user", null, jsonUser1, User.class);
 		User userFromDb1= userService.getById(user1.getId());
-		Assert.assertEquals("TestUser20", userFromDb1.getName());
-		Assert.assertEquals("email20@fhnw.ch", userFromDb1.getEmail());
+		Assert.assertEquals("TestUser24", userFromDb1.getName());
+		Assert.assertEquals("email24@fhnw.ch", userFromDb1.getEmail());
 		Assert.assertNotNull(user1.getId());
 
 		JSONObject jsonUser2 = new JSONObject();
 
 		// CREATE / REGISTER
-		jsonUser2.put("name", "TestUser21");
-		jsonUser2.put("email", "email21@fhnw.ch");
+		jsonUser2.put("name", "TestUser25");
+		jsonUser2.put("email", "email25@fhnw.ch");
 		jsonUser2.put("password", "password2");
 
 		User user2 = doPost("http://localhost:8080/user", null, jsonUser2, User.class);
 		User userFromDb2 = userService.getById(user2.getId());
-		Assert.assertEquals("TestUser21", userFromDb2.getName());
-		Assert.assertEquals("email21@fhnw.ch", userFromDb2.getEmail());
+		Assert.assertEquals("TestUser25", userFromDb2.getName());
+		Assert.assertEquals("email25@fhnw.ch", userFromDb2.getEmail());
 		Assert.assertNotNull(user2.getId());
 
 		// VALIDATE EMAIL ADDRESS
@@ -154,27 +154,27 @@ public class AttachmentIntTest extends AbstractIntegrationTest {
 		JSONObject jsonUser1 = new JSONObject();
 
 		// CREATE / REGISTER
-		jsonUser1.put("name", "TestUser22");
-		jsonUser1.put("email", "email22@fhnw.ch");
+		jsonUser1.put("name", "TestUser26");
+		jsonUser1.put("email", "email26@fhnw.ch");
 		jsonUser1.put("password", "password");
 
 		User user1 = doPost("http://localhost:8080/user", null, jsonUser1, User.class);
 		User userFromDb1= userService.getById(user1.getId());
-		Assert.assertEquals("TestUser22", userFromDb1.getName());
-		Assert.assertEquals("email22@fhnw.ch", userFromDb1.getEmail());
+		Assert.assertEquals("TestUser26", userFromDb1.getName());
+		Assert.assertEquals("email26@fhnw.ch", userFromDb1.getEmail());
 		Assert.assertNotNull(user1.getId());
 
 		JSONObject jsonUser2 = new JSONObject();
 
 		// CREATE / REGISTER
-		jsonUser2.put("name", "TestUser23");
-		jsonUser2.put("email", "email23@fhnw.ch");
+		jsonUser2.put("name", "TestUser27");
+		jsonUser2.put("email", "email27@fhnw.ch");
 		jsonUser2.put("password", "password2");
 
 		User user2 = doPost("http://localhost:8080/user", null, jsonUser2, User.class);
 		User userFromDb2 = userService.getById(user2.getId());
-		Assert.assertEquals("TestUser23", userFromDb2.getName());
-		Assert.assertEquals("email23@fhnw.ch", userFromDb2.getEmail());
+		Assert.assertEquals("TestUser27", userFromDb2.getName());
+		Assert.assertEquals("email27@fhnw.ch", userFromDb2.getEmail());
 		Assert.assertNotNull(user2.getId());
 
 		// VALIDATE EMAIL ADDRESS
