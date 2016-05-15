@@ -8,6 +8,7 @@
  *
  * Main module of the application.
  */
+
 angular
   .module('angularWebclientApp', [
     'services',
@@ -21,7 +22,8 @@ angular
     'pascalprecht.translate',
     'angularFileUpload',
     'ngFileUpload',
-    'ngTagsInput'
+    'ngTagsInput',
+    'ngDragDrop'
   ])
   .config(function ($stateProvider, $urlRouterProvider, $translateProvider, translations_DE) {
     // For any unmatched url, redirect to home

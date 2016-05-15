@@ -4,63 +4,48 @@
 
 <div class="row">
   <div class="col-md-4">
-      <h3 translate="tasks.doTitle"></h3>
-      <div ng-repeat="task in tasks.list | filter:isState('state', 'TODO') | filter:searchText | filter:filterAssignee">
-        <div class="media">
-          <div class="media-left">
-            <!-- <a href="#">
-               <img class="media-object" src="..." alt="...">
-             </a>-->
-          </div>
-          <div class="media-body">
-            <h4 class="media-heading">{{task.description}} <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span></h4>
-            <p>{{task.description}}</p>
+      <h3 translate="tasks.doTitle" class="text-center"></h3>
+      <ul class="list-unstyled draggableArea" ng-model="tasks.todoList" jqyoui-droppable="{onDrop: 'updateTodoList',multiple:true}" data-drop="true">
+        <li class="panel panel-info draggablePanel" jqyoui-draggable="{index: {{$index}},animate:true}" data-drag="true"
+            ng-repeat="task in tasks.todoList | filter:searchText | filter:filterAssignee "
+            ng-model="tasks.todoList">
+          <div class="panel-heading">{{task.description}}  <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span></div>
+          <div class="panel-body">
             <p ng-show="task.dueDate > 0">{{task.dueDate | date:'dd.MM.yyyy'}}</p>
-            <button ng-click="tasks.update(task)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
-            <button ng-click="tasks.remove(task)" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-          </div>
-        </div>
-      </div>
+            <button ng-click="tasks.updateModal(task)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
+            <button ng-click="tasks.remove(task)" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></button></div>
+        </li>
+      </ul>
   </div>
 
   <div class="col-md-4">
-      <h3 translate="tasks.doingTitle"></h3>
-    <div ng-repeat="task in tasks.list | filter:isState('state', 'DOING')  | filter:searchText | filter:filterAssignee ">
-        <div class="media">
-          <div class="media-left">
-            <!-- <a href="#">
-               <img class="media-object" src="..." alt="...">
-             </a>-->
-          </div>
-          <div class="media-body">
-            <h4 class="media-heading">{{task.description}} <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span></h4>
-
+    <h3 translate="tasks.doingTitle" class="text-center"></h3>
+      <ul class="list-unstyled draggableArea" ng-model="tasks.doingList" jqyoui-droppable="{onDrop: 'updateDoingList',multiple:true}" data-drop="true">
+        <li class="panel panel-info draggablePanel" jqyoui-draggable="{index: {{$index}},animate:true}" data-drag="true"
+            ng-repeat="task in tasks.doingList | filter:searchText | filter:filterAssignee "
+            ng-model="tasks.doingList">
+          <div class="panel-heading">{{task.description}}  <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span></div>
+          <div class="panel-body">
             <p ng-show="task.dueDate > 0">{{task.dueDate | date:'dd.MM.yyyy'}}</p>
-            <button ng-click="tasks.update(task)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
-            <button ng-click="tasks.remove(task)" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-          </div>
-        </div>
-      </div>
+            <button ng-click="tasks.updateModal(task)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
+            <button ng-click="tasks.remove(task)" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></button></div>
+        </li>
+      </ul>
   </div>
 
   <div class="col-md-4">
-    <h3 translate="tasks.doneTitle"></h3>
-    <div ng-repeat="task in tasks.list | filter:isState('state', 'DONE')  | filter:searchText | filter:filterAssignee">
-      <div class="media">
-        <div class="media-left">
-          <!-- <a href="#">
-             <img class="media-object" src="..." alt="...">
-           </a>-->
-        </div>
-        <div class="media-body">
-          <h4 class="media-heading">{{task.description}} <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span></h4>
-
-          <p ng-show="task.dueDate > 0">{{task.dueDate | date:'dd.MM.yyyy'}}</p>
-          <button ng-click="tasks.update(task)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
-          <button ng-click="tasks.remove(task)" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-        </div>
-      </div>
-    </div>
+    <h3 translate="tasks.doneTitle" class="text-center"></h3>
+      <ul class="list-unstyled draggableArea" ng-model="tasks.doneList" jqyoui-droppable="{onDrop: 'updateDoneList',multiple:true}" data-drop="true">
+        <li class="panel panel-info draggablePanel" jqyoui-draggable="{onStart: saveDraggable(task),index: {{$index}},animate:true}" data-drag="true"
+            ng-repeat="task in tasks.doneList | filter:searchText | filter:filterAssignee"
+            ng-model="tasks.doneList">
+          <div class="panel-heading">{{task.description}}  <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span></div>
+          <div class="panel-body">
+            <p ng-show="task.dueDate > 0">{{task.dueDate | date:'dd.MM.yyyy'}}</p>
+            <button ng-click="tasks.updateModal(task)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
+            <button ng-click="tasks.remove(task)" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></button></div>
+        </li>
+      </ul>
   </div>
 </div><!-- end row-->
 
