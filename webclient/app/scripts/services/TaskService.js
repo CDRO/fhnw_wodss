@@ -43,19 +43,24 @@
     };
 
       /**
-       * Updates the board
-       * @param board
+       * Updates the task
+       * @param task
        */
-    this.update = function(board){
-      return service.updateObject('task', board);
+    this.update = function(task){
+      var files = null;
+      if(task.files){
+        files = task.files;
+        delete task.files;
+      }
+      return service.updateObject('task', task, files);
     };
 
     /**
-     * Removes the Board
-     * @param board board with id specified
+     * Removes the Task
+     * @param board task with id specified
      */
-    this.remove = function (board) {
-        service.deleteObject('task', board);
+    this.remove = function (task) {
+        service.deleteObject('task', task);
     };
 
   };

@@ -30,10 +30,13 @@
      */
     this.add = function(board){
       // Object transformation for Tag Input
-      for(var i=0; i<board.users.length; i++){
+      if(board.users){
+        for(var i=0; i<board.users.length; i++){
           board.users[i].email = board.users[i].text;
           delete board.users[i].text;
+        }
       }
+
       return service.createObject('board', board).then(function(response){
         return response.data;
       });
@@ -45,10 +48,13 @@
        */
     this.update = function(board){
       // Object transformation for Tag Input
-      for(var i=0; i<board.users.length; i++){
-        board.users[i].email = board.users[i].text;
-        delete board.users[i].text;
+      if(board.users){
+        for(var i=0; i<board.users.length; i++){
+          board.users[i].email = board.users[i].text;
+          delete board.users[i].text;
+        }
       }
+
       return service.updateObject('board', board);
     };
 

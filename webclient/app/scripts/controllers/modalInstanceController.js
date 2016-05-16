@@ -29,6 +29,10 @@ var ModalInstanceCtrl = function($scope, $uibModalInstance, isNew, people, board
     $scope.dt = null;
   };*/
 
+  $scope.markToDelete = function(object){
+      object.toDelete = true;
+  };
+
   $scope.inlineOptions = {
     minDate: new Date(),
     showWeeks: false
