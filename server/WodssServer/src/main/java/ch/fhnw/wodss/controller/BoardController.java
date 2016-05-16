@@ -47,6 +47,10 @@ public class BoardController {
 		// reload from Database
 		user = userService.getById(user.getId());
 		LOG.debug("Getting boards for user <{}>", user.getEmail());
+		// remove owner from the users list.
+		for (Board board : user.getBoards()){
+			board.removeUser(user);
+		}
 		return new ResponseEntity<>(user.getBoards(), HttpStatus.OK);
 	}
 
