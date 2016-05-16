@@ -42,7 +42,7 @@
   <div class="form-group">
     <label for="peopleSelect" translate="tasks.form.person"></label>
     <select name="peopleSelection" id="peopleSelect" ng-model="model.assignee"
-         ng-options="person as person.name for person in people">
+         ng-options="person as person.email for person in people">
     </select>
   </div>
 
@@ -52,7 +52,7 @@
 
     <!--ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-multiple="true"-->
     <button class="btn btn-primary" ngf-select ng-model="model.files" name="files"
-           ngf-max-size="10MB" ngf-max-total-size="50MB" ngf-multiple="true" translate="tasks.form.addAttachment"
+           ngf-max-size="10MB" ngf-max-total-size="50MB" ngf-max-files="10" ngf-multiple="true" translate="tasks.form.addAttachment"
            ngf-keep="'distinct'" multiple></button>
 
     <button class="btn btn-danger" translate="btn.clear" ng-click="clearUpload()" ng-show="model.files.length > 0"></button>
