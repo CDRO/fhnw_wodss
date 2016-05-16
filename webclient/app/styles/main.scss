@@ -94,3 +94,13 @@ body {
     max-height: 120px;
   }
 }
+/* Dragable todos*/
+.draggableArea {
+  min-height: 500px;
+  border: 1px red solid;
+}
+
+.draggablePanel {
+  cursor: move;
+  width: 200px;
+}
