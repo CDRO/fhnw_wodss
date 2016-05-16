@@ -49,7 +49,7 @@ public class BoardController {
 		LOG.debug("Getting boards for user <{}>", user.getEmail());
 		// remove owner from the users list, so he cannot remove himself
 		for (Board board : user.getBoards()){
-			board.removeUser(user);
+			board.removeUser(board.getOwner());
 		}
 		return new ResponseEntity<>(user.getBoards(), HttpStatus.OK);
 	}
@@ -74,7 +74,7 @@ public class BoardController {
 		if (user.getBoards().contains(board)) {
 			LOG.debug("User requested board with id <{}>", board.getId());
 			// remove owner from the users list, so he cannot remove himself
-			board.removeUser(user);
+			board.removeUser(board.getOwner());
 			return new ResponseEntity<>(board, HttpStatus.OK);
 		}
 		LOG.debug("User requested board with id <{}> but is not authorized", board.getId());
