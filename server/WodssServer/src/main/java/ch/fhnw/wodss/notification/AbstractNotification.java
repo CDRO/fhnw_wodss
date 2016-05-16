@@ -17,11 +17,6 @@ import ch.fhnw.wodss.domain.User;
 public abstract class AbstractNotification {
 
 	/**
-	 * Flag for test mode.
-	 */
-	private boolean testMode = true;
-
-	/**
 	 * The mail session.
 	 */
 	private Session session;
@@ -74,44 +69,45 @@ public abstract class AbstractNotification {
 	 * Sends the notification.
 	 */
 	public void send() {
-		if (testMode) {
-			System.out.println("");
-			System.out.println(
-					"============================================== EMAIL NOTIFICATION ==============================================");
-			System.out.println("FROM:\t\t" + SENDER);
-			System.out.println("TO:\t\t" + getRecipients().toString());
-			System.out.println("SUBJECT:\t" + SUBJECT_PREFIX + getSubject());
-			System.out.println("MESSAGE:\t" + getMessageBody());
-			System.out.println(
-					"================================================================================================================");
-			System.out.println("");
+		String profiles = System.getProperty("spring.profiles.active");
+		if (profiles != null && profiles.contains("prod")) {
+			try {
+				// Create a default MimeMessage object.
+				Message message = new MimeMessage(session);
+
+				// Set From: header field of the header.
+				message.setFrom(new InternetAddress(SENDER));
+
+				// Set To: header field of the header.
+				for (User recipient : getRecipients()) {
+					message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient.getEmail()));
+				}
+
+				// Set Subject: header field
+				message.setSubject(SUBJECT_PREFIX + getSubject());
+
+				// Send the actual HTML message, as big as you like
+				message.setContent(getMessageBody(), "text/html");
+
+				// Send message
+				Transport.send(message);
+
+			} catch (MessagingException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
 			return;
 		}
-		try {
-			// Create a default MimeMessage object.
-			Message message = new MimeMessage(session);
-
-			// Set From: header field of the header.
-			message.setFrom(new InternetAddress(SENDER));
-
-			// Set To: header field of the header.
-			for (User recipient : getRecipients()) {
-				message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient.getEmail()));
-			}
-
-			// Set Subject: header field
-			message.setSubject(SUBJECT_PREFIX + getSubject());
-
-			// Send the actual HTML message, as big as you like
-			message.setContent(getMessageBody(), "text/html");
-
-			// Send message
-			Transport.send(message);
-
-		} catch (MessagingException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		System.out.println("");
+		System.out.println(
+				"============================================== EMAIL NOTIFICATION ==============================================");
+		System.out.println("FROM:\t\t" + SENDER);
+		System.out.println("TO:\t\t" + getRecipients().toString());
+		System.out.println("SUBJECT:\t" + SUBJECT_PREFIX + getSubject());
+		System.out.println("MESSAGE:\t" + getMessageBody());
+		System.out.println(
+				"================================================================================================================");
+		System.out.println("");
 	}
 
 	/**
@@ -134,20 +130,5 @@ public abstract class AbstractNotification {
 	 * @return the body of the message.
 	 */
 	abstract String getMessageBody();
-
-	/**
-	 * @return the testMode
-	 */
-	public boolean isTestMode() {
-		return testMode;
-	}
-
-	/**
-	 * @param testMode
-	 *            the testMode to set
-	 */
-	public void setTestMode(boolean testMode) {
-		this.testMode = testMode;
-	}
 
 }
