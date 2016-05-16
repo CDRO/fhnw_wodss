@@ -23,7 +23,7 @@ import ch.fhnw.wodss.service.BoardService;
 import ch.fhnw.wodss.service.UserService;
 
 @RestController
-@CrossOrigin(origins = "http://*:9000")
+@CrossOrigin(origins = "*")
 public class BoardController {
 
 	private final static Logger LOG = LoggerFactory.getLogger(BoardController.class);
