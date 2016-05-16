@@ -68,7 +68,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		jsonBoard.put("title", board.getTitle());
 		json.put("board", jsonBoard);
 
-		Task task = doMulitPartPostTask("http://localhost:8080/task", token, json, null);
+		Task task = doPost("http://localhost:8080/task", token, json, Task.class);
 		Assert.assertNotNull(task.getId());
 		Assert.assertEquals(board.getTitle(), task.getBoard().getTitle());
 		Task taskFromDb = taskService.getById(task.getId());
@@ -357,7 +357,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 			Task task1 = TaskFactory.getInstance().createTask(board1, "Task1");
 			JSONParser parser = new JSONParser();
 			JSONObject task1json = (JSONObject) parser.parse(objectMapper.writeValueAsString(task1));
-			task1 = doMulitPartPostTask("http://localhost:8080/task", token, task1json, null);
+			task1 = doPost("http://localhost:8080/task", token, task1json, Task.class);
 			Assert.assertNotNull(task1.getId());
 			Assert.fail();
 		} catch (IOException e) {
@@ -369,7 +369,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 			Task task2 = TaskFactory.getInstance().createTask(board2, "Task2");
 			JSONParser parser = new JSONParser();
 			JSONObject task1json = (JSONObject) parser.parse(objectMapper.writeValueAsString(task2));
-			task2 = doMulitPartPostTask("http://localhost:8080/task", token, task1json, null);
+			task2 = doPost("http://localhost:8080/task", token, task1json, Task.class);
 			Assert.assertNotNull(task2.getId());
 		} catch (IOException e) {
 			Assert.fail();
@@ -630,7 +630,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		try {
 			task1.setDescription("OtherDescription1");
 			JSONObject task1json = (JSONObject) parser.parse(objectMapper.writeValueAsString(task1));
-			task1 = doMulitPartPutTask("http://localhost:8080/task/{0}", token, task1json, null, task1.getId());
+			task1 = doPut("http://localhost:8080/task/{0}", token, task1json, Task.class, task1.getId());
 			Assert.fail();
 		} catch (IOException e) {
 		} catch (Exception e) {
@@ -640,7 +640,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		try {
 			task2.setDescription("OtherDescription2");
 			JSONObject task2json = (JSONObject) parser.parse(objectMapper.writeValueAsString(task2));
-			task2 = doMulitPartPutTask("http://localhost:8080/task/{0}", token, task2json, null, task2.getId());
+			task2 = doPut("http://localhost:8080/task/{0}", token, task2json, Task.class, task2.getId());
 			Assert.assertEquals("OtherDescription2", task2.getDescription());
 		} catch (IOException e) {
 			Assert.fail();
@@ -735,7 +735,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		try {
 			task2.setDescription("OtherDescription2");
 			JSONObject task2json = (JSONObject) parser.parse(objectMapper.writeValueAsString(task2));
-			task2 = doMulitPartPutTask("http://localhost:8080/task/{0}", token, task2json, null, task2.getId());
+			task2 = doPut("http://localhost:8080/task/{0}", token, task2json, Task.class, task2.getId());
 			Assert.assertEquals("OtherDescription2", task2.getDescription());
 		} catch (IOException e) {
 			Assert.fail();

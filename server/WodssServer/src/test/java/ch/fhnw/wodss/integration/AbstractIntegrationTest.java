@@ -165,8 +165,8 @@ public abstract class AbstractIntegrationTest {
 		MultipartEntityBuilder mpBuilder = MultipartEntityBuilder.create();
 		mpBuilder.addTextBody("info", json.toJSONString(), ContentType.APPLICATION_JSON);
 		if (files != null) {
-			for (File file : files) {
-				mpBuilder.addBinaryBody("file", file);
+			for (int index = 0; index < files.size(); index++) {
+				mpBuilder.addBinaryBody("file[" + index + "]", files.get(index));
 			}
 		}
 		HttpEntity entity = mpBuilder.build();
@@ -186,15 +186,17 @@ public abstract class AbstractIntegrationTest {
 
 	}
 
-	protected Task doMulitPartPutTask(String url, Token token, JSONObject json, File file, Object... urlParameters)
+	protected Task doMulitPartPutTask(String url, Token token, JSONObject json, List<File> files, Object... urlParameters)
 			throws Exception {
 
 		HttpClient httpClient = HttpClientBuilder.create().build();
 
 		MultipartEntityBuilder mpBuilder = MultipartEntityBuilder.create();
 		mpBuilder.addTextBody("info", json.toJSONString(), ContentType.APPLICATION_JSON);
-		if (file != null) {
-			mpBuilder.addBinaryBody("file", file);
+		if (files != null) {
+			for (int index = 0; index < files.size(); index++) {
+				mpBuilder.addBinaryBody("file[" + index + "]", files.get(index));
+			}
 		}
 		HttpEntity entity = mpBuilder.build();
 

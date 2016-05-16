@@ -1,5 +1,6 @@
 package ch.fhnw.wodss.controller;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -51,7 +52,7 @@ public class TaskController {
 	 */
 	@RequestMapping(path = "/tasks", method = RequestMethod.GET)
 	public ResponseEntity<List<Task>> getAllTasks(@RequestHeader(value = "x-session-token") Token token,
-			@RequestParam(name = "boardId",required = false) Board board) {
+			@RequestParam(name = "boardId", required = false) Board board) {
 		User user = TokenHandler.getUser(token.getId());
 		// reload user from db
 		user = userService.getById(user.getId());
@@ -107,20 +108,56 @@ public class TaskController {
 	 * @return The saved task that contains an ID from database.
 	 */
 	// TODO: restrict attachment mime types.
-	@RequestMapping(path = "/task", method = RequestMethod.POST, headers="Content-Type=multipart/*")
+	@RequestMapping(path = "/task", method = RequestMethod.POST, headers = "Content-Type=multipart/*")
 	public ResponseEntity<Task> createTask(@RequestHeader(value = "x-session-token") Token token,
-			@RequestPart("info") Task task, @RequestPart(name = "file") List<MultipartFile> files) {
+			@RequestPart("info") Task task, @RequestPart(name = "file[0]") MultipartFile file0,
+			@RequestPart(name = "file[1]", required = false) MultipartFile file1, @RequestPart(name = "file[2]", required = false) MultipartFile file2,
+			@RequestPart(name = "file[3]", required = false) MultipartFile file3, @RequestPart(name = "file[4]", required = false) MultipartFile file4,
+			@RequestPart(name = "file[5]", required = false) MultipartFile file5, @RequestPart(name = "file[6]", required = false) MultipartFile file6,
+			@RequestPart(name = "file[7]", required = false) MultipartFile file7, @RequestPart(name = "file[8]", required = false) MultipartFile file8,
+			@RequestPart(name = "file[9]", required = false) MultipartFile file9) {
 		User user = TokenHandler.getUser(token.getId());
 		// reload user from db
 		user = userService.getById(user.getId());
 		if (user.getBoards().contains(task.getBoard())) {
+			List<MultipartFile> files = new LinkedList<>();
+			if(file0 != null){
+				files.add(file0);
+			}
+			if(file1 != null){
+				files.add(file1);
+			}
+			if(file2 != null){
+				files.add(file2);
+			}
+			if(file3 != null){
+				files.add(file3);
+			}
+			if(file4 != null){
+				files.add(file4);
+			}
+			if(file5 != null){
+				files.add(file5);
+			}
+			if(file6 != null){
+				files.add(file6);
+			}
+			if(file7 != null){
+				files.add(file7);
+			}
+			if(file8 != null){
+				files.add(file8);
+			}
+			if(file9 != null){
+				files.add(file9);
+			}
 			Task savedTask = taskService.saveTask(task, files);
 			LOG.info("User <{}> saved task <{}> with attachments", user.getEmail(), task.getId());
 			return new ResponseEntity<>(savedTask, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
-	
+
 	/**
 	 * Creates a new task in a board. To create a new task, the user must be
 	 * subscribed for the board, where the task should be associated with.
@@ -187,21 +224,57 @@ public class TaskController {
 	 *            The attachments of the task.
 	 * @return The modified task.
 	 */
-	@RequestMapping(path = "/task/{id}", method = RequestMethod.PUT, headers="Content-Type=multipart/*")
+	@RequestMapping(path = "/task/{id}", method = RequestMethod.PUT, headers = "Content-Type=multipart/*")
 	public ResponseEntity<Task> updateTask(@RequestHeader(value = "x-session-token") Token token,
 			@RequestPart(name = "info") Task task, @PathVariable Integer id,
-			@RequestPart(name = "file") List<MultipartFile> files) {
+			@RequestPart(name = "file[0]") MultipartFile file0,
+			@RequestPart(name = "file[1]", required = false) MultipartFile file1, @RequestPart(name = "file[2]", required = false) MultipartFile file2,
+			@RequestPart(name = "file[3]", required = false) MultipartFile file3, @RequestPart(name = "file[4]", required = false) MultipartFile file4,
+			@RequestPart(name = "file[5]", required = false) MultipartFile file5, @RequestPart(name = "file[6]", required = false) MultipartFile file6,
+			@RequestPart(name = "file[7]", required = false) MultipartFile file7, @RequestPart(name = "file[8]", required = false) MultipartFile file8,
+			@RequestPart(name = "file[9]", required = false) MultipartFile file9) {
 		User user = TokenHandler.getUser(token.getId());
 		// reload user from db
 		user = userService.getById(user.getId());
 		if (user.getBoards().contains(task.getBoard())) {
+			List<MultipartFile> files = new LinkedList<>();
+			if(file0 != null){
+				files.add(file0);
+			}
+			if(file1 != null){
+				files.add(file1);
+			}
+			if(file2 != null){
+				files.add(file2);
+			}
+			if(file3 != null){
+				files.add(file3);
+			}
+			if(file4 != null){
+				files.add(file4);
+			}
+			if(file5 != null){
+				files.add(file5);
+			}
+			if(file6 != null){
+				files.add(file6);
+			}
+			if(file7 != null){
+				files.add(file7);
+			}
+			if(file8 != null){
+				files.add(file8);
+			}
+			if(file9 != null){
+				files.add(file9);
+			}
 			Task updatedTask = taskService.saveTask(task, files);
 			LOG.info("User <{}> updated task <{}> with attachments.", user.getEmail(), task.getId());
 			return new ResponseEntity<>(updatedTask, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
-	
+
 	/**
 	 * Modifies a created task. This should only be possible if the user is
 	 * subscribed to the board that contains the task to modify.
