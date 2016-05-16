@@ -159,6 +159,7 @@ public class UserController {
 			@RequestBody User user, @PathVariable Integer id) {
 		User currUser = userService.getById(id);
 		if (TokenHandler.validate(token.getId(), currUser)) {
+			user.setLoginData(currUser.getLoginData());
 			User updatedUser = userService.saveUser(user);
 			LOG.info("User <{}> has updated his user profile", updatedUser.getEmail());
 			return new ResponseEntity<>(updatedUser, HttpStatus.OK);
