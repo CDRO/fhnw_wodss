@@ -34,7 +34,7 @@ import ch.fhnw.wodss.security.Token;
 public abstract class AbstractIntegrationTest {
 
 	protected ObjectMapper objectMapper = new ObjectMapper();
-
+	
 	protected <T> T doPost(String url, Token token, Object obj, Class<T> type, Object... urlParameters)
 			throws Exception {
 		String formattedUrl = MessageFormat.format(url, urlParameters);
@@ -132,7 +132,6 @@ public abstract class AbstractIntegrationTest {
 		InputStream is = con.getInputStream();
 
 		T readValue = objectMapper.readValue(is, type);
-		System.out.println(objectMapper.writeValueAsString(readValue));
 
 		return readValue;
 
