@@ -115,7 +115,7 @@ public class TaskController {
 		user = userService.getById(user.getId());
 		if (user.getBoards().contains(task.getBoard())) {
 			Task savedTask = taskService.saveTask(task, files);
-			LOG.info("User <{}> saved task <{}>", user.getEmail(), task.getId());
+			LOG.info("User <{}> saved task <{}> with attachments", user.getEmail(), task.getId());
 			return new ResponseEntity<>(savedTask, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -196,7 +196,7 @@ public class TaskController {
 		user = userService.getById(user.getId());
 		if (user.getBoards().contains(task.getBoard())) {
 			Task updatedTask = taskService.saveTask(task, files);
-			LOG.info("User <{}> updated task <{}>", user.getEmail(), task.getId());
+			LOG.info("User <{}> updated task <{}> with attachments.", user.getEmail(), task.getId());
 			return new ResponseEntity<>(updatedTask, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
