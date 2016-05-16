@@ -132,6 +132,7 @@ public abstract class AbstractIntegrationTest {
 		InputStream is = con.getInputStream();
 
 		T readValue = objectMapper.readValue(is, type);
+		System.out.println(objectMapper.writeValueAsString(readValue));
 
 		return readValue;
 

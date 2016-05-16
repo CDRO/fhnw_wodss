@@ -112,8 +112,18 @@ public class TaskIntTest extends AbstractIntegrationTest {
 
 		task = doMulitPartPostTask("http://localhost:8080/task", token, taskjson, files);
 		Assert.assertNotNull(task.getId().intValue());
+		Assert.assertTrue(task.getAttachments().size() > 0);
 		Task taskFromDb = taskService.getById(task.getId());
 		Assert.assertEquals("Description", taskFromDb.getDescription());
+		
+		// GET TASKS
+		List<Task> tasks = Arrays.asList(doGet("http://localhost:8080/tasks", token, Task[].class));
+		Assert.assertTrue(tasks.contains(task));
+		for(Task t : tasks){
+			if(t.getId() == task.getId()){
+				Assert.assertTrue(t.getAttachments().size() > 0);
+			}
+		}
 
 		// TODO test delete task with attachment!!
 	}

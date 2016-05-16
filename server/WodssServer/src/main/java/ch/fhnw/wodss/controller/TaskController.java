@@ -109,7 +109,7 @@ public class TaskController {
 	// TODO: restrict attachment mime types.
 	@RequestMapping(path = "/task", method = RequestMethod.POST, headers="content-type=multipart/*")
 	public ResponseEntity<Task> createTask(@RequestHeader(value = "x-session-token") Token token,
-			@RequestPart("info") Task task, @RequestPart(name = "file", required = false) List<MultipartFile> files) {
+			@RequestPart("info") Task task, @RequestPart(name = "file") List<MultipartFile> files) {
 		User user = TokenHandler.getUser(token.getId());
 		// reload user from db
 		user = userService.getById(user.getId());
@@ -190,7 +190,7 @@ public class TaskController {
 	@RequestMapping(path = "/task/{id}", method = RequestMethod.PUT, headers="content-type=multipart/*")
 	public ResponseEntity<Task> updateTask(@RequestHeader(value = "x-session-token") Token token,
 			@RequestPart(name = "info") Task task, @PathVariable Integer id,
-			@RequestPart(name = "file", required = false) List<MultipartFile> files) {
+			@RequestPart(name = "file") List<MultipartFile> files) {
 		User user = TokenHandler.getUser(token.getId());
 		// reload user from db
 		user = userService.getById(user.getId());
