@@ -9,15 +9,20 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import ch.fhnw.wodss.domain.Board;
+import ch.fhnw.wodss.domain.Task;
 import ch.fhnw.wodss.domain.User;
 import ch.fhnw.wodss.domain.UserFactory;
 import ch.fhnw.wodss.repository.BoardRepository;
+import ch.fhnw.wodss.repository.TaskRepository;
 
 @Component
 public class BoardService {
 	
 	@Autowired
 	private BoardRepository boardRepository;
+	
+	@Autowired
+	private TaskRepository taskRepository;
 	
 	@Autowired
 	private UserService userService;
@@ -45,6 +50,10 @@ public class BoardService {
 	@Transactional
 	public void deleteBoard(Board board){
 		boardRepository.delete(board);
+		List<Task> tasks = taskRepository.findByBoard(board);
+		for(Task task : tasks){
+			taskRepository.delete(task.getId());
+		}
 	}
 	
 	@Transactional
