@@ -8,36 +8,37 @@
  * Controller of the angularWebclientApp
  */
 
-var boardController = function(boardService, $uibModal) {
+var boardController = function($scope, boardService, $uibModal) {
   var self = this;
   this.list = [];
   this.assignees = [];
-  this.members = [];
 
-  boardService.getAll(this.list).then(function(data){
+  this.synchronize = function(){
+    boardService.getAll(this.list).then(function(data){
       self.list = data;
-  });
+    });
+  };
 
-  this.checkMember = function(member){
+  self.synchronize();
+
+  $scope.checkMember = function(member){
       return self.validateEmail(member.text);
   };
 
-  this.add = function(){
-    var members = self.members.map(function(member){
-        return {email: member.text, name: member.text};
-    });
-    boardService.add({title: self.title, users: members}).then(function(data){
-        self.list.push(data);
+  this.add = function(model){
+    boardService.add(model).then(function(data){
+        self.synchronize();
     });
   };
 
-  this.update = function(board){
-    boardService.update(board);
+  this.update = function(model){
+    boardService.update(model).then(function(data){
+        synchronize();
+    });
   };
 
   /* Confirmation Dialog */
   this.confirm = function(model){
-    var board = model;
     var modalInstance = $uibModal.open({
       templateUrl: 'views/confirmationOverlay.html',
       controller: 'ModalConfirmationCtrl',
@@ -57,12 +58,52 @@ var boardController = function(boardService, $uibModal) {
     }, function () {
         // Dismissed
     });
+  };
 
+  /* Open Overlay to create/update the board */
+  var openModal = function(isNew, model){
+    var modalInstance = $uibModal.open({
+      templateUrl: 'views/boards/boardOverlay.html',
+      controller: 'ModalInstanceCtrl',
+      size: "lg",
+      resolve: {
+        isNew: isNew,
+        people: function() {
+          return [];
+        },
+        boards: function(){
+          return [];
+        },
+        model: function(){
+          return model
+        }
+      }
+    });
+
+    modalInstance.result.then(function(model) {
+      if(model.id){
+        self.update(model);
+      }else{
+        self.add(model);
+      }
+    }, function () {
+
+    });
+  };
+
+  this.createModal = function(){
+    openModal(true, {});
+  };
+
+  this.updateModal = function(model){
+    openModal(false, model);
   };
 
   /* Removes the board */
   this.remove = function(board){
-    boardService.remove(board);
+    boardService.remove(board).then(function(){
+        self.synchronize();
+    });
   };
 
   /* Regex from here http://www.w3resource.com/javascript/form/email-validation.php */
@@ -72,7 +113,7 @@ var boardController = function(boardService, $uibModal) {
   };
 };
 
-boardController.$inject = ['BoardService', '$uibModal'];
+boardController.$inject = ['$scope', 'BoardService', '$uibModal'];
 
 angular.module('angularWebclientApp').controller('BoardsCtrl', boardController);
 

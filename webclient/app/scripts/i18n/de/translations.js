@@ -8,6 +8,7 @@
     boards: {
       boards: "Übersicht Boards",
       createBoard: "Board erstellen",
+      updateBoard: "Board bearbeiten",
       form: {
         title: "Bezeichnung",
         requiredTitle: "Bitte geben Sie einen Board Titel an",
