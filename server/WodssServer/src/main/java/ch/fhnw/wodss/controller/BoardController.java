@@ -47,7 +47,7 @@ public class BoardController {
 		// reload from Database
 		user = userService.getById(user.getId());
 		LOG.debug("Getting boards for user <{}>", user.getEmail());
-		// remove owner from the users list.
+		// remove owner from the users list, so he cannot remove himself
 		for (Board board : user.getBoards()){
 			board.removeUser(user);
 		}
@@ -73,6 +73,8 @@ public class BoardController {
 		Board board = boardService.getById(id);
 		if (user.getBoards().contains(board)) {
 			LOG.debug("User requested board with id <{}>", board.getId());
+			// remove owner from the users list, so he cannot remove himself
+			board.removeUser(user);
 			return new ResponseEntity<>(board, HttpStatus.OK);
 		}
 		LOG.debug("User requested board with id <{}> but is not authorized", board.getId());
@@ -149,6 +151,8 @@ public class BoardController {
 		user = userService.getById(user.getId());
 		Board aCurrBoard = boardService.getById(id);
 		if (user.equals(aCurrBoard.getOwner())) {
+			// add owner to the users list
+			board.addUser(board.getOwner());
 			Board updatedBoard = boardService.saveBoard(board);
 			LOG.info("User <{}> updated board <{}>", user.getEmail(), board.getId());
 			return new ResponseEntity<>(updatedBoard, HttpStatus.OK);
