@@ -107,7 +107,7 @@ public class TaskController {
 	 * @return The saved task that contains an ID from database.
 	 */
 	// TODO: restrict attachment mime types.
-	@RequestMapping(path = "/task", method = RequestMethod.POST, headers="content-type=multipart/*")
+	@RequestMapping(path = "/task", method = RequestMethod.POST, headers="Content-Type=multipart/*")
 	public ResponseEntity<Task> createTask(@RequestHeader(value = "x-session-token") Token token,
 			@RequestPart("info") Task task, @RequestPart(name = "file") List<MultipartFile> files) {
 		User user = TokenHandler.getUser(token.getId());
@@ -187,7 +187,7 @@ public class TaskController {
 	 *            The attachments of the task.
 	 * @return The modified task.
 	 */
-	@RequestMapping(path = "/task/{id}", method = RequestMethod.PUT, headers="content-type=multipart/*")
+	@RequestMapping(path = "/task/{id}", method = RequestMethod.PUT, headers="Content-Type=multipart/*")
 	public ResponseEntity<Task> updateTask(@RequestHeader(value = "x-session-token") Token token,
 			@RequestPart(name = "info") Task task, @PathVariable Integer id,
 			@RequestPart(name = "file") List<MultipartFile> files) {
