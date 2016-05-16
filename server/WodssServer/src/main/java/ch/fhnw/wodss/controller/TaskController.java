@@ -1,6 +1,5 @@
 package ch.fhnw.wodss.controller;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -110,12 +109,12 @@ public class TaskController {
 	// TODO: restrict attachment mime types.
 	@RequestMapping(path = "/task", method = RequestMethod.POST, headers="Content-Type=multipart/*")
 	public ResponseEntity<Task> createTask(@RequestHeader(value = "x-session-token") Token token,
-			@RequestPart("info") Task task, @RequestPart(name = "file") MultipartFile[] files) {
+			@RequestPart("info") Task task, @RequestPart(name = "file") List<MultipartFile> files) {
 		User user = TokenHandler.getUser(token.getId());
 		// reload user from db
 		user = userService.getById(user.getId());
 		if (user.getBoards().contains(task.getBoard())) {
-			Task savedTask = taskService.saveTask(task, Arrays.asList(files));
+			Task savedTask = taskService.saveTask(task, files);
 			LOG.info("User <{}> saved task <{}> with attachments", user.getEmail(), task.getId());
 			return new ResponseEntity<>(savedTask, HttpStatus.OK);
 		}
@@ -191,12 +190,12 @@ public class TaskController {
 	@RequestMapping(path = "/task/{id}", method = RequestMethod.PUT, headers="Content-Type=multipart/*")
 	public ResponseEntity<Task> updateTask(@RequestHeader(value = "x-session-token") Token token,
 			@RequestPart(name = "info") Task task, @PathVariable Integer id,
-			@RequestPart(name = "file") MultipartFile[] files) {
+			@RequestPart(name = "file") List<MultipartFile> files) {
 		User user = TokenHandler.getUser(token.getId());
 		// reload user from db
 		user = userService.getById(user.getId());
 		if (user.getBoards().contains(task.getBoard())) {
-			Task updatedTask = taskService.saveTask(task, Arrays.asList(files));
+			Task updatedTask = taskService.saveTask(task, files);
 			LOG.info("User <{}> updated task <{}> with attachments.", user.getEmail(), task.getId());
 			return new ResponseEntity<>(updatedTask, HttpStatus.OK);
 		}
