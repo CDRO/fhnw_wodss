@@ -9,7 +9,7 @@
   <div class="form-group">
     <label for="boardSelect" translate="tasks.form.boardSelection"></label>
     <select name="boardSelection" id="boardSelect" ng-model="model.board" class="form-control"
-            ng-options="board.title for board in boards"> <!--board.id as board.title for board in boards-->
+            ng-options="board as board.title for board in boards"> <!--board.id as board.title for board in boards-->
     </select>
   </div>
 
@@ -49,6 +49,10 @@
   <!-- Attachment -->
   <div class="form-group">
     <label for="files" translate="tasks.form.attachment"></label>
+    <ul ng-show="!isNew" ng-repeat="attachment in model.attachments">
+      <li ng-hide="attachment.toDelete">{{attachment.documentName}}
+        <button ng-click="markToDelete(attachment)" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-remove"></span></button></li>
+    </ul>
 
     <!--ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-multiple="true"-->
     <button class="btn btn-primary" ngf-select ng-model="model.files" name="files"

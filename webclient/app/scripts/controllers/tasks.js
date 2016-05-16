@@ -9,7 +9,7 @@
  */
 var module = angular.module('angularWebclientApp');
 
-var taskController = function(taskService, params, $uibModal, $scope){
+var taskController = function(taskService, attachmentService, params, $uibModal, $scope){
   var self = this;
   this.todoList = [];
   this.doingList = [];
@@ -78,41 +78,53 @@ var taskController = function(taskService, params, $uibModal, $scope){
   };
 
   /* Show tasks from board or all tasks */
-  if(params.boardId){
-    taskService.getByBoard(params.boardId).then(function(data){
-      self.switchTasks(data);
-      //self.list = data;
-    });
-  }else{
-    taskService.getAll().then(function(data){
-      self.switchTasks(data);
-      //self.list = data;
-    });
-  }
+  this.synchronize = function(){
+    self.todoList = [];
+    self.doneList = [];
+    self.doingList = [];
+    if(params.boardId){
+      taskService.getByBoard(params.boardId).then(function(data){
+        self.switchTasks(data);
+        //self.list = data;
+      });
+    }else{
+      taskService.getAll().then(function(data){
+        self.switchTasks(data);
+        //self.list = data;
+      });
+    }
+  };
+  self.synchronize();
 
   /* Add a task to list, sync with api */
   this.add = function(task){
       taskService.add(task).then(function(data){
-          self.todoList.push(data);
+          self.synchronize();
       });
   };
 
   this.update = function(task){
-    taskService.update(task).then(function(data){
-        // Saved
-    });
+      for(var i=0; i<task.attachments.length; i++){
+          if(task.attachments[i] && task.attachments[i].toDelete === true){
+              delete task.attachments[i];
+          }
+      }
+      taskService.update(task).then(function(data){
+          self.synchronize();
+      });
   };
 
   /* Remove tasks from list */
   this.remove = function(task){
     taskService.remove(task).then(function(data){
-      self.list = self.list.filter(function(current) {
+      /*self.list = self.list.filter(function(current) {
           if(task.id = current.id){
             return false;
           }else{
             return true;
           }
-      });
+      });*/
+      self.synchronize();
     });
   };
 
@@ -138,9 +150,9 @@ var taskController = function(taskService, params, $uibModal, $scope){
 
     modalInstance.result.then(function(model) {
       if(model.id){
-        taskService.update(model);
+        self.update(model);
       }else{
-        taskService.add(model);
+        self.add(model);
       }
     }, function () {
 
@@ -156,6 +168,6 @@ var taskController = function(taskService, params, $uibModal, $scope){
   };
 };
 
-taskController.$inject = ['TaskService', '$stateParams', '$uibModal', '$scope'];
+taskController.$inject = ['TaskService', 'AttachmentService', '$stateParams', '$uibModal', '$scope'];
 
 module.controller('TasksCtrl', taskController);
