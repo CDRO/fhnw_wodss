@@ -133,8 +133,8 @@ public class AttachmentIntTest extends AbstractIntegrationTest {
 		
 		try{
 			doGet("http://localhost:8080/attachment/{0}", token2, File.class, attachment.getId());
-			Assert.fail();
 		} catch (IOException e){
+			Assert.fail();
 		} catch (Exception e){
 			Assert.fail();
 		}
