@@ -28,7 +28,7 @@ import ch.fhnw.wodss.service.TaskService;
 import ch.fhnw.wodss.service.UserService;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin
 public class TaskController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(TaskController.class);

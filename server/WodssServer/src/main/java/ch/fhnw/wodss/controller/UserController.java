@@ -30,7 +30,7 @@ import ch.fhnw.wodss.service.BoardService;
 import ch.fhnw.wodss.service.UserService;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin
 public class UserController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(UserController.class);

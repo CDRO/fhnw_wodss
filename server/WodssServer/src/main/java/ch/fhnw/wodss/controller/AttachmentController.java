@@ -22,7 +22,7 @@ import ch.fhnw.wodss.service.AttachmentService;
 import ch.fhnw.wodss.service.UserService;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin
 public class AttachmentController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AttachmentController.class);
