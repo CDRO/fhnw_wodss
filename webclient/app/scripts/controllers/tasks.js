@@ -15,6 +15,8 @@ var taskController = function(taskService, attachmentService, params, $uibModal,
   this.doingList = [];
   this.doneList = [];
 
+  this.attachmentUrl = attachmentService.getPath();
+
   this.boards = params.boards ? params.boards : [];
 
   this.people = params.assignees ? params.assignees : [];

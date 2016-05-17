@@ -9,9 +9,14 @@
         <li class="panel panel-info draggablePanel" jqyoui-draggable="{index: {{$index}},animate:true}" data-drag="true"
             ng-repeat="task in tasks.todoList | filter:searchText | filter:filterAssignee "
             ng-model="tasks.todoList">
-          <div class="panel-heading">{{task.description}}  <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span></div>
+          <div class="panel-heading">{{task.description}} </div>
           <div class="panel-body">
-            <p ng-show="task.dueDate > 0">{{task.dueDate | date:'dd.MM.yyyy'}}</p>
+            <!-- Attachment -->
+            <a ng-repeat="attachment in task.attachments" target="_blank" ng-href="{{tasks.attachmentUrl}}{{attachment.id}}">
+              {{attachment.documentName}} <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span><br/>
+            </a>
+            <!-- Due Date and Buttons -->
+            <p ng-show="task.dueDate > 0">{{'tasks.dueDate' | translate}}: {{task.dueDate | date:'dd.MM.yyyy'}}</p>
             <button ng-click="tasks.updateModal(task)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
             <button ng-click="tasks.remove(task)" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></button></div>
         </li>
@@ -26,7 +31,12 @@
             ng-model="tasks.doingList">
           <div class="panel-heading">{{task.description}}  <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span></div>
           <div class="panel-body">
-            <p ng-show="task.dueDate > 0">{{task.dueDate | date:'dd.MM.yyyy'}}</p>
+            <!-- Attachment -->
+            <a ng-repeat="attachment in task.attachments" target="_blank" ng-href="{{tasks.attachmentUrl}}{{attachment.id}}">
+              {{attachment.documentName}} <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span><br/>
+            </a>
+            <!-- Due Date and Buttons -->
+            <p ng-show="task.dueDate > 0">{{'tasks.dueDate' | translate}}: {{task.dueDate | date:'dd.MM.yyyy'}}</p>
             <button ng-click="tasks.updateModal(task)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
             <button ng-click="tasks.remove(task)" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></button></div>
         </li>
@@ -41,7 +51,12 @@
             ng-model="tasks.doneList">
           <div class="panel-heading">{{task.description}}  <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span></div>
           <div class="panel-body">
-            <p ng-show="task.dueDate > 0">{{task.dueDate | date:'dd.MM.yyyy'}}</p>
+            <!-- Attachment -->
+            <a ng-repeat="attachment in task.attachments" target="_blank" ng-href="{{tasks.attachmentUrl}}{{attachment.id}}">
+              {{attachment.documentName}} <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span><br/>
+            </a>
+            <!-- Due Date and Buttons -->
+            <p ng-show="task.doneDate > 0">{{'tasks.doneDate' | translate}}: {{task.dueDate | date:'dd.MM.yyyy'}}</p>
             <button ng-click="tasks.updateModal(task)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
             <button ng-click="tasks.remove(task)" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></button></div>
         </li>

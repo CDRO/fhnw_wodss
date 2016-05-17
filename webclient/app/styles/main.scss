@@ -104,3 +104,7 @@ body {
   cursor: move;
   width: 200px;
 }
+
+.draggablePanel a, .draggablePanel button{
+  cursor: pointer;
+}
