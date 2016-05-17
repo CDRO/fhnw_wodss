@@ -6,6 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 public class LoginData {
 	@Id
@@ -15,6 +17,7 @@ public class LoginData {
 	private byte[] password;
 	@Lob
 	private byte[] salt;
+	@Type(type = "org.hibernate.type.NumericBooleanType")
 	private boolean validated;
 	private String validationCode;
 	private String resetCode;

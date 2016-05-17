@@ -34,36 +34,23 @@ public class AttachmentController {
 	private UserService userService;
 
 	/**
-	 * Gets the attachment of a task, only if the user is subscribed to the
-	 * board which contains this task.
+	 * Gets the attachment of a task.
 	 * 
-	 * @param token
-	 *            The security token to verify that the user is logged in.
 	 * @param id
 	 *            The attachment id (UUID)
 	 * @return The attachament if any.
 	 */
 	@RequestMapping(path = "/attachment/{id}", method = RequestMethod.GET)
-	public ResponseEntity<File> getAttachment(@RequestHeader(value = "x-session-token") Token token,
-			@PathVariable String id) {
+	public ResponseEntity<File> getAttachment(@PathVariable String id) {
 		LOG.debug("Getting attachment with id <{}>", id);
-		User user = TokenHandler.getUser(token.getId());
 		// Reload user from database
-		user = userService.getById(user.getId());
 		Attachment attachment = attachmentService.getAttachment(id);
 		if (attachment == null) {
 			LOG.debug("Attachment not found, returning <{}>", HttpStatus.NOT_FOUND);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		if (user.getBoards().contains(attachment.getTask().getBoard())) {
-			LOG.debug("Found attachment with id <{}> and user <{}> is permitted to open it", id,
-					user.getEmail());
-			return new ResponseEntity<>(attachment.getFile(), HttpStatus.OK);
-		}
-		LOG.debug(
-				"The user <{}> wanted to open the attachment with id <{}> but is not authorized.", user.getEmail(),
-				id);
-		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		LOG.debug("Found attachment with id <{}>", id);
+		return new ResponseEntity<>(attachment.getFile(), HttpStatus.OK);
 	}
 
 	/**
@@ -92,8 +79,7 @@ public class AttachmentController {
 			LOG.info("User <{}> deleted attachment with id <{}>", user.getEmail(), id);
 			return new ResponseEntity<>(true, HttpStatus.OK);
 		}
-		LOG.debug("User <{}> is not authorized to delete attachment with id <{}>",
-				user.getEmail(), id);
+		LOG.debug("User <{}> is not authorized to delete attachment with id <{}>", user.getEmail(), id);
 		return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
 	}
 
