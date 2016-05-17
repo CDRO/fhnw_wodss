@@ -22,7 +22,7 @@ import ch.fhnw.wodss.security.TokenHandler;
 import ch.fhnw.wodss.service.UserService;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin
 public class TokenController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(TokenController.class);
