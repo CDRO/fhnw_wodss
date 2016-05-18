@@ -9,7 +9,7 @@
   <div class="form-group">
     <label for="boardSelect" translate="tasks.form.boardSelection"></label>
     <select name="boardSelection" id="boardSelect" ng-model="model.board" class="form-control"
-            ng-options="board as board.title for board in boards"> <!--board.id as board.title for board in boards-->
+            ng-options="board.title for board in boards track by board.id"> <!--board.id as board.title for board in boards-->
     </select>
   </div>
 
@@ -42,7 +42,7 @@
   <div class="form-group">
     <label for="peopleSelect" translate="tasks.form.person"></label>
     <select name="peopleSelection" id="peopleSelect" ng-model="model.assignee"
-         ng-options="person as person.email for person in people">
+         ng-options="assignee.email for assignee in assignees track by assignee.id">
     </select>
   </div>
 

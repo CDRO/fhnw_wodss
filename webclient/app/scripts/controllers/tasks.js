@@ -19,7 +19,7 @@ var taskController = function(taskService, attachmentService, params, $uibModal,
 
   this.boards = params.boards ? params.boards : [];
 
-  this.people = params.assignees ? params.assignees : [];
+  this.assignees = params.assignees ? params.assignees : [];
   this.boardId = parseInt(params.boardId);
 
   this.selectedBoard = {};
@@ -138,8 +138,8 @@ var taskController = function(taskService, attachmentService, params, $uibModal,
       size: "lg",
       resolve: {
         isNew: isNew,
-        people: function() {
-            return self.people;
+        assignees: function() {
+            return self.assignees;
         },
         boards: function(){
           return self.boards;
