@@ -8,8 +8,8 @@
  * @param model object to update
  * @constructor
  */
-var ModalInstanceCtrl = function($scope, $uibModalInstance, isNew, people, boards, model) {
-  $scope.people = people;
+var ModalInstanceCtrl = function($scope, $uibModalInstance, isNew, assignees, boards, model) {
+  $scope.assignees = assignees;
   $scope.boards = boards;
   $scope.model = model;
   $scope.isNew = isNew;

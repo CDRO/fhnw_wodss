@@ -68,7 +68,7 @@ var boardController = function($scope, boardService, $uibModal) {
       size: "lg",
       resolve: {
         isNew: isNew,
-        people: function() {
+        assignees: function() {
           return [];
         },
         boards: function(){

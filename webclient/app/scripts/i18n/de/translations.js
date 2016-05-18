@@ -29,6 +29,8 @@
           addAttachment: "Hinzufügen",
           dueDate: "Zu erledigen bis"
       },
+      dueDate: "Erledigen bis",
+      doneDate: "Erledigt am",
       doTitle: "Todo",
       doingTitle: "In Bearbeitung",
       doneTitle: "Erledigt",

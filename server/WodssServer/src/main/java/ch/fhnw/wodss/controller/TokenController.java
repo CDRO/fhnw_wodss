@@ -49,7 +49,7 @@ public class TokenController {
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
-	@RequestMapping(path = "/token", method = RequestMethod.DELETE)
+	@RequestMapping(path = "/token/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Boolean> logout(@RequestHeader(value = "x-session-token") Token token) {
 		User user = TokenHandler.getUser(token.getId());
 		TokenHandler.unregister(token.getId());

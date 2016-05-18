@@ -107,6 +107,15 @@
       var uri = configService.baseUrl + collection + "/" +object.id;
       return $http({method: "DELETE", url: uri, cache: false, data: JSON.stringify(object)});
     };
+
+    /**
+     * Returns the server url
+     * @returns {*|string}
+       */
+    this.getPath = function(){
+        return configService.baseUrl;
+    }
+
   };
 
   ApiService.$inject = ['ConfigService', '$http', 'Upload'];

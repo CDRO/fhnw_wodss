@@ -85,6 +85,14 @@ angular
           validationCode: null,
         }
       })
+      .state('resetPassword', {
+        url: "/reset/:resetToken",
+        templateUrl: "views/resetPassword.html",
+        controller: "ResetPasswordCtrl",
+        params: {
+          resetToken: null
+        }
+      })
       .state('user', {
         url: "/user",
         templateUrl: "views/editUser.html",
