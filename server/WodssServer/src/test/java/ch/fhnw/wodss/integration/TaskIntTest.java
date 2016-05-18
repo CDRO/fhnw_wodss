@@ -373,11 +373,14 @@ public class TaskIntTest extends AbstractIntegrationTest {
 
 		try {
 			Task task2 = TaskFactory.getInstance().createTask(board2, "Task2");
+			task2.setAssignee(user2);
 			JSONParser parser = new JSONParser();
-			JSONObject task1json = (JSONObject) parser.parse(objectMapper.writeValueAsString(task2));
-			task2 = doPost("http://localhost:8080/task", token, task1json, Task.class);
+			JSONObject task2json = (JSONObject) parser.parse(objectMapper.writeValueAsString(task2));
+			System.out.println(task2json.toJSONString());
+			task2 = doPost("http://localhost:8080/task", token, task2json, Task.class);
 			Assert.assertNotNull(task2.getId());
 			Assert.assertNotNull(task2.getCreationDate());
+			Assert.assertNotNull(task2.getAssignee());
 			Assert.assertTrue(task2.getCreationDate().getTime() - System.currentTimeMillis() < 1000);
 		} catch (IOException e) {
 			Assert.fail();

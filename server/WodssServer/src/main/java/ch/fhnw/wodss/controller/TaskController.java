@@ -24,6 +24,8 @@ import ch.fhnw.wodss.domain.Board;
 import ch.fhnw.wodss.domain.Task;
 import ch.fhnw.wodss.domain.TaskState;
 import ch.fhnw.wodss.domain.User;
+import ch.fhnw.wodss.notification.AbstractNotification;
+import ch.fhnw.wodss.notification.ReassignedNotification;
 import ch.fhnw.wodss.security.Token;
 import ch.fhnw.wodss.security.TokenHandler;
 import ch.fhnw.wodss.service.TaskService;
@@ -159,6 +161,11 @@ public class TaskController {
 			}
 			Task savedTask = taskService.saveTask(task, files);
 			LOG.info("User <{}> saved task <{}> with attachments", user.getEmail(), task.getId());
+			// sending notification when assignee is not the same
+			if (!task.getAssignee().equals(user)) {
+				AbstractNotification notification = new ReassignedNotification(task.getAssignee());
+				notification.send();
+			}
 			return new ResponseEntity<>(savedTask, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -184,6 +191,11 @@ public class TaskController {
 		if (user.getBoards().contains(task.getBoard())) {
 			Task savedTask = taskService.saveTask(task);
 			LOG.info("User <{}> saved task <{}>", user.getEmail(), task.getId());
+			// sending notification when assignee is not the same
+			if (!task.getAssignee().equals(user)) {
+				AbstractNotification notification = new ReassignedNotification(task.getAssignee());
+				notification.send();
+			}
 			return new ResponseEntity<>(savedTask, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -279,8 +291,8 @@ public class TaskController {
 				files.add(file9);
 			}
 			// add attachments to task that comes not with the put request
-			Task currTask = taskService.getById(task.getId());
-			task.getAttachments().addAll(currTask.getAttachments());
+			Task oldTask = taskService.getById(task.getId());
+			task.getAttachments().addAll(oldTask.getAttachments());
 			// set done date if set to done
 			// remove otherwise
 			if (task.getState() == TaskState.DONE) {
@@ -290,6 +302,10 @@ public class TaskController {
 			}
 			Task updatedTask = taskService.saveTask(task, files);
 			LOG.info("User <{}> updated task <{}> with attachments.", user.getEmail(), task.getId());
+			if (!oldTask.getAssignee().equals(task.getAssignee())) {
+				AbstractNotification notification = new ReassignedNotification(task.getAssignee());
+				notification.send();
+			}
 			return new ResponseEntity<>(updatedTask, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -315,8 +331,8 @@ public class TaskController {
 		user = userService.getById(user.getId());
 		if (user.getBoards().contains(task.getBoard())) {
 			// add attachments to task that comes not with the put request
-			Task currTask = taskService.getById(task.getId());
-			task.getAttachments().addAll(currTask.getAttachments());
+			Task oldTask = taskService.getById(task.getId());
+			task.getAttachments().addAll(oldTask.getAttachments());
 			if (task.getState() == TaskState.DONE) {
 				task.setDoneDate(new Date());
 			} else {
@@ -324,6 +340,10 @@ public class TaskController {
 			}
 			Task updatedTask = taskService.saveTask(task);
 			LOG.info("User <{}> updated task <{}>", user.getEmail(), task.getId());
+			if (!oldTask.getAssignee().equals(task.getAssignee())) {
+				AbstractNotification notification = new ReassignedNotification(task.getAssignee());
+				notification.send();
+			}
 			return new ResponseEntity<>(updatedTask, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
