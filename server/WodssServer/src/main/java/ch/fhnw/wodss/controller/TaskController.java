@@ -1,5 +1,6 @@
 package ch.fhnw.wodss.controller;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import ch.fhnw.wodss.domain.Board;
 import ch.fhnw.wodss.domain.Task;
+import ch.fhnw.wodss.domain.TaskState;
 import ch.fhnw.wodss.domain.User;
 import ch.fhnw.wodss.security.Token;
 import ch.fhnw.wodss.security.TokenHandler;
@@ -111,44 +113,48 @@ public class TaskController {
 	@RequestMapping(path = "/task", method = RequestMethod.POST, headers = "Content-Type=multipart/*")
 	public ResponseEntity<Task> createTask(@RequestHeader(value = "x-session-token") Token token,
 			@RequestPart("info") Task task, @RequestPart(name = "file[0]") MultipartFile file0,
-			@RequestPart(name = "file[1]", required = false) MultipartFile file1, @RequestPart(name = "file[2]", required = false) MultipartFile file2,
-			@RequestPart(name = "file[3]", required = false) MultipartFile file3, @RequestPart(name = "file[4]", required = false) MultipartFile file4,
-			@RequestPart(name = "file[5]", required = false) MultipartFile file5, @RequestPart(name = "file[6]", required = false) MultipartFile file6,
-			@RequestPart(name = "file[7]", required = false) MultipartFile file7, @RequestPart(name = "file[8]", required = false) MultipartFile file8,
+			@RequestPart(name = "file[1]", required = false) MultipartFile file1,
+			@RequestPart(name = "file[2]", required = false) MultipartFile file2,
+			@RequestPart(name = "file[3]", required = false) MultipartFile file3,
+			@RequestPart(name = "file[4]", required = false) MultipartFile file4,
+			@RequestPart(name = "file[5]", required = false) MultipartFile file5,
+			@RequestPart(name = "file[6]", required = false) MultipartFile file6,
+			@RequestPart(name = "file[7]", required = false) MultipartFile file7,
+			@RequestPart(name = "file[8]", required = false) MultipartFile file8,
 			@RequestPart(name = "file[9]", required = false) MultipartFile file9) {
 		User user = TokenHandler.getUser(token.getId());
 		// reload user from db
 		user = userService.getById(user.getId());
 		if (user.getBoards().contains(task.getBoard())) {
 			List<MultipartFile> files = new LinkedList<>();
-			if(file0 != null){
+			if (file0 != null) {
 				files.add(file0);
 			}
-			if(file1 != null){
+			if (file1 != null) {
 				files.add(file1);
 			}
-			if(file2 != null){
+			if (file2 != null) {
 				files.add(file2);
 			}
-			if(file3 != null){
+			if (file3 != null) {
 				files.add(file3);
 			}
-			if(file4 != null){
+			if (file4 != null) {
 				files.add(file4);
 			}
-			if(file5 != null){
+			if (file5 != null) {
 				files.add(file5);
 			}
-			if(file6 != null){
+			if (file6 != null) {
 				files.add(file6);
 			}
-			if(file7 != null){
+			if (file7 != null) {
 				files.add(file7);
 			}
-			if(file8 != null){
+			if (file8 != null) {
 				files.add(file8);
 			}
-			if(file9 != null){
+			if (file9 != null) {
 				files.add(file9);
 			}
 			Task savedTask = taskService.saveTask(task, files);
@@ -228,48 +234,60 @@ public class TaskController {
 	public ResponseEntity<Task> updateTask(@RequestHeader(value = "x-session-token") Token token,
 			@RequestPart(name = "info") Task task, @PathVariable Integer id,
 			@RequestPart(name = "file[0]") MultipartFile file0,
-			@RequestPart(name = "file[1]", required = false) MultipartFile file1, @RequestPart(name = "file[2]", required = false) MultipartFile file2,
-			@RequestPart(name = "file[3]", required = false) MultipartFile file3, @RequestPart(name = "file[4]", required = false) MultipartFile file4,
-			@RequestPart(name = "file[5]", required = false) MultipartFile file5, @RequestPart(name = "file[6]", required = false) MultipartFile file6,
-			@RequestPart(name = "file[7]", required = false) MultipartFile file7, @RequestPart(name = "file[8]", required = false) MultipartFile file8,
+			@RequestPart(name = "file[1]", required = false) MultipartFile file1,
+			@RequestPart(name = "file[2]", required = false) MultipartFile file2,
+			@RequestPart(name = "file[3]", required = false) MultipartFile file3,
+			@RequestPart(name = "file[4]", required = false) MultipartFile file4,
+			@RequestPart(name = "file[5]", required = false) MultipartFile file5,
+			@RequestPart(name = "file[6]", required = false) MultipartFile file6,
+			@RequestPart(name = "file[7]", required = false) MultipartFile file7,
+			@RequestPart(name = "file[8]", required = false) MultipartFile file8,
 			@RequestPart(name = "file[9]", required = false) MultipartFile file9) {
 		User user = TokenHandler.getUser(token.getId());
 		// reload user from db
 		user = userService.getById(user.getId());
 		if (user.getBoards().contains(task.getBoard())) {
 			List<MultipartFile> files = new LinkedList<>();
-			if(file0 != null){
+			if (file0 != null) {
 				files.add(file0);
 			}
-			if(file1 != null){
+			if (file1 != null) {
 				files.add(file1);
 			}
-			if(file2 != null){
+			if (file2 != null) {
 				files.add(file2);
 			}
-			if(file3 != null){
+			if (file3 != null) {
 				files.add(file3);
 			}
-			if(file4 != null){
+			if (file4 != null) {
 				files.add(file4);
 			}
-			if(file5 != null){
+			if (file5 != null) {
 				files.add(file5);
 			}
-			if(file6 != null){
+			if (file6 != null) {
 				files.add(file6);
 			}
-			if(file7 != null){
+			if (file7 != null) {
 				files.add(file7);
 			}
-			if(file8 != null){
+			if (file8 != null) {
 				files.add(file8);
 			}
-			if(file9 != null){
+			if (file9 != null) {
 				files.add(file9);
 			}
+			// add attachments to task that comes not with the put request
 			Task currTask = taskService.getById(task.getId());
 			task.getAttachments().addAll(currTask.getAttachments());
+			// set done date if set to done
+			// remove otherwise
+			if (task.getState() == TaskState.DONE) {
+				task.setDoneDate(new Date());
+			} else {
+				task.setDoneDate(null);
+			}
 			Task updatedTask = taskService.saveTask(task, files);
 			LOG.info("User <{}> updated task <{}> with attachments.", user.getEmail(), task.getId());
 			return new ResponseEntity<>(updatedTask, HttpStatus.OK);
@@ -296,6 +314,14 @@ public class TaskController {
 		// reload user from db
 		user = userService.getById(user.getId());
 		if (user.getBoards().contains(task.getBoard())) {
+			// add attachments to task that comes not with the put request
+			Task currTask = taskService.getById(task.getId());
+			task.getAttachments().addAll(currTask.getAttachments());
+			if (task.getState() == TaskState.DONE) {
+				task.setDoneDate(new Date());
+			} else {
+				task.setDoneDate(null);
+			}
 			Task updatedTask = taskService.saveTask(task);
 			LOG.info("User <{}> updated task <{}>", user.getEmail(), task.getId());
 			return new ResponseEntity<>(updatedTask, HttpStatus.OK);

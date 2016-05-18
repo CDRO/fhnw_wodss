@@ -1,5 +1,11 @@
 package ch.fhnw.wodss.integration;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.everyItem;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -19,6 +25,7 @@ import ch.fhnw.wodss.domain.LoginData;
 import ch.fhnw.wodss.domain.LoginDataFactory;
 import ch.fhnw.wodss.domain.Task;
 import ch.fhnw.wodss.domain.TaskFactory;
+import ch.fhnw.wodss.domain.TaskState;
 import ch.fhnw.wodss.domain.User;
 import ch.fhnw.wodss.domain.UserFactory;
 import ch.fhnw.wodss.security.Token;
@@ -204,7 +211,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		Assert.assertEquals(2, alltasksList.size());
 		Assert.assertTrue(alltasksList.contains(task2));
 		Assert.assertTrue(alltasksList.contains(task3));
-
+		assertThat(alltasksList, everyItem(hasProperty("creationDate", notNullValue())));
 	}
 
 	/**
@@ -358,7 +365,6 @@ public class TaskIntTest extends AbstractIntegrationTest {
 			JSONParser parser = new JSONParser();
 			JSONObject task1json = (JSONObject) parser.parse(objectMapper.writeValueAsString(task1));
 			task1 = doPost("http://localhost:8080/task", token, task1json, Task.class);
-			Assert.assertNotNull(task1.getId());
 			Assert.fail();
 		} catch (IOException e) {
 		} catch (Exception e) {
@@ -371,6 +377,8 @@ public class TaskIntTest extends AbstractIntegrationTest {
 			JSONObject task1json = (JSONObject) parser.parse(objectMapper.writeValueAsString(task2));
 			task2 = doPost("http://localhost:8080/task", token, task1json, Task.class);
 			Assert.assertNotNull(task2.getId());
+			Assert.assertNotNull(task2.getCreationDate());
+			Assert.assertTrue(task2.getCreationDate().getTime() - System.currentTimeMillis() < 1000);
 		} catch (IOException e) {
 			Assert.fail();
 		} catch (Exception e) {
@@ -745,4 +753,66 @@ public class TaskIntTest extends AbstractIntegrationTest {
 
 	}
 
+	/**
+	 * Tests set task to done and back. A done date should be there and removed again.
+	 * 
+	 * @throws Exception
+	 */
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testSetTaskToDone() throws Exception {
+		JSONObject json = new JSONObject();
+
+		json = new JSONObject();
+
+		// CREATE / REGISTER
+		json.put("name", "TestUser30");
+		json.put("email", "email30@fhnw.ch");
+		json.put("password", "password2");
+
+		User user = doPost("http://localhost:8080/user", null, json, User.class);
+		User userFromDb2 = userService.getById(user.getId());
+		Assert.assertEquals("TestUser30", userFromDb2.getName());
+		Assert.assertEquals("email30@fhnw.ch", userFromDb2.getEmail());
+		Assert.assertNotNull(user.getId());
+
+		// VALIDATE EMAIL ADDRESS
+		json.put("validationCode", userFromDb2.getLoginData().getValidationCode());
+		Boolean success = doPut("http://localhost:8080/user/{0}/logindata", null, json, Boolean.class,
+				userFromDb2.getId());
+		Assert.assertTrue(success);
+		userFromDb2 = userService.getById(user.getId());
+		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
+
+		// REQUEST TOKEN
+		Token token = doPost("http://localhost:8080/token", null, json, Token.class);
+
+		Board board = BoardFactory.getInstance().createBoard("Board", user);
+		board = boardService.saveBoard(board);
+		Assert.assertNotNull(board.getId());
+
+		Task task = TaskFactory.getInstance().createTask(board, "Task");
+		task = taskService.saveTask(task);
+		Assert.assertNotNull(task.getId());
+
+		JSONParser parser = new JSONParser();
+
+		try {
+			task.setDescription("OtherDescription2");
+			task.setState(TaskState.DONE);
+			JSONObject task2json = (JSONObject) parser.parse(objectMapper.writeValueAsString(task));
+			task = doPut("http://localhost:8080/task/{0}", token, task2json, Task.class, task.getId());
+			Assert.assertEquals("OtherDescription2", task.getDescription());
+			assertThat(task.getDoneDate(), notNullValue());
+			task.setState(TaskState.DOING);
+			task2json = (JSONObject) parser.parse(objectMapper.writeValueAsString(task));
+			task = doPut("http://localhost:8080/task/{0}", token, task2json, Task.class, task.getId());
+			assertThat(task.getDoneDate(), nullValue());
+		} catch (IOException e) {
+			Assert.fail();
+		} catch (Exception e) {
+			Assert.fail();
+		}
+
+	}
 }

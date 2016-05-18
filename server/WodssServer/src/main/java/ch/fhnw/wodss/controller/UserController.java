@@ -174,19 +174,42 @@ public class UserController {
 	public ResponseEntity<Boolean> validateOrReset(@PathVariable("id") Integer id,
 			@RequestBody(required = false) JSONObject json) {
 		String validationCode = (String) json.get("validationCode");
-		Boolean doReset = (Boolean) json.get("doReset");
 		String resetCode = (String) json.get("resetCode");
 		String password = (String) json.get("password");
 		if (validationCode != null && !"".equals(validationCode)) {
 			return validate(id, validationCode);
 		}
-		if (doReset != null && doReset) {
-			return generateResetCode(id);
-		}
 		if (resetCode != null && !"".equals(resetCode) && password != null && !"".equals(password)) {
 			return reset(id, resetCode, password);
 		}
 		return new ResponseEntity<Boolean>(false, HttpStatus.BAD_REQUEST);
+	}
+	
+	/**
+	 * Generates the user's password reset code.
+	 * 
+	 * @param id
+	 *            the user's id.
+	 * @return true or false
+	 */
+	@RequestMapping(path = "/resetcode", method = RequestMethod.POST)
+	public ResponseEntity<Boolean> generateResetCode(@RequestBody JSONObject json) {
+		Object obj = json.get("email");
+		if(obj == null && !(obj instanceof String)){
+			return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED); 
+		}
+		String email = (String) obj;
+		User aCurrUser = userService.getByEmail(email);
+		if (aCurrUser != null) {
+			String resetCode = UUID.randomUUID().toString();
+			aCurrUser.getLoginData().setResetCode(resetCode);
+			userService.saveUser(aCurrUser);
+			ResetPasswordNotification notification = new ResetPasswordNotification(aCurrUser);
+			notification.send();
+			LOG.info("User <{}> has requested a password reset code.", aCurrUser.getEmail());
+			return new ResponseEntity<>(true, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
 	}
 
 	/**
@@ -237,25 +260,6 @@ public class UserController {
 		return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
 	}
 
-	/**
-	 * Generates the user's password reset code.
-	 * 
-	 * @param id
-	 *            the user's id.
-	 * @return true or false
-	 */
-	private ResponseEntity<Boolean> generateResetCode(Integer id) {
-		User aCurrUser = userService.getById(id);
-		if (aCurrUser != null) {
-			String resetCode = UUID.randomUUID().toString();
-			aCurrUser.getLoginData().setResetCode(resetCode);
-			userService.saveUser(aCurrUser);
-			ResetPasswordNotification notification = new ResetPasswordNotification(aCurrUser);
-			notification.send();
-			LOG.info("User <{}> has requested a password reset code.", aCurrUser.getEmail());
-			return new ResponseEntity<>(true, HttpStatus.OK);
-		}
-		return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
-	}
+	
 
 }

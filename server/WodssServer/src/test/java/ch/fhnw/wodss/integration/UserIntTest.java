@@ -429,10 +429,10 @@ public class UserIntTest extends AbstractIntegrationTest {
 		userFromDb2 = userService.getById(user2.getId());
 		Assert.assertTrue(userFromDb2.getLoginData().isValidated());
 		
-		json.remove("validationCode");
-		json.put("doReset", true);
 		// RESET PASSWORD
-		success = doPut("http://localhost:8080/user/{0}/logindata", null, json, Boolean.class,
+		json = new JSONObject();
+		json.put("email", "emailR@fhnw.ch");
+		success = doPost("http://localhost:8080/resetcode", null, json, Boolean.class,
 				userFromDb2.getId());
 		Assert.assertTrue(success);
 		userFromDb2 = userService.getById(user2.getId());

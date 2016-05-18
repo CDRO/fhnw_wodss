@@ -23,7 +23,7 @@ public class LoginLogoutIntTest extends AbstractIntegrationTest {
 		Assert.assertTrue(TokenHandler.validate(token.getId()));
 		
 		// DELETE
-		doDelete("http://localhost:8080/token", token, Boolean.class);
+		doDelete("http://localhost:8080/token/1", token, Boolean.class);
 		Assert.assertFalse(TokenHandler.validate(token.getId()));
 	}
 }
