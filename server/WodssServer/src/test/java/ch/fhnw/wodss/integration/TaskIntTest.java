@@ -116,7 +116,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		Assert.assertEquals(2, task.getAttachments().size());
 		Task taskFromDb = taskService.getById(task.getId());
 		Assert.assertEquals("Description", taskFromDb.getDescription());
-		
+				
 		// GET TASKS
 		List<Task> tasks = Arrays.asList(doGet("http://localhost:8080/tasks", token, Task[].class));
 		Assert.assertTrue(tasks.contains(task));

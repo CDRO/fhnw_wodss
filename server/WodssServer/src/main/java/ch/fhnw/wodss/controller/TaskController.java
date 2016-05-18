@@ -268,6 +268,8 @@ public class TaskController {
 			if(file9 != null){
 				files.add(file9);
 			}
+			Task currTask = taskService.getById(task.getId());
+			task.getAttachments().addAll(currTask.getAttachments());
 			Task updatedTask = taskService.saveTask(task, files);
 			LOG.info("User <{}> updated task <{}> with attachments.", user.getEmail(), task.getId());
 			return new ResponseEntity<>(updatedTask, HttpStatus.OK);
