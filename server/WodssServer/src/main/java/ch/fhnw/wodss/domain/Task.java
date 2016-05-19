@@ -30,30 +30,30 @@ public class Task {
 	private Date dueDate;
 	private Date doneDate;
 	private String description;
-	@OneToMany(mappedBy="task", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "task", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Attachment> attachments;
-	
-	Task(){
+
+	Task() {
 		super();
 		setAttachments(new LinkedList<>());
 	}
-	
+
 	/**
 	 * Gets the task id.
 	 * 
 	 * @return the task id.
 	 */
-	public Integer getId(){
+	public Integer getId() {
 		return id;
 	}
-	
+
 	/**
 	 * Sets the id of the task.
 	 * 
 	 * @param id
 	 *            the id to set.
 	 */
-	public void setId(Integer id){
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -72,19 +72,18 @@ public class Task {
 	 * @param board
 	 *            the board to set.
 	 */
-	 public void setBoard(Board board) {
+	public void setBoard(Board board) {
 		this.board = board;
 	}
 
-	 /**
-		 * Gets the state of the current task.
-		 * 
-		 * @return the state of the current task.
-		 */
+	/**
+	 * Gets the state of the current task.
+	 * 
+	 * @return the state of the current task.
+	 */
 	public TaskState getState() {
 		return state;
 	}
-
 
 	/**
 	 * Sets the state of the current task.
@@ -131,7 +130,7 @@ public class Task {
 	 *            the creation date to set.
 	 */
 	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate; 
+		this.creationDate = creationDate;
 	}
 
 	/**
@@ -190,29 +189,20 @@ public class Task {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	@Override
-	public boolean equals(Object object){
-		if(!(object instanceof Task)){
+	public boolean equals(Object object) {
+		if (!(object instanceof Task)) {
 			return false;
 		}
 		Task task = (Task) object;
 		return task.getId() == this.id;
 	}
-	
+
 	@Override
-	public int hashCode(){
-		return new HashCodeBuilder(17,31). 
-				append(id). 
-				append(board). 
-				append(state). 
-				append(assignee). 
-				append(creationDate). 
-				append(dueDate). 
-				append(doneDate). 
-				append(description). 
-				append(attachments).
-				toHashCode();
+	public int hashCode() {
+		return new HashCodeBuilder(17, 31).append(id).append(board).append(state).append(assignee).append(creationDate)
+				.append(dueDate).append(doneDate).append(description).append(attachments).toHashCode();
 	}
 
 	/**
@@ -223,7 +213,8 @@ public class Task {
 	}
 
 	/**
-	 * @param attachments the attachments to set
+	 * @param attachments
+	 *            the attachments to set
 	 */
 	public void setAttachments(List<Attachment> attachments) {
 		this.attachments = attachments;

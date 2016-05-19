@@ -1,5 +1,6 @@
 package ch.fhnw.wodss.service;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class TaskService {
 	@Transactional
 	public Task saveTask(Task task, List<MultipartFile> files) {
 		if (task.getState() == null) {
+			task.setCreationDate(new Date());
 			task.setState(TaskState.TODO);
 		}
 		if (files != null) {

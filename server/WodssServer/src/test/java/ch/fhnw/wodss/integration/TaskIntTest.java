@@ -50,11 +50,11 @@ public class TaskIntTest extends AbstractIntegrationTest {
 
 		LoginData loginData = LoginDataFactory.getInstance().createLoginData("password");
 		loginData.setValidated(true);
-		
+
 		User user = UserFactory.getInstance().createUser("Bla", "Blub@fhnw.ch");
 		user.setLoginData(loginData);
 		user = userService.saveUser(user);
-		
+
 		Board board = BoardFactory.getInstance().createBoard("BoardTitle", user);
 		board = boardService.saveBoard(board);
 
@@ -88,11 +88,11 @@ public class TaskIntTest extends AbstractIntegrationTest {
 
 		LoginData loginData = LoginDataFactory.getInstance().createLoginData("password");
 		loginData.setValidated(true);
-		
+
 		User user = UserFactory.getInstance().createUser("Blab", "Blubub@fhnw.ch");
 		user.setLoginData(loginData);
 		user = userService.saveUser(user);
-		
+
 		// load file
 		URL resource1 = getClass().getClassLoader().getResource("ch/fhnw/wodss/integration/Trello_1.1.pdf");
 		URL resource2 = getClass().getClassLoader().getResource("ch/fhnw/wodss/integration/Trello_1.1.pdf");
@@ -112,7 +112,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		// CREATE
 		Board board = BoardFactory.getInstance().createBoard("Baord", user);
 		board = boardService.saveBoard(board);
-		
+
 		Task task = TaskFactory.getInstance().createTask(board, "Description");
 		JSONParser parser = new JSONParser();
 		JSONObject taskjson = (JSONObject) parser.parse(objectMapper.writeValueAsString(task));
@@ -123,17 +123,22 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		Assert.assertEquals(2, task.getAttachments().size());
 		Task taskFromDb = taskService.getById(task.getId());
 		Assert.assertEquals("Description", taskFromDb.getDescription());
-				
+
 		// GET TASKS
 		List<Task> tasks = Arrays.asList(doGet("http://localhost:8080/tasks", token, Task[].class));
 		Assert.assertTrue(tasks.contains(task));
-		for(Task t : tasks){
-			if(t.getId() == task.getId()){
+		for (Task t : tasks) {
+			if (t.getId() == task.getId()) {
 				Assert.assertTrue(t.getAttachments().size() > 0);
 			}
 		}
 
-		// TODO test delete task with attachment!!
+		// PUT
+		task.setDescription("Other");
+		taskjson = (JSONObject) parser.parse(objectMapper.writeValueAsString(task));
+		task = doPut("http://localhost:8080/task/{0}", token, taskjson, Task.class, task.getId());
+		task = doMulitPartPutTask("http://localhost:8080/task/{0}", token, taskjson, files, task.getId());
+
 	}
 
 	/**
@@ -474,7 +479,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		}
 
 	}
-	
+
 	/**
 	 * Tests deleting a single task by id, if the task belongs to the board the
 	 * user is subscribed to.
@@ -660,7 +665,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 		}
 
 	}
-	
+
 	/**
 	 * Tests modifying a single task by id, if the task belongs to the board the
 	 * user is subscribed to.
@@ -757,7 +762,8 @@ public class TaskIntTest extends AbstractIntegrationTest {
 	}
 
 	/**
-	 * Tests set task to done and back. A done date should be there and removed again.
+	 * Tests set task to done and back. A done date should be there and removed
+	 * again.
 	 * 
 	 * @throws Exception
 	 */
