@@ -11,7 +11,7 @@
 
     // Declare the backend, with an ending slash
     this.baseUrl = 'http://localhost:8080/';
-    //this.baseUrl = 'https://server1070.cs.technik.fhnw.ch/wodss5/';
+    // this.baseUrl = 'https://server1070.cs.technik.fhnw.ch/wodss5/server/';
 
     // Represents the logged in user
     var currentUser = {
