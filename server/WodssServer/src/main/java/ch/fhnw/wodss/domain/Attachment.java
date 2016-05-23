@@ -13,9 +13,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Attachment {
-	// TODO check what should be not nullable.
 	@JsonIgnore
-	private static final String ATTACHMENT_ROOT_PATH = "target";
+	private static final String ATTACHMENT_ROOT_PATH;
 
 	/**
 	 * The id of the attachment. A UUID.
@@ -39,6 +38,15 @@ public class Attachment {
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Task task;
+
+	static {
+		String profiles = System.getProperty("spring.profiles.active");
+		if (profiles != null && profiles.contains("prod")) {
+			ATTACHMENT_ROOT_PATH = "/var/wodss5/attachments";
+		} else {
+			ATTACHMENT_ROOT_PATH = "target";
+		}
+	}
 
 	Attachment() {
 		super();
