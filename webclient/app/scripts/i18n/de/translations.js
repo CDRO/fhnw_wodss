@@ -51,7 +51,7 @@
     nav: {
       home: "Start",
       register: 'Jetzt Registrieren',
-      passwordReset: 'Passwort vergesen?',
+      passwordReset: 'Passwort vergessen?',
       boards: 'Boards',
       user: 'Profil bearbeiten',
       login: 'Login',
@@ -86,6 +86,9 @@
     },
 
     register: {
+      validationRequired: "Bitte validieren Sie ihre Email Adresse mit dem Aktivierungslink, den wir ihnen gesendet haben.",
+      alreadyRegistered: "Diese Email wurde bereits registriert. Bitte loggen Sie sich ein oder setzen Sie ihr Passwort zurück",
+      errorHappened: "Die Registrierung ist aus unbekannten Gründen fehlgeschlagen",
       emailRequired: "Bitte geben Sie Ihre Email Adresse ein",
       emailWrong: "Keine gültige Email Adresse",
       passwordRequired: "Bitte geben Sie ein Passwort an",
@@ -104,6 +107,7 @@
     },
 
     validation:{
+        successful: "Ihre EMail Adresse wurde erfolgreich validiert",
         error: {
           title: "Ihre Validierung ist ungültig",
           text: "Bitte kontrollieren Sie den Link im erhaltenen Email und rufen Ihn erneut auf"

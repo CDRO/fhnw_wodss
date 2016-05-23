@@ -9,20 +9,26 @@
  */
 var module = angular.module('angularWebclientApp');
 
-var RegisterCtrl = function ($scope, authService, $state) {
-  var vm = this;
+var RegisterCtrl = function ($scope, authService, $state, alertService, $translate) {
+  var self = this;
   this.model = {};
 
   this.register = function(){
-      authService.registerAccount(vm.email, vm.password).then(function(response){
+      authService.registerAccount(self.email, self.password).then(function(response){
+        alertService.addAlert('warning', 'register.validationRequired');
         $state.go('login');
       }, function(error){
-          vm.errorMessage = error.message;
+          if(error.status == 409){
+              self.errorMessage = 'register.alreadyRegistered';
+          }else{
+              self.errorMessage = 'register.errorHappened';
+          }
+
       });
   }
 };
 
-RegisterCtrl.$inject = ['$scope', 'AuthService', '$state'];
+RegisterCtrl.$inject = ['$scope', 'AuthService', '$state', 'AlertService', '$translate'];
 
 module.controller('RegisterCtrl', RegisterCtrl);
 

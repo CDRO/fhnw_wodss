@@ -9,7 +9,7 @@
  */
 var module = angular.module('angularWebclientApp');
 
-var ValidationCtrl = function ($scope, authService, params, $state) {
+var ValidationCtrl = function ($scope, authService, params, $state, alertService) {
   var self = this;
   this.model = {};
   this.validated = false;
@@ -20,6 +20,9 @@ var ValidationCtrl = function ($scope, authService, params, $state) {
     authService.validateAccount(id, validationCode).then(function(response){
         self.validated = true;
         self.error = false;
+        alertService.flush();
+        alertService.addAlert("success", "validation.successful");
+
         // Login redirect
         $state.go('login');
     }, function(error){
@@ -37,6 +40,6 @@ var ValidationCtrl = function ($scope, authService, params, $state) {
 
 };
 
-ValidationCtrl.$inject = ['$scope', 'AuthService', '$stateParams', '$state'];
+ValidationCtrl.$inject = ['$scope', 'AuthService', '$stateParams', '$state', 'AlertService'];
 
 module.controller('ValidationCtrl', ValidationCtrl);
