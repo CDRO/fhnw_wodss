@@ -6,13 +6,12 @@
   'use strict';
   var module = angular.module('services');
 
-  var NotAuthorizedInterceptor = function($q, $log){
+  var NotAuthorizedInterceptor = function($q, $log, $injector){
     return {
       responseError: function(response) {
         if(response.status === 401){
-          //$state.go('login');
-          $log("Not logged in yet");
-          return response;
+            $injector.get('$state').transitionTo('login');
+            return $q.reject(response);
         }
         else{
           return $q.reject(response);
@@ -21,7 +20,7 @@
     }
   };
 
-  NotAuthorizedInterceptor.$inject = ['$q', '$log'];
+  NotAuthorizedInterceptor.$inject = ['$q', '$log','$injector'];
 
   // Export
   module.service('notAuthorizedInterceptor', NotAuthorizedInterceptor);

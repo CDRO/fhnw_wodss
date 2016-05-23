@@ -12,12 +12,15 @@ var loginController = function(auth, $scope, $state, alertService) {
 
   $scope.loginNow = function(){
     self.loginError = false;
-    auth.login($scope.email, $scope.password).then(function(response){
-        alertService.flush();
-        $state.go('boards');
-        self.loginError = false;
-    }, function(error){
-        self.loginError = true;
+    auth.login($scope.email, $scope.password).then(function(error){
+        if(error.status){
+          self.loginError = true;
+        }else{
+          alertService.flush();
+          $state.go('boards');
+          self.loginError = false;
+        }
+
     });
 
   };

@@ -32,7 +32,7 @@
         <li class="panel panel-info draggablePanel" jqyoui-draggable="{index: {{$index}},animate:true}" data-drag="true"
             ng-repeat="task in tasks.doingList | filter:searchText | filter:filterAssignee "
             ng-model="tasks.doingList">
-          <div class="panel-heading">{{task.description}}  <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span></div>
+          <div class="panel-heading">{{task.description}}</div>
           <div class="panel-body">
             <!-- Attachment -->
             <a ng-repeat="attachment in task.attachments" target="_blank" ng-href="{{tasks.attachmentUrl}}{{attachment.id}}">
@@ -54,14 +54,14 @@
         <li class="panel panel-info draggablePanel" jqyoui-draggable="{onStart: saveDraggable(task),index: {{$index}},animate:true}" data-drag="true"
             ng-repeat="task in tasks.doneList | filter:searchText | filter:filterAssignee"
             ng-model="tasks.doneList">
-          <div class="panel-heading">{{task.description}}  <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span></div>
+          <div class="panel-heading">{{task.description}}</div>
           <div class="panel-body">
             <!-- Attachment -->
             <a ng-repeat="attachment in task.attachments" target="_blank" ng-href="{{tasks.attachmentUrl}}{{attachment.id}}">
               {{attachment.documentName}} <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span><br/>
             </a>
             <!-- Due Date and Buttons -->
-            <p ng-show="task.doneDate > 0">{{'tasks.doneDate' | translate}}: {{task.dueDate | date:'dd.MM.yyyy'}}</p>
+            <p ng-show="task.doneDate > 0">{{'tasks.doneDate' | translate}}: {{task.doneDate | date:'dd.MM.yyyy'}}</p>
             <button ng-click="tasks.updateModal(task)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
             <button ng-click="tasks.remove(task)" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></button></div>
         </li>

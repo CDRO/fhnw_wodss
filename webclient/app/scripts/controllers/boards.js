@@ -33,7 +33,7 @@ var boardController = function($scope, boardService, $uibModal) {
 
   this.update = function(model){
     boardService.update(model).then(function(data){
-        synchronize();
+        self.synchronize();
     });
   };
 
@@ -62,6 +62,14 @@ var boardController = function($scope, boardService, $uibModal) {
 
   /* Open Overlay to create/update the board */
   var openModal = function(isNew, model){
+    model.users = model.users.filter(function(user){
+        if(user.id === model.owner.id){
+          return false;
+        }else{
+          return true;
+        }
+    });
+
     var modalInstance = $uibModal.open({
       templateUrl: 'views/boardOverlay.html',
       controller: 'ModalInstanceCtrl',
