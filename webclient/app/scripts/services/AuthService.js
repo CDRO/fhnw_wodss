@@ -25,9 +25,11 @@
             email: response.data.user.email,
             timeToLive: response.data.timeToLive
         });
+        return true;
       },
       function(error){
-        config.setCurrentUser({user: null, token: null});
+          config.setCurrentUser({user: null, token: null});
+          return error;
       });
     };
 
