@@ -16,8 +16,8 @@ public class Encrypter {
 	        config.setSaltGeneratorClassName("org.jasypt.salt.RandomSaltGenerator");
 	        config.setStringOutputType("base64");
 	        encryptor.setConfig(config);
-	        String encrypt = encryptor.encrypt("xxx");
-	        System.out.println(encrypt);
+	        System.out.println(encryptor.encrypt("xxx"));
+	        System.out.println(encryptor.decrypt("xxxx"));
 	}
 	
 }
