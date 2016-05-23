@@ -73,6 +73,7 @@
     login: {
       emailRequired: "Bitte geben Sie Ihre Email Adresse ein",
       emailWrong: "Keine gültige Email Adresse",
+      passwordRequired: "Bitte geben Sie ihr Passwort an",
       failed: "Passwort oder EMail Adresse falsch. Bitte überprüfen Sie ihre Eingabe."
     },
     user: {
