@@ -51,6 +51,7 @@
     nav: {
       home: "Start",
       register: 'Registrieren',
+      passwordReset: 'P'
       boards: 'Boards',
       user: 'Profil bearbeiten',
       login: 'Login',
