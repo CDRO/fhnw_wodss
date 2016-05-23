@@ -11,19 +11,24 @@ var module = angular.module('angularWebclientApp');
 
 var ResetPasswordCtrl = function ($scope, authService, params, $state) {
   var self = this;
-  this.model = {};
 
-  this.model.resetToken = params.resetToken;
+  // Handle Password Reset
+  this.resetCode = params.resetCode;
 
-  this.requestReset = function(email) {
-    authService.requestResetToken(email).then(function (response) {
-      // Activation Link
+  this.model = {
+    resetCode: params.resetCode,
+    id: params.id
+  };
 
+
+  this.requestReset = function() {
+    authService.resetPasswordRequest(self.model).then(function (response) {
+        // Activation Link sent
     });
   };
 
-  this.resetPassword = function(model) {
-      authService.resetPassword(model).then(function(response){
+  this.resetPassword = function() {
+      authService.resetPassword(self.model).then(function(response){
           $state.go('login');
       });
   };

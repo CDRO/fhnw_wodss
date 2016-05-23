@@ -51,7 +51,7 @@
     nav: {
       home: "Start",
       register: 'Jetzt Registrieren',
-      passwordReset: 'Passwort zurücksetzen',
+      passwordReset: 'Passwort vergesen?',
       boards: 'Boards',
       user: 'Profil bearbeiten',
       login: 'Login',
@@ -71,6 +71,7 @@
       no: "Nein"
     },
     login: {
+      loginBtn: "Login",
       emailRequired: "Bitte geben Sie Ihre Email Adresse ein",
       emailWrong: "Keine gültige Email Adresse",
       passwordRequired: "Bitte geben Sie ihr Passwort an",
@@ -90,6 +91,18 @@
       passwordRequired: "Bitte geben Sie ein Passwort an",
       repeatPassword: "Bitte wiederholen Sie ihr eingegebenes Passwort"
     },
+    reset: {
+      resetBtn: "Account zurücksetzen",
+      error: {
+        title: "Ihr Resetcode ist ungültig",
+        text: "Bitte kontrollieren Sie den Link im erhaltenen Email und rufen Ihn erneut auf"
+      },
+      empty: {
+        title: "Kein Resetcode angegeben",
+        text: "Bitte kontrollieren Sie den Link im erhaltenen Email und rufen Ihn erneut auf"
+      }
+    },
+
     validation:{
         error: {
           title: "Ihre Validierung ist ungültig",
