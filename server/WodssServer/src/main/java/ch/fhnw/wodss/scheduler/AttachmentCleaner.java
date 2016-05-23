@@ -23,7 +23,7 @@ public class AttachmentCleaner {
 	 * Removes attachments from the file system and database which have no
 	 * reference to tasks anymore, every 20 Minutes
 	 */
-	@Scheduled(fixedDelay = 60000L)
+	@Scheduled(fixedDelay = 1200000L)
 	public void cleanAttachments() {
 		LOG.info("Removing old attachments...");
 		List<Attachment> attachments = attachmentService.getAllByTaskId(null);
