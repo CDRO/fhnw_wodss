@@ -14,11 +14,8 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
-import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
-
 @SpringBootApplication
 @EnableAspectJAutoProxy
-@EnableEncryptableProperties
 public class WodssServer extends SpringBootServletInitializer {
 	
 	private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(WodssServer.class);
