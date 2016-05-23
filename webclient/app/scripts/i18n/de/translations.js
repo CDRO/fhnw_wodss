@@ -82,7 +82,9 @@
         name: "Benutzername",
         password: "Passwort",
         password2: "Passwort wiederholen",
-        editProfile: "Profil bearbeiten"
+        editProfile: "Profil bearbeiten",
+        saved: "Profil wurde aktualisiert",
+        error: "Profil konnte aufgrund eines Fehlers nicht aktualisiert werden"
     },
 
     register: {
