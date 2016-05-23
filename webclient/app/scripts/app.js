@@ -110,6 +110,5 @@ angular
       $translateProvider
         .translations('de', translations_DE)
         .preferredLanguage('de')
-        .useSanitizeValueStrategy('sanitize');
-
+        .useSanitizeValueStrategy('sanitizeParameters');
   });

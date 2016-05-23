@@ -13,14 +13,14 @@
     <div class="form-group" ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required }">
       <label for="password">Passwort</label>
       <input type="password" name="password" id="password" class="form-control" ng-model="password" required />
-      <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Bitte geben Sie ihr Passwort an</span>
+      <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">{{'login.passwordRequired' | translate}}</span>
     </div>
 
     <div class="text-danger" ng-show="login.loginError" translate="login.failed"></div>
 
     <div class="form-actions">
       <button type="submit" ng-disabled="form.$invalid || vm.dataLoading" class="btn btn-primary">Login</button>
-      <a href="#/register" class="btn btn-link">{{'nav.register' | translate}}Jetzt Registrieren</a> | <a ui-sref="passwordReset" translate="nav.passwordReset"></a>
+      <a href="#/register" class="btn btn-link">{{'nav.register' | translate}}</a> | <a ui-sref="passwordReset">{{ 'nav.passwordReset' | translate}}</a>
     </div>
   </form>
 </div>
