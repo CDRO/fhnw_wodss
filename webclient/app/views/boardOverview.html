@@ -1,0 +1,12 @@
+<div class="col-md-12">
+  <h2 translate="boards.boards"></h2>
+  <div class="row">
+    <button ng-click="boards.createModal()" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
+  </div>
+  <div ng-repeat="board in boards.list">
+    <p><a ui-sref="tasksFromBoard({boardId: board.id, assignees: board.users, boards: boards.list})">{{board.title}}</a>
+      <button ng-click="boards.updateModal(board)" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
+      <button ng-click="boards.confirm(board)" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
+    </p>
+  </div>
+</div>
