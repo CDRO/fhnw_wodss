@@ -97,7 +97,7 @@ public abstract class AbstractIntegrationTest {
 		HttpURLConnection con = (HttpURLConnection) u.openConnection();
 
 		con.setRequestMethod("GET");
-
+		
 		if (token != null) {
 			con.setRequestProperty("x-session-token", token.getId());
 		}

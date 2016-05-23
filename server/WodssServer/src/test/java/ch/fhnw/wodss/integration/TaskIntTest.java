@@ -132,12 +132,21 @@ public class TaskIntTest extends AbstractIntegrationTest {
 				Assert.assertTrue(t.getAttachments().size() > 0);
 			}
 		}
-
+		
 		// PUT
 		task.setDescription("Other");
 		taskjson = (JSONObject) parser.parse(objectMapper.writeValueAsString(task));
 		task = doPut("http://localhost:8080/task/{0}", token, taskjson, Task.class, task.getId());
 		task = doMulitPartPutTask("http://localhost:8080/task/{0}", token, taskjson, files, task.getId());
+
+		// GET TASKS
+		tasks = Arrays.asList(doGet("http://localhost:8080/tasks", token, Task[].class));
+		Assert.assertTrue(tasks.contains(task));
+		for (Task t : tasks) {
+			if (t.getId() == task.getId()) {
+				Assert.assertTrue(t.getAttachments().size() > 0);
+			}
+		}
 
 	}
 
