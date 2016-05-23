@@ -17,4 +17,9 @@
       <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary" translate="btn.update"></button>
     </div>
   </form>
+  <br/>
+  <p class="text-success" ng-show="user.saved">{{user.saved | translate}}</p>
+  <p class="text-danger" ng-show="user.errorMessage">{{user.errorMessage | translate}}</p>
+
+
 </div>

@@ -6,7 +6,12 @@ var UserCtrl = function ($scope, config, auth) {
 
   /* Update Profile information */
   this.update = function(){
-    auth.updateProfile(self.profile);
+    auth.updateProfile(self.profile).then(function(response){
+        self.saved = 'user.saved';
+    }, function(error){
+        self.saved = '';
+        self.errorMessage = 'user.error';
+    });
   }
 
 };

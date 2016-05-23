@@ -7,12 +7,13 @@
  * # LoginCtrl
  * Controller of the angularWebclientApp
  */
-var loginController = function(auth, $scope, $state) {
+var loginController = function(auth, $scope, $state, alertService) {
   var self = this;
 
   $scope.loginNow = function(){
     self.loginError = false;
     auth.login($scope.email, $scope.password).then(function(response){
+        alertService.flush();
         $state.go('boards');
         self.loginError = false;
     }, function(error){
@@ -22,6 +23,6 @@ var loginController = function(auth, $scope, $state) {
   };
 };
 
-loginController.$inject = ['AuthService', '$scope', '$state'];
+loginController.$inject = ['AuthService', '$scope', '$state', 'AlertService'];
 
 angular.module('angularWebclientApp').controller('LoginCtrl', loginController);
