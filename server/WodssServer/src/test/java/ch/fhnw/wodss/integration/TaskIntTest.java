@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
@@ -19,6 +20,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import ch.fhnw.wodss.domain.Attachment;
 import ch.fhnw.wodss.domain.Board;
 import ch.fhnw.wodss.domain.BoardFactory;
 import ch.fhnw.wodss.domain.LoginData;
@@ -132,7 +134,7 @@ public class TaskIntTest extends AbstractIntegrationTest {
 				Assert.assertTrue(t.getAttachments().size() > 0);
 			}
 		}
-		
+
 		// PUT
 		task.setDescription("Other");
 		taskjson = (JSONObject) parser.parse(objectMapper.writeValueAsString(task));
@@ -146,6 +148,17 @@ public class TaskIntTest extends AbstractIntegrationTest {
 			if (t.getId() == task.getId()) {
 				Assert.assertTrue(t.getAttachments().size() > 0);
 			}
+		}
+
+		// DELETE
+		Boolean success = doDelete("http://localhost:8080/task/{0}", token, Boolean.class, task.getId());
+		Assert.assertTrue(success);
+		try {
+			doGet("http://localhost:8080/attachment/{0}", token, Attachment.class,
+					task.getAttachments().get(0).getId());
+			Assert.fail();
+		} catch (FileNotFoundException e) {
+
 		}
 
 	}

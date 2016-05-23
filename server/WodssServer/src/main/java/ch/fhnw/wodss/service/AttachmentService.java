@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class AttachmentService {
 	}
 	
 	public Attachment getAttachment(String id){
-		return attachmentRepository.getOne(id);
+		return attachmentRepository.findOne(id);
 	}
 	
 	@Transactional
@@ -42,6 +43,11 @@ public class AttachmentService {
 	@Transactional
 	public Attachment saveAttachment(Attachment attachment){
 		return attachmentRepository.save(attachment);
+	}
+	
+	@Transactional(readOnly = true)
+	public List<Attachment> getAllByTaskId(Integer taskId){
+		return attachmentRepository.findByTaskId(taskId);
 	}
 	
 	/**

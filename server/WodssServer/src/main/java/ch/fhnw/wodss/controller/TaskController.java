@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import ch.fhnw.wodss.domain.Attachment;
 import ch.fhnw.wodss.domain.Board;
 import ch.fhnw.wodss.domain.Task;
 import ch.fhnw.wodss.domain.TaskState;
@@ -300,12 +299,6 @@ public class TaskController {
 			} else {
 				task.setDoneDate(null);
 			}
-			// set task id in all attachment, since we will not get id from the
-			// client
-			// to prevent JSON endless unmarshalling.
-			for (Attachment attachment : task.getAttachments()) {
-				attachment.setTask(task);
-			}
 			Task updatedTask = taskService.saveTask(task, files);
 			LOG.info("User <{}> updated task <{}> with attachments.", user.getEmail(), task.getId());
 			if (oldTask.getAssignee() != null && task.getAssignee() != null
@@ -342,12 +335,6 @@ public class TaskController {
 				task.setDoneDate(new Date());
 			} else {
 				task.setDoneDate(null);
-			}
-			// set task id in all attachment, since we will not get id from the
-			// client
-			// to prevent JSON endless unmarshalling.
-			for (Attachment attachment : task.getAttachments()) {
-				attachment.setTask(task);
 			}
 			Task updatedTask = taskService.saveTask(task);
 			LOG.info("User <{}> updated task <{}>", user.getEmail(), task.getId());

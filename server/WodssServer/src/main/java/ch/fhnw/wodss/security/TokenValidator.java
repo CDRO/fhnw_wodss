@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class TokenValidator {
 
-	// TODO what if x-session-token not set? This leads to bad request, but should also be not authorized.
 	@Around("execution(* ch.fhnw.wodss.controller.*.*(Token, ..)) && args(token,..)")
 	public Object validate(ProceedingJoinPoint pjp, Token token) throws Throwable {
 		boolean valid = TokenHandler.validate(token.getId());

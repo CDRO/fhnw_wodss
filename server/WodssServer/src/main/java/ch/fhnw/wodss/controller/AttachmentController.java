@@ -1,11 +1,16 @@
 package ch.fhnw.wodss.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +46,7 @@ public class AttachmentController {
 	 * @return The attachament if any.
 	 */
 	@RequestMapping(path = "/attachment/{id}", method = RequestMethod.GET)
-	public ResponseEntity<File> getAttachment(@PathVariable String id) {
+	public ResponseEntity<InputStreamResource> getAttachment(@PathVariable String id) {
 		LOG.debug("Getting attachment with id <{}>", id);
 		// Reload user from database
 		Attachment attachment = attachmentService.getAttachment(id);
@@ -50,7 +55,18 @@ public class AttachmentController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		LOG.debug("Found attachment with id <{}>", id);
-		return new ResponseEntity<>(attachment.getFile(), HttpStatus.OK);
+		try {
+			File file = attachment.getFile();
+			InputStream is = new FileInputStream(file);
+			return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/octet-stream"))
+					.header("Content-disposition", "attachment; filename=" + attachment.getDocumentName())
+					.body(new InputStreamResource(is));
+		} catch (IOException e) {
+			LOG.debug("File not found, returning <{}>", HttpStatus.NOT_FOUND);
+			attachmentService.deleteAttachment(attachment);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+
 	}
 
 	/**

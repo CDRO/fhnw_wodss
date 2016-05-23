@@ -97,5 +97,9 @@ public class TokenHandler {
 	public static void clear() {
 		tokenCache.clear();
 	}
+	
+	public static Map<String, Token> getCache(){
+		return tokenCache;
+	}
 
 }

@@ -11,11 +11,13 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 @SpringBootApplication
 @EnableAspectJAutoProxy
+@EnableScheduling
 public class WodssServer extends SpringBootServletInitializer {
 	
 	private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(WodssServer.class);
