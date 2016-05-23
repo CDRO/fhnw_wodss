@@ -39,6 +39,11 @@ public class AttachmentService {
 		}
 	}
 	
+	@Transactional
+	public Attachment saveAttachment(Attachment attachment){
+		return attachmentRepository.save(attachment);
+	}
+	
 	/**
 	 * Saved the uploaded file to file system
 	 * @param attachment the attachment object to retrieve path from uuid

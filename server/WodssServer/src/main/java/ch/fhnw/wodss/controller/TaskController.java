@@ -162,7 +162,7 @@ public class TaskController {
 			Task savedTask = taskService.saveTask(task, files);
 			LOG.info("User <{}> saved task <{}> with attachments", user.getEmail(), task.getId());
 			// sending notification when assignee is not the same
-			if (!task.getAssignee().equals(user)) {
+			if (task.getAssignee() != null && !task.getAssignee().equals(user)) {
 				AbstractNotification notification = new ReassignedNotification(task.getAssignee());
 				notification.send();
 			}
@@ -192,7 +192,7 @@ public class TaskController {
 			Task savedTask = taskService.saveTask(task);
 			LOG.info("User <{}> saved task <{}>", user.getEmail(), task.getId());
 			// sending notification when assignee is not the same
-			if (!task.getAssignee().equals(user)) {
+			if (task.getAssignee() != null && !task.getAssignee().equals(user)) {
 				AbstractNotification notification = new ReassignedNotification(task.getAssignee());
 				notification.send();
 			}
@@ -290,9 +290,7 @@ public class TaskController {
 			if (file9 != null) {
 				files.add(file9);
 			}
-			// add attachments to task that comes not with the put request
 			Task oldTask = taskService.getById(task.getId());
-			task.getAttachments().addAll(oldTask.getAttachments());
 			// set done date if set to done
 			// remove otherwise
 			if (task.getState() == TaskState.DONE) {
@@ -302,7 +300,8 @@ public class TaskController {
 			}
 			Task updatedTask = taskService.saveTask(task, files);
 			LOG.info("User <{}> updated task <{}> with attachments.", user.getEmail(), task.getId());
-			if (!oldTask.getAssignee().equals(task.getAssignee())) {
+			if (oldTask.getAssignee() != null && task.getAssignee() != null
+					&& !oldTask.getAssignee().equals(task.getAssignee())) {
 				AbstractNotification notification = new ReassignedNotification(task.getAssignee());
 				notification.send();
 			}
@@ -330,9 +329,7 @@ public class TaskController {
 		// reload user from db
 		user = userService.getById(user.getId());
 		if (user.getBoards().contains(task.getBoard())) {
-			// add attachments to task that comes not with the put request
 			Task oldTask = taskService.getById(task.getId());
-			task.getAttachments().addAll(oldTask.getAttachments());
 			if (task.getState() == TaskState.DONE) {
 				task.setDoneDate(new Date());
 			} else {
@@ -340,7 +337,8 @@ public class TaskController {
 			}
 			Task updatedTask = taskService.saveTask(task);
 			LOG.info("User <{}> updated task <{}>", user.getEmail(), task.getId());
-			if (!oldTask.getAssignee().equals(task.getAssignee())) {
+			if (oldTask.getAssignee() != null && task.getAssignee() != null
+					&& !oldTask.getAssignee().equals(task.getAssignee())) {
 				AbstractNotification notification = new ReassignedNotification(task.getAssignee());
 				notification.send();
 			}
