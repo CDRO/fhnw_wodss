@@ -11,6 +11,8 @@
         request: function(config){
             if(ConfigService.isLoggedIn()){
                 config.headers['x-session-token'] = ConfigService.getCurrentToken().id;
+            }else{
+                config.headers['x-session-token'] = '';
             }
           return config;
         }
