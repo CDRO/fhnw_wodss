@@ -50,8 +50,8 @@
     },
     nav: {
       home: "Start",
-      register: 'Registrieren',
-      passwordReset: 'P',
+      register: 'Jetzt Registrieren',
+      passwordReset: 'Passwort zurücksetzen',
       boards: 'Boards',
       user: 'Profil bearbeiten',
       login: 'Login',

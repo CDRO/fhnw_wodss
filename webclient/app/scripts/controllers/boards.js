@@ -63,7 +63,7 @@ var boardController = function($scope, boardService, $uibModal) {
   /* Open Overlay to create/update the board */
   var openModal = function(isNew, model){
     var modalInstance = $uibModal.open({
-      templateUrl: 'views/boards/boardOverlay.html',
+      templateUrl: 'views/boardOverlay.html',
       controller: 'ModalInstanceCtrl',
       size: "lg",
       resolve: {

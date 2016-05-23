@@ -54,7 +54,7 @@ angular
       })
       .state('boards', {
         url: "/boards",
-        templateUrl: 'views/boards/boardOverview.html',
+        templateUrl: 'views/boardOverview.html',
         controller: 'BoardsCtrl',
         controllerAs: 'boards'
       })
