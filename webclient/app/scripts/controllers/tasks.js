@@ -51,6 +51,9 @@ var taskController = function(taskService, attachmentService, params, $uibModal,
     for(var i=0; i<list.length; i++){
        var task = list[i];
         if(task.state !== state){
+            if(state==='DONE'){
+              task.doneDate = Date.now();
+            }
             task.state = state;
             self.update(task);
         }
