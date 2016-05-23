@@ -35,12 +35,27 @@
      * Logout the user
      */
     this.logout = function(){
-      service.deleteObject('token', config.getCurrentToken()).then(function(response){
+      return service.deleteObject('token', config.getCurrentToken()).then(function(response){
         config.setCurrentUser({user: null, id: null, token: null, email: null, timeToLive: null});
       }, function(error){
         $log.error("Log out was not possible cause %o", error);
       });
+    };
 
+      /**
+       * Request an email for password reset
+       * @param model
+       */
+    this.resetPasswordRequest = function(model){
+      return service.createObject('resetcode', model);
+    };
+
+    /**
+     * Resets the Password
+     * @param model
+     */
+    this.resetPassword = function(model){
+      return service.updateObject('user', model, null, 'logindata');
     };
 
     /**

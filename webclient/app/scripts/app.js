@@ -86,11 +86,13 @@ angular
         }
       })
       .state('resetPassword', {
-        url: "/reset/:resetToken",
+        url: "/reset/:id?resetCode",
         templateUrl: "views/resetPassword.html",
         controller: "ResetPasswordCtrl",
+        controllerAs: "reset",
         params: {
-          resetToken: null
+          id: null,
+          resetCode: null
         }
       })
       .state('user', {
