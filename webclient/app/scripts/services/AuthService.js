@@ -36,7 +36,6 @@
      */
     this.logout = function(){
       return service.deleteObject('token', config.getCurrentToken()).then(function(response){
-        config
         config.setCurrentUser({user: null, id: null, token: null, email: null, timeToLive: null});
       }, function(error){
         $log.error("Log out was not possible cause %o", error);
