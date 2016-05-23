@@ -52,6 +52,11 @@
         files = task.files;
         delete task.files;
       }
+      task.attachments = task.attachments.map(function(attachment){
+        attachment['task'] = {id: task.id};
+        return attachment;
+      });
+
       return service.updateObject('task', task, files);
     };
 
