@@ -3,31 +3,33 @@ package ch.fhnw.wodss.notification;
 import java.util.LinkedList;
 import java.util.List;
 
+import ch.fhnw.wodss.domain.Task;
 import ch.fhnw.wodss.domain.User;
 
 public class ReassignedNotification extends AbstractNotification {
 
-	private User user;
+	private Task task;
 
-	public ReassignedNotification(User user) {
-		this.user = user;
+	public ReassignedNotification(Task task) {
+		this.task = task;
 	}
 
 	@Override
 	List<User> getRecipients() {
 		List<User> recipients = new LinkedList<>();
-		recipients.add(user);
+		recipients.add(task.getAssignee());
 		return recipients;
 	}
 
 	@Override
 	String getSubject() {
-		return "You have been assigned for the following Task";
+		return "Du wurdest zu einem Task zugewiesen.";
 	}
 
 	@Override
 	String getMessageBody() {
-		return "You have been assigned for a new Task. Go to <a href=\"https://www.cs.technik.fhnw.ch/wodss5/\">ToDooooo</a> now.";
+		return "Du wurdest zu einem Task zugewiesen. Siehe <a href=\"https://www.cs.technik.fhnw.ch/wodss5/#/tasks/board/"
+				+ task.getBoard() + "\">ToDooooo</a>.";
 	}
 
 }

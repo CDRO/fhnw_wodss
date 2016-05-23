@@ -24,13 +24,13 @@ public class NewTaskNotification extends AbstractNotification {
 
 	@Override
 	String getSubject() {
-		return "New Taks for you!";
+		return "Neuer Task für Dich!";
 	}
 
 	@Override
 	String getMessageBody() {
-		return "<p>New task has been created for you. "
-				+ "Look it up with the following link:</p><p><a href=\"#\">LINK</a></p>";
+		return "<p>Ein neuer Task wurde für Dich erstellt. "
+				+ "Geh und sehe nach! </p><p><a href=\"https://www.cs.technik.fhnw.ch/wodss5/#/tasks/board/" + task.getBoard().getId() + "\">LINK</a></p>";
 	}
 
 }

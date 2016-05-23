@@ -23,12 +23,12 @@ public class RegistrationNotification extends AbstractNotification {
 
 	@Override
 	String getSubject() {
-		return "Thank you for your registration";
+		return "Danke für Deine Registration";
 	}
 
 	@Override
 	String getMessageBody() {
-		return "Please validate your email address by clicking on the following link: <a href=\"https://www.cs.technik.fhnw.ch/wodss5/#/validate/"
+		return "Bevor du ToDooooo nutzen kannst, musst Du noch deine E-Mail-Adresse validieren. Dies kannst du unter folgendem Link tun: <a href=\"https://www.cs.technik.fhnw.ch/wodss5/#/validate/"
 				+ user.getId() + "?validationCode=" + user.getLoginData().getValidationCode() + "\">LINK</a>";
 	}
 

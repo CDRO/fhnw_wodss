@@ -25,6 +25,7 @@ import ch.fhnw.wodss.domain.Task;
 import ch.fhnw.wodss.domain.TaskState;
 import ch.fhnw.wodss.domain.User;
 import ch.fhnw.wodss.notification.AbstractNotification;
+import ch.fhnw.wodss.notification.NewTaskNotification;
 import ch.fhnw.wodss.notification.ReassignedNotification;
 import ch.fhnw.wodss.security.Token;
 import ch.fhnw.wodss.security.TokenHandler;
@@ -163,7 +164,7 @@ public class TaskController {
 			LOG.info("User <{}> saved task <{}> with attachments", user.getEmail(), task.getId());
 			// sending notification when assignee is not the same
 			if (task.getAssignee() != null && !task.getAssignee().equals(user)) {
-				AbstractNotification notification = new ReassignedNotification(task.getAssignee());
+				AbstractNotification notification = new NewTaskNotification(savedTask);
 				notification.send();
 			}
 			return new ResponseEntity<>(savedTask, HttpStatus.OK);
@@ -193,7 +194,7 @@ public class TaskController {
 			LOG.info("User <{}> saved task <{}>", user.getEmail(), task.getId());
 			// sending notification when assignee is not the same
 			if (task.getAssignee() != null && !task.getAssignee().equals(user)) {
-				AbstractNotification notification = new ReassignedNotification(task.getAssignee());
+				AbstractNotification notification = new NewTaskNotification(savedTask);
 				notification.send();
 			}
 			return new ResponseEntity<>(savedTask, HttpStatus.OK);
@@ -302,7 +303,7 @@ public class TaskController {
 			LOG.info("User <{}> updated task <{}> with attachments.", user.getEmail(), task.getId());
 			if (oldTask.getAssignee() != null && task.getAssignee() != null
 					&& !oldTask.getAssignee().equals(task.getAssignee())) {
-				AbstractNotification notification = new ReassignedNotification(task.getAssignee());
+				AbstractNotification notification = new ReassignedNotification(updatedTask);
 				notification.send();
 			}
 			return new ResponseEntity<>(updatedTask, HttpStatus.OK);
@@ -339,7 +340,7 @@ public class TaskController {
 			LOG.info("User <{}> updated task <{}>", user.getEmail(), task.getId());
 			if (oldTask.getAssignee() != null && task.getAssignee() != null
 					&& !oldTask.getAssignee().equals(task.getAssignee())) {
-				AbstractNotification notification = new ReassignedNotification(task.getAssignee());
+				AbstractNotification notification = new ReassignedNotification(updatedTask);
 				notification.send();
 			}
 			return new ResponseEntity<>(updatedTask, HttpStatus.OK);

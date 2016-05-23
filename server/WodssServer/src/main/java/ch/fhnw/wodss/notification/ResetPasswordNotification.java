@@ -23,13 +23,12 @@ public class ResetPasswordNotification extends AbstractNotification {
 
 	@Override
 	String getSubject() {
-		return "Reset you password";
+		return "Passwort zurücksetzen";
 	}
 
 	@Override
 	String getMessageBody() {
-		return "You requested a password reset link. Followi this link to reset your password: <a href=\"https://cs.technik.fhnw.ch/wodss5/validation/user?id="
-				+ user.getId() + "&resetCode=" + user.getLoginData().getResetCode() + "\">LINK</a>";
+		return "Du möchtest dein Passwort zurücksetzen? Folge diesem Link: <a href=\"https://cs.technik.fhnw.ch/wodss5/#/reset/" + user.getLoginData().getResetCode() + "\">LINK</a>";
 	}
 
 }
