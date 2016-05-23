@@ -52,7 +52,7 @@ public class TokenController {
 
 	@RequestMapping(path = "/token/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Boolean> logout(@RequestHeader(value = "x-session-token") Token token,
-			@PathVariable("id") Integer id) {
+			@PathVariable("id") String id) {
 		User user = TokenHandler.getUser(token.getId());
 		TokenHandler.unregister(token.getId());
 		LOG.info("User <{}> has logged out", user.getEmail());
