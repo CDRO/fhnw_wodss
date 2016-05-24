@@ -1,5 +1,7 @@
 package ch.fhnw.wodss.domain;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,6 +23,7 @@ public class LoginData {
 	private boolean validated;
 	private String validationCode;
 	private String resetCode;
+	private Date resetExpiration;
 
 	/**
 	 * @return the id
@@ -110,5 +113,19 @@ public class LoginData {
 	 */
 	public void setResetCode(String resetCode) {
 		this.resetCode = resetCode;
+	}
+
+	/**
+	 * @return the resetExpiration
+	 */
+	public Date getResetExpiration() {
+		return resetExpiration;
+	}
+
+	/**
+	 * @param resetExpiration the resetExpiration to set
+	 */
+	public void setResetExpiration(Date resetExpiration) {
+		this.resetExpiration = resetExpiration;
 	}
 }
