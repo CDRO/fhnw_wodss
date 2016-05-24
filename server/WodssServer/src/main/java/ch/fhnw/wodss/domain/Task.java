@@ -15,8 +15,6 @@ import javax.persistence.OneToMany;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity
 public class Task {
 	// TODO check what should be not nullable.
@@ -33,7 +31,6 @@ public class Task {
 	private Date doneDate;
 	private String description;
 	@OneToMany(mappedBy = "task", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JsonManagedReference
 	private List<Attachment> attachments;
 
 	Task() {

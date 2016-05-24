@@ -15,22 +15,19 @@ import ch.fhnw.wodss.service.AttachmentService;
 public class AttachmentCleaner {
 
 	public final static Logger LOG = LoggerFactory.getLogger(AttachmentCleaner.class);
-
+	
 	@Autowired
 	private AttachmentService attachmentService;
-
+	
 	/**
-	 * Removes attachments from the file system and database which have no
-	 * reference to tasks anymore, every 20 Minutes
+	 * Removes unreferenced attachments every 20 minutes.
 	 */
-	@Scheduled(fixedDelay = 1200000L)
-	public void cleanAttachments() {
-		LOG.info("Removing old attachments...");
+	//@Scheduled(fixedDelay = 1200000L)
+	@Scheduled(fixedDelay = 60000L)
+	public void cleanUnreferencedAttachments(){
+		LOG.info("Removing unreferenced attachments...");
 		List<Attachment> attachments = attachmentService.getAllByTaskId(null);
-		for (Attachment attachment : attachments) {
-			attachmentService.deleteAttachmentFromFileSystem(attachment);
-			attachmentService.deleteAttachment(attachment);
-		}
+		attachments.forEach(attachment -> attachmentService.deleteAttachment(attachment));		
 	}
-
+	
 }

@@ -36,7 +36,7 @@ public class AttachmentService {
 	public void deleteAttachment(Attachment attachment){
 		boolean success = deleteAttachmentFromFileSystem(attachment);
 		if(success){
-			attachmentRepository.delete(attachment);
+			attachmentRepository.delete(attachment.getId());
 		}
 	}
 	
@@ -114,6 +114,9 @@ public class AttachmentService {
 
 	
 	public boolean deleteAttachmentFromFileSystem(Attachment attachment) {
+		if(!attachment.getFile().exists()){
+			return true;
+		}
 		try {
 			FileUtils.forceDelete(attachment.getFile());
 			return true;

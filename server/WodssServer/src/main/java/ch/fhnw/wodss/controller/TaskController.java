@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import ch.fhnw.wodss.domain.Attachment;
 import ch.fhnw.wodss.domain.Board;
 import ch.fhnw.wodss.domain.Task;
 import ch.fhnw.wodss.domain.TaskState;
@@ -29,6 +30,7 @@ import ch.fhnw.wodss.notification.NewTaskNotification;
 import ch.fhnw.wodss.notification.ReassignedNotification;
 import ch.fhnw.wodss.security.Token;
 import ch.fhnw.wodss.security.TokenHandler;
+import ch.fhnw.wodss.service.AttachmentService;
 import ch.fhnw.wodss.service.TaskService;
 import ch.fhnw.wodss.service.UserService;
 
@@ -43,6 +45,9 @@ public class TaskController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private AttachmentService attachmentService;
 
 	/**
 	 * Gets the list of tasks of one or all board the user is subscribed to.
@@ -299,6 +304,8 @@ public class TaskController {
 			} else {
 				task.setDoneDate(null);
 			}
+			removeAttachments(oldTask, task);
+			setTaskOnAttachments(task);
 			Task updatedTask = taskService.saveTask(task, files);
 			LOG.info("User <{}> updated task <{}> with attachments.", user.getEmail(), task.getId());
 			if (oldTask.getAssignee() != null && task.getAssignee() != null
@@ -336,6 +343,8 @@ public class TaskController {
 			} else {
 				task.setDoneDate(null);
 			}
+			removeAttachments(oldTask, task);
+			setTaskOnAttachments(task);
 			Task updatedTask = taskService.saveTask(task);
 			LOG.info("User <{}> updated task <{}>", user.getEmail(), task.getId());
 			if (oldTask.getAssignee() != null && task.getAssignee() != null
@@ -346,6 +355,25 @@ public class TaskController {
 			return new ResponseEntity<>(updatedTask, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}
+
+	private void removeAttachments(Task oldTask, Task updatedTask) {
+		List<Attachment> attachments = oldTask.getAttachments();
+		attachments.removeAll(updatedTask.getAttachments());
+		attachments.forEach((Attachment attachment) -> {
+			attachment.setTask(null);
+			attachmentService.saveAttachment(attachment);
+		});
+	}
+
+	private void setTaskOnAttachments(Task task){
+		if(task.getAttachments().size() > 0){
+			task.getAttachments().forEach((Attachment attachment) -> {
+				if(attachment != null){
+					attachment.setTask(task);
+				}
+			});
+		}
 	}
 
 }

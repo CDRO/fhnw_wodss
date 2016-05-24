@@ -9,7 +9,6 @@ import javax.persistence.ManyToOne;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -36,8 +35,7 @@ public class Attachment {
 	/**
 	 * The task to which this attachment belongs.
 	 */
-	//@JsonIgnore
-	@JsonBackReference
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Task task;
 
