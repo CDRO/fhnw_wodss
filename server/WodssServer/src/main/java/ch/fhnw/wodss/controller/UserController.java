@@ -29,7 +29,6 @@ import ch.fhnw.wodss.security.Token;
 import ch.fhnw.wodss.security.TokenHandler;
 import ch.fhnw.wodss.service.BoardService;
 import ch.fhnw.wodss.service.UserService;
-import ch.qos.logback.core.util.Duration;
 
 @RestController
 @CrossOrigin
