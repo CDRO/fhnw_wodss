@@ -108,9 +108,9 @@
         title: "Ihr Resetcode ist ungültig",
         text: "Bitte kontrollieren Sie den Link im erhaltenen Email und rufen Ihn erneut auf"
       },
-      empty: {
-        title: "Kein Resetcode angegeben",
-        text: "Bitte kontrollieren Sie den Link im erhaltenen Email und rufen Ihn erneut auf"
+      gone: {
+        title: "Resetcode abgelaufen",
+        text: "Bitte fordern Sie einen neuen Resetcode an"
       }
     },
 

@@ -30,6 +30,12 @@ var ResetPasswordCtrl = function ($scope, authService, params, $state) {
   this.resetPassword = function() {
       authService.resetPassword(self.model).then(function(response){
           $state.go('login');
+      }, function(error){
+          if(error.status === 410){
+              self.errorGone = true;
+          }else{
+            reset.error = true;
+          }
       });
   };
 
