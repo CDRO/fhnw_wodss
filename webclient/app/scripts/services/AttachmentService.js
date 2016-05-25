@@ -8,12 +8,16 @@
   var AttachmentService = function (service) {
     /**
      * Removes the Attachment
-     * @param board board with id specified
+     * @param attachment with id specified
      */
     this.remove = function (attachment) {
-        service.deleteObject('task', attachment);
+        service.deleteObject('attachment', attachment);
     };
 
+    /**
+     * Get Path for attachments
+     * @returns string
+     */
     this.getPath = function(){
         return service.getPath() + 'attachment/';
     }

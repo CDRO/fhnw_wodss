@@ -2,7 +2,7 @@
 
 /**
  * @ngdoc function
- * @name angularWebclientApp.controller:LoginCtrl
+ * @name angularWebclientApp.controller:LogoutCtrl
  * @description
  * # LogoutCtrl
  * Controller of the angularWebclientApp

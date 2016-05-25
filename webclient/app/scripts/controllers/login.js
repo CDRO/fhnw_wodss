@@ -7,12 +7,12 @@
  * # LoginCtrl
  * Controller of the angularWebclientApp
  */
-var loginController = function(auth, $scope, $state, alertService) {
+var loginController = function(authService, $scope, $state, alertService) {
   var self = this;
+  self.loginError = false;
 
-  $scope.loginNow = function(){
-    self.loginError = false;
-    auth.login($scope.email, $scope.password).then(function(error){
+  self.loginNow = function(){
+    authService.login($scope.email, $scope.password).then(function(error){
         if(error.status){
           self.loginError = true;
         }else{

@@ -26,13 +26,13 @@ var boardController = function($scope, boardService, $uibModal) {
   };
 
   this.add = function(model){
-    boardService.add(model).then(function(data){
+    boardService.add(model).then(function(){
         self.synchronize();
     });
   };
 
   this.update = function(model){
-    boardService.update(model).then(function(data){
+    boardService.update(model).then(function(){
         self.synchronize();
     });
   };
@@ -42,13 +42,13 @@ var boardController = function($scope, boardService, $uibModal) {
     var modalInstance = $uibModal.open({
       templateUrl: 'views/confirmationOverlay.html',
       controller: 'ModalConfirmationCtrl',
-      size: "sm",
+      size: 'sm',
       resolve: {
         model: function(){
-          return model
+          return model;
         },
         confirmation: function(){
-          return {text: "Board " + model.title};
+          return {text: 'Board ' + model.title};
         }
       }
     });
@@ -75,7 +75,7 @@ var boardController = function($scope, boardService, $uibModal) {
     var modalInstance = $uibModal.open({
       templateUrl: 'views/boardOverlay.html',
       controller: 'ModalInstanceCtrl',
-      size: "lg",
+      size: 'lg',
       resolve: {
         isNew: isNew,
         assignees: function() {
@@ -85,7 +85,7 @@ var boardController = function($scope, boardService, $uibModal) {
           return [];
         },
         model: function(){
-          return model
+          return model;
         }
       }
     });

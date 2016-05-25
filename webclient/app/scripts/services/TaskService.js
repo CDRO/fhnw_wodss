@@ -1,10 +1,13 @@
-/*jslint plusplus: true, vars: true*/
-/*global angular, window, console, btoa */
 (function (undefined) {
   'use strict';
 
   var module = angular.module('services');
 
+  /**
+   * Service to retrieve and interact with Task related data
+   * @param service
+   * @constructor
+   */
   var TaskService = function (service) {
 
     /**
@@ -52,10 +55,10 @@
         files = task.files;
         delete task.files;
       }
-      task.attachments = task.attachments.map(function(attachment){
+      /*task.attachments = task.attachments.map(function(attachment){
         attachment['task'] = {id: task.id};
         return attachment;
-      });
+      });*/
 
       return service.updateObject('task', task, files);
     };

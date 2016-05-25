@@ -7,30 +7,26 @@
  * # RegisterCtrl
  * Controller of the angularWebclientApp
  */
-var module = angular.module('angularWebclientApp');
 
-var RegisterCtrl = function ($scope, authService, $state, alertService, $translate) {
+var RegisterCtrl = function ($scope, authService, $state, alertService) {
   var self = this;
-  this.model = {};
+  self.model = {};
 
-  this.register = function(){
-      authService.registerAccount(self.email, self.password).then(function(response){
+  self.register = function(){
+      authService.registerAccount(self.email, self.password).then(function(){
         alertService.addAlert('warning', 'register.validationRequired');
         $state.go('login');
       }, function(error){
-          if(error.status == 409){
+          if(error.status === 409){
               self.errorMessage = 'register.alreadyRegistered';
           }else{
               self.errorMessage = 'register.errorHappened';
           }
 
       });
-  }
+  };
 };
 
-RegisterCtrl.$inject = ['$scope', 'AuthService', '$state', 'AlertService', '$translate'];
+RegisterCtrl.$inject = ['$scope', 'AuthService', '$state', 'AlertService'];
 
-module.controller('RegisterCtrl', RegisterCtrl);
-
-
-
+angular.module('angularWebclientApp').controller('RegisterCtrl', RegisterCtrl);
