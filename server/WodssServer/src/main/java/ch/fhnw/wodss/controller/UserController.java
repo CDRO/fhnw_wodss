@@ -1,5 +1,6 @@
 package ch.fhnw.wodss.controller;
 
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -34,6 +35,7 @@ import ch.fhnw.wodss.service.UserService;
 public class UserController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
+	private static final long TWENTY_MIN = 1200000L;
 
 	@Autowired
 	private UserService userService;
@@ -203,6 +205,7 @@ public class UserController {
 		if (aCurrUser != null) {
 			String resetCode = UUID.randomUUID().toString();
 			aCurrUser.getLoginData().setResetCode(resetCode);
+			aCurrUser.getLoginData().setResetExpiration(new Date(System.currentTimeMillis() + TWENTY_MIN));
 			userService.saveUser(aCurrUser);
 			ResetPasswordNotification notification = new ResetPasswordNotification(aCurrUser);
 			notification.send();
@@ -249,12 +252,22 @@ public class UserController {
 		User aCurrUser = userService.getById(id);
 		if (aCurrUser != null) {
 			if (resetCode.equals(aCurrUser.getLoginData().getResetCode())) {
-				LoginData newLoginData = LoginDataFactory.getInstance().createLoginData(password);
-				aCurrUser.getLoginData().setSalt(newLoginData.getSalt());
-				aCurrUser.getLoginData().setPassword(newLoginData.getPassword());
-				userService.saveUser(aCurrUser);
-				LOG.info("User <{}> has resetted his password.", aCurrUser.getEmail());
-				return new ResponseEntity<>(true, HttpStatus.OK);
+				if(aCurrUser.getLoginData().getResetExpiration().before(new Date())){
+					aCurrUser.getLoginData().setResetCode(null);
+					aCurrUser.getLoginData().setResetExpiration(null);
+					userService.saveUser(aCurrUser);
+					LOG.info("<{}>'s reset code has been expired.", aCurrUser.getEmail());
+					return new ResponseEntity<>(true, HttpStatus.GONE);
+				} else {
+					LoginData newLoginData = LoginDataFactory.getInstance().createLoginData(password);
+					aCurrUser.getLoginData().setSalt(newLoginData.getSalt());
+					aCurrUser.getLoginData().setPassword(newLoginData.getPassword());
+					aCurrUser.getLoginData().setResetCode(null);
+					aCurrUser.getLoginData().setResetExpiration(null);
+					userService.saveUser(aCurrUser);
+					LOG.info("User <{}> has resetted his password.", aCurrUser.getEmail());
+					return new ResponseEntity<>(true, HttpStatus.OK);
+				}
 			}
 		}
 		return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);

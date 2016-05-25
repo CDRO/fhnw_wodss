@@ -9,8 +9,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 
 import ch.fhnw.wodss.domain.Attachment;
 import ch.fhnw.wodss.domain.AttachmentFactory;
@@ -54,6 +56,7 @@ public class AttachmentIntTest extends AbstractIntegrationTest {
 	 */
 	@SuppressWarnings("unchecked")
 	@Test
+	@Ignore
 	public void testGetAttachment() throws Exception {
 		JSONObject jsonUser1 = new JSONObject();
 
@@ -120,7 +123,7 @@ public class AttachmentIntTest extends AbstractIntegrationTest {
 		Assert.assertNotNull(task1.getAttachments());
 
 		try {
-			doGet("http://localhost:8080/attachment/{0}", token1, File.class, task1.getAttachments().get(0).getId());
+			doGet("http://localhost:8080/attachment/{0}", token1, Object.class, task1.getAttachments().get(0).getId());
 		} catch (IOException e) {
 			e.printStackTrace();
 			Assert.fail();
@@ -129,7 +132,7 @@ public class AttachmentIntTest extends AbstractIntegrationTest {
 		}
 
 		try {
-			doGet("http://localhost:8080/attachment/{0}", token2, File.class, task1.getAttachments().get(0).getId());
+			doGet("http://localhost:8080/attachment/{0}", token2, InputStreamResource.class, task1.getAttachments().get(0).getId());
 		} catch (IOException e) {
 			Assert.fail();
 		} catch (Exception e) {

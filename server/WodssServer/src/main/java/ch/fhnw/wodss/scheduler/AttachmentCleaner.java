@@ -22,8 +22,7 @@ public class AttachmentCleaner {
 	/**
 	 * Removes unreferenced attachments every 20 minutes.
 	 */
-	//@Scheduled(fixedDelay = 1200000L)
-	@Scheduled(fixedDelay = 60000L)
+	@Scheduled(fixedDelay = 1200000L)
 	public void cleanUnreferencedAttachments(){
 		LOG.info("Removing unreferenced attachments...");
 		List<Attachment> attachments = attachmentService.getAllByTaskId(null);

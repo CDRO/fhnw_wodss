@@ -1,5 +1,6 @@
 package ch.fhnw.wodss.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ch.fhnw.wodss.domain.Board;
 import ch.fhnw.wodss.domain.User;
+import ch.fhnw.wodss.notification.AbstractNotification;
+import ch.fhnw.wodss.notification.NewBoardNotification;
 import ch.fhnw.wodss.security.Token;
 import ch.fhnw.wodss.security.TokenHandler;
 import ch.fhnw.wodss.service.BoardService;
@@ -69,8 +72,6 @@ public class BoardController {
 		Board board = boardService.getById(id);
 		if (user.getBoards().contains(board)) {
 			LOG.debug("User requested board with id <{}>", board.getId());
-			// remove owner from the users list, so he cannot remove himself
-			board.removeUser(board.getOwner());
 			return new ResponseEntity<>(board, HttpStatus.OK);
 		}
 		LOG.debug("User requested board with id <{}> but is not authorized", board.getId());
@@ -92,6 +93,10 @@ public class BoardController {
 	public ResponseEntity<Board> createBoard(@RequestHeader(value = "x-session-token") Token token,
 			@RequestBody Board board) {
 		User user = TokenHandler.getUser(token.getId());
+		for(User member : board.getUsers()){
+			AbstractNotification notification = new NewBoardNotification(member);
+			notification.send();
+		}
 		board.setOwner(user);
 		board.addUser(user);
 		Board savedBoard = boardService.saveBoard(board);
@@ -147,7 +152,13 @@ public class BoardController {
 		user = userService.getById(user.getId());
 		Board aCurrBoard = boardService.getById(id);
 		if (user.equals(aCurrBoard.getOwner())) {
-			// add owner to the users list
+			List<User> newMembers = new ArrayList<>(board.getUsers());
+			newMembers.removeAll(aCurrBoard.getUsers());
+			for(User member : newMembers){
+				AbstractNotification notification = new NewBoardNotification(member);
+				notification.send();
+			}
+			// add owner to the users list, because client sends it without
 			board.addUser(board.getOwner());
 			Board updatedBoard = boardService.saveBoard(board);
 			LOG.info("User <{}> updated board <{}>", user.getEmail(), board.getId());

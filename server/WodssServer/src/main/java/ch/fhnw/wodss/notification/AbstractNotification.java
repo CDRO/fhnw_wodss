@@ -102,7 +102,10 @@ public abstract class AbstractNotification {
 		System.out.println(
 				"============================================== EMAIL NOTIFICATION ==============================================");
 		System.out.println("FROM:\t\t" + SENDER);
-		System.out.println("TO:\t\t" + getRecipients().toString());
+		StringBuilder sb = new StringBuilder();
+		getRecipients().forEach(user->sb.append(user.getEmail() + ", "));
+		sb.delete(sb.length()-2, sb.length());
+		System.out.println("TO:\t\t" + sb.toString());
 		System.out.println("SUBJECT:\t" + SUBJECT_PREFIX + getSubject());
 		System.out.println("MESSAGE:\t" + getMessageBody());
 		System.out.println(
