@@ -14,7 +14,7 @@
           <div class="panel-body">
             <!-- Attachment -->
             <a ng-repeat="attachment in task.attachments" target="_blank" ng-href="{{tasks.attachmentUrl}}{{attachment.id}}">
-              {{attachment.documentName}} <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span><br/>
+              {{attachment.documentName | limitTo: 20}} <span class="glyphicon glyphicon-paperclip"></span><br/>
             </a>
             <!-- Due Date and Buttons -->
             <p ng-show="task.dueDate > 0">{{'tasks.dueDate' | translate}}: {{task.dueDate | date:'dd.MM.yyyy'}}</p>
@@ -36,7 +36,7 @@
           <div class="panel-body">
             <!-- Attachment -->
             <a ng-repeat="attachment in task.attachments" target="_blank" ng-href="{{tasks.attachmentUrl}}{{attachment.id}}">
-              {{attachment.documentName}} <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span><br/>
+              {{attachment.documentName | limitTo: 20}} <span class="glyphicon glyphicon-paperclip"></span><br/>
             </a>
             <!-- Due Date and Buttons -->
             <p ng-show="task.dueDate > 0">{{'tasks.dueDate' | translate}}: {{task.dueDate | date:'dd.MM.yyyy'}}</p>
@@ -58,7 +58,7 @@
           <div class="panel-body">
             <!-- Attachment -->
             <a ng-repeat="attachment in task.attachments" target="_blank" ng-href="{{tasks.attachmentUrl}}{{attachment.id}}">
-              {{attachment.documentName}} <span ng-show="task.attachments.length > 0" class="glyphicon glyphicon-paperclip"></span><br/>
+              {{attachment.documentName | limitTo: 20}} <span class="glyphicon glyphicon-paperclip"></span><br/>
             </a>
             <!-- Due Date and Buttons -->
             <p ng-show="task.doneDate > 0">{{'tasks.doneDate' | translate}}: {{task.doneDate | date:'dd.MM.yyyy'}}</p>

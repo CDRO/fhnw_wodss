@@ -68,7 +68,7 @@
      * @param board task with id specified
      */
     this.remove = function (task) {
-        service.deleteObject('task', task);
+        return service.deleteObject('task', task);
     };
 
   };

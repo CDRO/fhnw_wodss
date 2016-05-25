@@ -132,16 +132,28 @@ var taskController = function(taskService, attachmentService, params, $uibModal,
 
   /* Remove tasks from list */
   this.remove = function(task){
-    taskService.remove(task).then(function(data){
-      /*self.list = self.list.filter(function(current) {
-          if(task.id = current.id){
-            return false;
-          }else{
-            return true;
+    /* Confirmation Dialog */
+    var modalInstance = $uibModal.open({
+      templateUrl: 'views/confirmationOverlay.html',
+      controller: 'ModalConfirmationCtrl',
+      size: 'sm',
+      resolve: {
+          model: function(){
+            return task;
+          },
+          confirmation: function(){
+            return {text: 'Task ' + task.description};
           }
-      });*/
-      self.synchronize();
-    });
+        }
+      });
+
+      modalInstance.result.then(function(model) {
+        taskService.remove(task).then(function(data){
+          self.synchronize();
+        });
+      }, function () {
+        // Dismissed
+      });
   };
 
   /* Open Overlay to create/update the task */
