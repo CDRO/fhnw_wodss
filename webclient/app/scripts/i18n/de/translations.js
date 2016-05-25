@@ -9,6 +9,12 @@
       boards: "Übersicht Boards",
       createBoard: "Board erstellen",
       updateBoard: "Board bearbeiten",
+      table: {
+        title: "Bezeichnung",
+        cntMembers: "Anzahl Mitglieder",
+        owner: "Besitzer",
+        actions: "Bearbeiten/Löschen"
+      },
       form: {
         title: "Bezeichnung",
         requiredTitle: "Bitte geben Sie einen Board Titel an",
@@ -56,7 +62,7 @@
       user: 'Profil bearbeiten',
       login: 'Login',
       logout: "Logout",
-      tasks: 'Tasks',
+      tasks: 'Alle Tasks anzeigen',
       about: 'Über',
       loginBack: "Zurück zum Login"
     },

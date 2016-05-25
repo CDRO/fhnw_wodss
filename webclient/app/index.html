@@ -42,7 +42,6 @@
             <ul class="nav navbar-nav">
               <li ng-class="{ active: isActive('/home')}"><a ui-sref="home">{{'nav.home' | translate}}</a></li>
               <li ng-show="isLoggedIn()" ng-class="{ active: isActive('/boards')}"><a ui-sref="boards">{{'nav.boards' | translate}}</a></li>
-              <li ng-show="isLoggedIn()" ng-class="{active: isActive('/tasks')}"><a ui-sref="tasks({})">{{'nav.tasks' | translate}}</a></li>
               <li ng-show="isLoggedIn()" ng-class="{active: isActive('/user')}"><a ui-sref="user">{{'nav.user' | translate}}</a></li>
               <li ng-show="isLoggedIn()"><a ui-sref="logout">{{'nav.logout' | translate}}</a></li>
               <li ng-show="!isLoggedIn()" ng-class="{ active: isActive('/register')}"><a ui-sref="register">{{'nav.register' | translate}}</a></li>
@@ -67,18 +66,6 @@
         <p class="text-center"><span class="glyphicon glyphicon-star"></span> {{'app.footer' | translate}} </p>
       </div>
     </div>
-
-
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID
-     <script>
-       !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
-       (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
-       r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
-       }(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-       ga('create', 'UA-XXXXX-X');
-       ga('send', 'pageview');
-    </script>-->
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->

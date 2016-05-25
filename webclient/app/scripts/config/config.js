@@ -32,7 +32,7 @@
     this.isLoggedIn = function(){
       // Try to load from local storage
       if(self.loadStorage===0){
-           //self.loadFromStorage();
+           self.loadFromStorage();
       }
       return (self.currentUser.user !== null && self.currentUser.token !== null);
     };

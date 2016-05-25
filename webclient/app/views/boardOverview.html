@@ -1,12 +1,26 @@
 <div class="col-md-12">
   <h2 translate="boards.boards"></h2>
-  <div class="row">
-    <button ng-click="boards.createModal()" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
-  </div>
-  <div ng-repeat="board in boards.list">
-    <p><a ui-sref="tasksFromBoard({boardId: board.id, assignees: board.users, boards: boards.list})">{{board.title}}</a>
-      <button ng-click="boards.updateModal(board)" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
-      <button ng-click="boards.confirm(board)" class="btn btn-sm btn-danger"><span class="glyphicon glyphicon-remove"></span></button>
-    </p>
-  </div>
+
+  <button ng-click="boards.createModal()" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-plus"></span></button>
+
+  <table class="table table-hover">
+      <thead>
+        <th translate="boards.table.title"></th>
+        <th translate="boards.table.cntMembers"></th>
+        <th translate="boards.table.owner"></th>
+        <th translate="boards.table.actions"></th>
+      </thead>
+      <tbody>
+        <tr ng-repeat="board in boards.list">
+          <td ui-sref="tasksFromBoard({boardId: board.id, assignees: board.users, boards: boards.list})">{{board.title}}</td>
+          <td ui-sref="tasksFromBoard({boardId: board.id, assignees: board.users, boards: boards.list})">{{board.users.length | number:0}}</td>
+          <td ui-sref="tasksFromBoard({boardId: board.id, assignees: board.users, boards: boards.list})">{{board.owner.email}}</td>
+          <td><button ng-click="boards.updateModal(board)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
+            <button ng-click="boards.confirm(board)" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></button></td>
+        </tr>
+      </tbody>
+
+  </table>
+
+  <button class="btn btn-sm btn-primary" ui-sref="tasks({boards: boards.list})">{{'nav.tasks' | translate}}</button>
 </div>
