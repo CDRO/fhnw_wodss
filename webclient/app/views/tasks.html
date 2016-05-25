@@ -79,7 +79,7 @@
   <div class="form-group">
     <label translate="filter.assignee"></label>
     <select name="assigneeSelection" id="assigneeSelection" ng-model="search.assignee" class="form-control"
-            ng-options="person as person.email for person in tasks.people">
+            ng-options="person as person.email for person in tasks.assignees">
       <option value=''>{{'filter.selectAssignee' | translate}}</option>
     </select>
   </div>

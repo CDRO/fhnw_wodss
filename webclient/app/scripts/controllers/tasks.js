@@ -20,6 +20,20 @@ var taskController = function(taskService, attachmentService, params, $uibModal,
   this.boards = params.boards ? params.boards : [];
 
   this.assignees = params.assignees ? params.assignees : [];
+  if(self.assignees.length === 0){
+      var assignees = [];
+      angular.forEach(self.boards, function(value, key){
+          angular.forEach(value.users, function(user){
+            assignees.push(user);
+          });
+      });
+
+      // Remove duplicates
+      self.assignees = assignees.filter(function(item, pos) {
+          return assignees.indexOf(item) == pos;
+      });
+  }
+
   this.boardId = parseInt(params.boardId);
 
   this.selectedBoard = {};
@@ -73,13 +87,12 @@ var taskController = function(taskService, attachmentService, params, $uibModal,
       self.updateList(self.doneList, 'DONE');
   };
 
-  $scope.filterAssignee = function(assignee){
+  $scope.filterAssignee = function(task){
       if($scope.search && $scope.search.assignee){
-        return assignee.id === $scope.search.assignee.id;
+        return task.assignee.id === $scope.search.assignee.id;
       }else{
         return true;
       }
-
   };
 
   /* Show tasks from board or all tasks */
@@ -90,12 +103,10 @@ var taskController = function(taskService, attachmentService, params, $uibModal,
     if(params.boardId){
       taskService.getByBoard(params.boardId).then(function(data){
         self.switchTasks(data);
-        //self.list = data;
       });
     }else{
       taskService.getAll().then(function(data){
         self.switchTasks(data);
-        //self.list = data;
       });
     }
   };

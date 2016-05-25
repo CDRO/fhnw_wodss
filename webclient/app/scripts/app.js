@@ -72,6 +72,9 @@ angular
       })
       .state('tasks', {
         url: "/tasks",
+        params: {
+            boards: null
+        },
         templateUrl: 'views/tasks.html',
         controller: 'TasksCtrl',
         controllerAs: 'tasks'
