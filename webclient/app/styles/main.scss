@@ -158,3 +158,11 @@ body {
 .draggablePanel a, .draggablePanel button{
   cursor: pointer;
 }
+
+.boardRow {
+  cursor: pointer;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: lighten($brand-primary, 60%);
+}
