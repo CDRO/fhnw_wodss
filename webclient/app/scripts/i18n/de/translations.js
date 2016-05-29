@@ -105,6 +105,8 @@
     },
     reset: {
       resetBtn: "Account zurücksetzen",
+      emailSent: "Bitte prüfen Sie ihre EMail Postfach, um ihr Passwort zurückzusetzen",
+      notSent: "Ihr Account konnte nicht zurückgesetzt werden. Sind sie registriert?",
       error: {
         title: "Ihr Resetcode ist ungültig",
         text: "Bitte kontrollieren Sie den Link im erhaltenen Email und rufen Ihn erneut auf"

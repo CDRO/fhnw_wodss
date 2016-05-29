@@ -9,7 +9,7 @@
  */
 var module = angular.module('angularWebclientApp');
 
-var ResetPasswordCtrl = function ($scope, authService, params, $state) {
+var ResetPasswordCtrl = function ($scope, authService, params, $state, alertService) {
   var self = this;
 
   // Handle Password Reset
@@ -24,6 +24,11 @@ var ResetPasswordCtrl = function ($scope, authService, params, $state) {
   this.requestReset = function() {
     authService.resetPasswordRequest(self.model).then(function (response) {
         // Activation Link sent
+        alertService.flush();
+        alertService.addAlert('success', 'reset.emailSent');
+    }, function(error){
+        alertService.flush();
+        alertService.addAlert('warning', 'reset.notSent');
     });
   };
 
@@ -41,6 +46,6 @@ var ResetPasswordCtrl = function ($scope, authService, params, $state) {
 
 };
 
-ResetPasswordCtrl.$inject = ['$scope', 'AuthService', '$stateParams', '$state'];
+ResetPasswordCtrl.$inject = ['$scope', 'AuthService', '$stateParams', '$state', 'AlertService'];
 
 module.controller('ResetPasswordCtrl', ResetPasswordCtrl);
