@@ -49,15 +49,16 @@ public class BoardService {
 	
 	@Transactional
 	public void deleteBoard(Board board){
-		boardRepository.delete(board);
-		List<Task> tasks = taskRepository.findByBoard(board);
-		for(Task task : tasks){
-			taskRepository.delete(task.getId());
-		}
+		deleteBoard(board.getId());
 	}
 	
 	@Transactional
 	public void deleteBoard(Integer id){
+		Board board = boardRepository.findOne(id);
+		List<Task> tasks = taskRepository.findByBoard(board);
+		for(Task task : tasks){
+			taskRepository.delete(task.getId());
+		}
 		boardRepository.delete(id);
 	}
 	
