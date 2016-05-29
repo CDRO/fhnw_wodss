@@ -101,6 +101,7 @@
       passwordTooShort: "Bitte geben Sie ein Passwort mit mindestens 6 Zeichen an",
       emailWrong: "Keine gültige Email Adresse",
       passwordRequired: "Bitte geben Sie ein Passwort an",
+      passwordMustMatch: "Die Passwörter stimmen nicht überein",
       repeatPassword: "Bitte wiederholen Sie ihr eingegebenes Passwort"
     },
     reset: {
