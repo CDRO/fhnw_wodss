@@ -98,6 +98,7 @@
       alreadyRegistered: "Diese Email wurde bereits registriert. Bitte loggen Sie sich ein oder setzen Sie ihr Passwort zurück",
       errorHappened: "Die Registrierung ist aus unbekannten Gründen fehlgeschlagen",
       emailRequired: "Bitte geben Sie Ihre Email Adresse ein",
+      passwordTooShort: "Bitte geben Sie ein Passwort mit mindestens 6 Zeichen an",
       emailWrong: "Keine gültige Email Adresse",
       passwordRequired: "Bitte geben Sie ein Passwort an",
       repeatPassword: "Bitte wiederholen Sie ihr eingegebenes Passwort"
