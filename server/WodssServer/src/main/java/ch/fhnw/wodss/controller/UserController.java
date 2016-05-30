@@ -196,7 +196,7 @@ public class UserController {
 	public ResponseEntity<Boolean> generateResetCode(@RequestBody JSONObject json) {
 		Object obj = json.get("email");
 		if(obj == null && !(obj instanceof String)){
-			return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED); 
+			return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST); 
 		}
 		String email = (String) obj;
 		User aCurrUser = userService.getByEmail(email);
@@ -210,7 +210,7 @@ public class UserController {
 			LOG.info("User <{}> has requested a password reset code.", aCurrUser.getEmail());
 			return new ResponseEntity<>(true, HttpStatus.OK);
 		}
-		return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<>(false, HttpStatus.FORBIDDEN);
 	}
 
 	/**
@@ -232,7 +232,7 @@ public class UserController {
 				return new ResponseEntity<>(true, HttpStatus.OK);
 			}
 		}
-		return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<>(false, HttpStatus.FORBIDDEN);
 	}
 
 	/**
@@ -268,7 +268,7 @@ public class UserController {
 				}
 			}
 		}
-		return new ResponseEntity<>(false, HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<>(false, HttpStatus.FORBIDDEN);
 	}
 
 	
