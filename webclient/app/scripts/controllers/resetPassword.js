@@ -39,7 +39,7 @@ var ResetPasswordCtrl = function ($scope, authService, params, $state, alertServ
           if(error.status === 410){
               self.errorGone = true;
           }else{
-            reset.error = true;
+              self.error = true;
           }
       });
   };
