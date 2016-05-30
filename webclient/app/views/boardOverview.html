@@ -15,8 +15,11 @@
           <td class="boardRow" ui-sref="tasksFromBoard({boardId: board.id, assignees: board.users, boards: boards.list})">{{board.title}}</td>
           <td class="boardRow" ui-sref="tasksFromBoard({boardId: board.id, assignees: board.users, boards: boards.list})">{{board.users.length | number:0}}</td>
           <td class="boardRow" ui-sref="tasksFromBoard({boardId: board.id, assignees: board.users, boards: boards.list})">{{board.owner.email}}</td>
-          <td><button ng-click="boards.updateModal(board)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
-            <button ng-click="boards.confirm(board)" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></button></td>
+          <td ng-show="boards.currentUser.id === board.owner.id"><button ng-click="boards.updateModal(board)" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-edit"></span></button>
+            <button  ng-click="boards.confirm(board)" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></button></td>
+          <td ng-hide="boards.currentUser.id === board.owner.id" translate="boards.table.actionNotOwner">
+
+          </td>
         </tr>
       </tbody>
 

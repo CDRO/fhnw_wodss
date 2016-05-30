@@ -8,10 +8,11 @@
  * Controller of the angularWebclientApp
  */
 
-var boardController = function($scope, boardService, $uibModal) {
+var boardController = function($scope, boardService, configService, $uibModal) {
   var self = this;
   this.list = [];
   this.assignees = [];
+  this.currentUser = configService.getCurrentUser();
 
   this.synchronize = function(){
     boardService.getAll(this.list).then(function(data){
@@ -123,7 +124,7 @@ var boardController = function($scope, boardService, $uibModal) {
   };
 };
 
-boardController.$inject = ['$scope', 'BoardService', '$uibModal'];
+boardController.$inject = ['$scope', 'BoardService', 'ConfigService', '$uibModal'];
 
 angular.module('angularWebclientApp').controller('BoardsCtrl', boardController);
 

@@ -13,7 +13,8 @@
         title: "Bezeichnung",
         cntMembers: "Anzahl Mitglieder",
         owner: "Besitzer",
-        actions: "Bearbeiten/Löschen"
+        actions: "Bearbeiten/Löschen",
+        actionNotOwner: "Nicht der Besitzer des Boards"
       },
       form: {
         title: "Bezeichnung",
