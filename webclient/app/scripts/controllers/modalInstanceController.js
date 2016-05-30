@@ -13,6 +13,7 @@ var ModalInstanceCtrl = function($scope, $uibModalInstance, isNew, assignees, bo
   $scope.boards = boards;
   $scope.model = model;
   $scope.isNew = isNew;
+  var self = this;
 
   var modal = $uibModalInstance;
 
@@ -24,11 +25,18 @@ var ModalInstanceCtrl = function($scope, $uibModalInstance, isNew, assignees, bo
     modal.dismiss('cancel');
   };
 
-  /* Options for Datepicker */
-/*  $scope.clearDate = function() {
-    $scope.dt = null;
-  };*/
+  /* Options for ng-tag input */
+  $scope.checkMember = function(member){
+    return self.validateEmail(member.text);
+  };
 
+  /* Regex from here http://www.w3resource.com/javascript/form/email-validation.php */
+  this.validateEmail = function validateEmail(email) {
+    var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return re.test(email);
+  };
+
+  /* Options for Datepicker */
   $scope.markToDelete = function(object){
       object.toDelete = true;
   };

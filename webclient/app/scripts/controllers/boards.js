@@ -8,10 +8,11 @@
  * Controller of the angularWebclientApp
  */
 
-var boardController = function($scope, boardService, $uibModal) {
+var boardController = function($scope, boardService, configService, $uibModal) {
   var self = this;
   this.list = [];
   this.assignees = [];
+  this.currentUser = configService.getCurrentUser();
 
   this.synchronize = function(){
     boardService.getAll(this.list).then(function(data){
@@ -20,10 +21,6 @@ var boardController = function($scope, boardService, $uibModal) {
   };
 
   self.synchronize();
-
-  $scope.checkMember = function(member){
-      return self.validateEmail(member.text);
-  };
 
   this.add = function(model){
     boardService.add(model).then(function(){
@@ -116,14 +113,10 @@ var boardController = function($scope, boardService, $uibModal) {
     });
   };
 
-  /* Regex from here http://www.w3resource.com/javascript/form/email-validation.php */
-  this.validateEmail = function validateEmail(email) {
-    var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    return re.test(email);
-  };
+
 };
 
-boardController.$inject = ['$scope', 'BoardService', '$uibModal'];
+boardController.$inject = ['$scope', 'BoardService', 'ConfigService', '$uibModal'];
 
 angular.module('angularWebclientApp').controller('BoardsCtrl', boardController);
 
