@@ -22,10 +22,6 @@ var boardController = function($scope, boardService, configService, $uibModal) {
 
   self.synchronize();
 
-  $scope.checkMember = function(member){
-      return self.validateEmail(member.text);
-  };
-
   this.add = function(model){
     boardService.add(model).then(function(){
         self.synchronize();
@@ -117,11 +113,7 @@ var boardController = function($scope, boardService, configService, $uibModal) {
     });
   };
 
-  /* Regex from here http://www.w3resource.com/javascript/form/email-validation.php */
-  this.validateEmail = function validateEmail(email) {
-    var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    return re.test(email);
-  };
+
 };
 
 boardController.$inject = ['$scope', 'BoardService', 'ConfigService', '$uibModal'];
