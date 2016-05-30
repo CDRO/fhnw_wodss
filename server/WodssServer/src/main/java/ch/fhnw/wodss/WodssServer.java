@@ -65,7 +65,7 @@ public class WodssServer extends SpringBootServletInitializer {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("https://www.cs.technik.fhnw.ch/");
+                registry.addMapping("/**").allowedOrigins("https://www.cs.technik.fhnw.ch");
             }
         };
     }
