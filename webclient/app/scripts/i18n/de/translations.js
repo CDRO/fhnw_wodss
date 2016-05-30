@@ -49,7 +49,9 @@
     },
     main: {
       toBoards: "Zu deinen Boards!",
-      lead: "Bleib immer organisiert!"
+      registerNow: "Jetzt anmelden",
+      lead: "Bleib immer organisiert!",
+      aProjectFrom: "Ein Projekt von Tobias Giess und Denis Augsburger für das Modul WODSS der FHNW"
     },
     modal: {
       sureToDelete: "Sind sie sicher, dass sie {{name}} löschen möchten?"
