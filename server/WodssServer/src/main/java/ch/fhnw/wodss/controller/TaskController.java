@@ -306,10 +306,11 @@ public class TaskController {
 			}
 			removeAttachments(oldTask, task);
 			setTaskOnAttachments(task);
+			boolean doNotify = oldTask.getAssignee() != null && task.getAssignee() != null
+					&& !oldTask.getAssignee().equals(task.getAssignee()) && !task.getAssignee().equals(user);
 			Task updatedTask = taskService.saveTask(task, files);
 			LOG.info("User <{}> updated task <{}> with attachments.", user.getEmail(), task.getId());
-			if (oldTask.getAssignee() != null && task.getAssignee() != null
-					&& !oldTask.getAssignee().equals(task.getAssignee())) {
+			if (doNotify) {
 				AbstractNotification notification = new ReassignedNotification(updatedTask);
 				notification.send();
 			}
@@ -345,10 +346,11 @@ public class TaskController {
 			}
 			removeAttachments(oldTask, task);
 			setTaskOnAttachments(task);
+			boolean doNotify = oldTask.getAssignee() != null && task.getAssignee() != null
+					&& !oldTask.getAssignee().equals(task.getAssignee()) && !task.getAssignee().equals(user);
 			Task updatedTask = taskService.saveTask(task);
 			LOG.info("User <{}> updated task <{}>", user.getEmail(), task.getId());
-			if (oldTask.getAssignee() != null && task.getAssignee() != null
-					&& !oldTask.getAssignee().equals(task.getAssignee())) {
+			if (doNotify) {
 				AbstractNotification notification = new ReassignedNotification(updatedTask);
 				notification.send();
 			}
@@ -366,10 +368,10 @@ public class TaskController {
 		});
 	}
 
-	private void setTaskOnAttachments(Task task){
-		if(task.getAttachments().size() > 0){
+	private void setTaskOnAttachments(Task task) {
+		if (task.getAttachments().size() > 0) {
 			task.getAttachments().forEach((Attachment attachment) -> {
-				if(attachment != null){
+				if (attachment != null) {
 					attachment.setTask(task);
 				}
 			});
