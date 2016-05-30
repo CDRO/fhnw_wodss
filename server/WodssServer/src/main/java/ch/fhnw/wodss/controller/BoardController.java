@@ -2,6 +2,7 @@ package ch.fhnw.wodss.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +44,7 @@ public class BoardController {
 	 * @return the boards.
 	 */
 	@RequestMapping(path = "/boards", method = RequestMethod.GET)
-	public ResponseEntity<List<Board>> getAllBoards(@RequestHeader(value = "x-session-token") Token token) {
+	public ResponseEntity<Set<Board>> getAllBoards(@RequestHeader(value = "x-session-token") Token token) {
 		User user = TokenHandler.getUser(token.getId());
 		// reload from Database
 		user = userService.getById(user.getId());

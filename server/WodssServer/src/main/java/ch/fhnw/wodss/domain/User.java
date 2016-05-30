@@ -1,7 +1,9 @@
 package ch.fhnw.wodss.domain;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -34,12 +36,12 @@ public class User {
 	private List<Task> tasks;
 	@ManyToMany(mappedBy="users", fetch = FetchType.EAGER)
 	@JsonIgnore
-	private List<Board> boards;
+	private Set<Board> boards;
 
 	User() {
 		super();
 		tasks = new LinkedList<>();
-		boards = new LinkedList<>();
+		boards = new HashSet<>();
 	}
 
 	/**
@@ -123,7 +125,7 @@ public class User {
 	 * 
 	 * @return the boards of this user.
 	 */
-	public List<Board> getBoards() {
+	public Set<Board> getBoards() {
 		return boards;
 	}
 
@@ -133,7 +135,7 @@ public class User {
 	 * @param boards
 	 *            the boards to set
 	 */
-	public void setBoards(List<Board> boards) {
+	public void setBoards(Set<Board> boards) {
 		this.boards = boards;
 	}
 
