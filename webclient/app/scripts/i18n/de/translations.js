@@ -8,6 +8,7 @@
     boards: {
       boards: "Übersicht Boards",
       createBoard: "Board erstellen",
+      addBoard: "Board hinzufügen",
       updateBoard: "Board bearbeiten",
       table: {
         title: "Bezeichnung",
@@ -26,6 +27,7 @@
     tasks: {
       createTitle: "Task erstellen",
       updateTitle: "Task updaten",
+      addTask: "Task Hinzufügen",
       form: {
           boardSelection: "Board",
           description: "Bezeichnung",
