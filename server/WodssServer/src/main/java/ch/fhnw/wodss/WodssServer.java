@@ -22,7 +22,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableAspectJAutoProxy
 @EnableScheduling
 public class WodssServer extends SpringBootServletInitializer {
-	
+
 	private static final Logger LOG = org.slf4j.LoggerFactory.getLogger(WodssServer.class);
 
 	public static void main(String[] args) {
@@ -56,17 +56,18 @@ public class WodssServer extends SpringBootServletInitializer {
 			}
 		};
 	}
-	
+
 	/**
 	 * Configures CORS
 	 */
 	@Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurerAdapter() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("https://www.cs.technik.fhnw.ch");
-            }
-        };
-    }
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurerAdapter() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**").allowedOrigins("https://www.cs.technik.fhnw.ch").allowedMethods("GET",
+						"POST", "PUT", "DELETE");
+			}
+		};
+	}
 }

@@ -3,6 +3,7 @@ package ch.fhnw.wodss.service;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -93,7 +94,7 @@ public class TaskService {
 	 * @return the tasks of all the boards specified.
 	 */
 	@Transactional(readOnly = true)
-	public List<Task> getByBoards(List<Board> boards) {
+	public List<Task> getByBoards(Set<Board> boards) {
 		List<Task> taskList = new LinkedList<>();
 		for (Board board : boards) {
 			List<Task> tasks = taskRepository.findByBoard(board);
