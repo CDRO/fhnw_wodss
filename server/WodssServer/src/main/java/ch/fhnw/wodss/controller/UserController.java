@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -31,7 +30,6 @@ import ch.fhnw.wodss.service.BoardService;
 import ch.fhnw.wodss.service.UserService;
 
 @RestController
-@CrossOrigin
 public class UserController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(UserController.class);

@@ -12,7 +12,6 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +26,6 @@ import ch.fhnw.wodss.service.AttachmentService;
 import ch.fhnw.wodss.service.UserService;
 
 @RestController
-@CrossOrigin
 public class AttachmentController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AttachmentController.class);
