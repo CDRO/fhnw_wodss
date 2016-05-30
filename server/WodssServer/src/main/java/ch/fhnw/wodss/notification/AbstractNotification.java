@@ -39,7 +39,7 @@ public abstract class AbstractNotification {
 	/**
 	 * The sender of every notification.
 	 */
-	private static final String SENDER = "info@fhnw.ch";
+	private static final String SENDER = "tobias.giess@students.fhnw.ch";
 
 	/**
 	 * The prefix of every notification subject.
