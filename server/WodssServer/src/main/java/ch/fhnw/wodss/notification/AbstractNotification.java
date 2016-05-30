@@ -73,7 +73,7 @@ public abstract class AbstractNotification {
 		if (profiles != null && profiles.contains("prod")) {
 			try {
 				// Create a default MimeMessage object.
-				Message message = new MimeMessage(session);
+				MimeMessage message = new MimeMessage(session);
 
 				// Set From: header field of the header.
 				message.setFrom(new InternetAddress(SENDER));
@@ -84,10 +84,10 @@ public abstract class AbstractNotification {
 				}
 
 				// Set Subject: header field
-				message.setSubject(SUBJECT_PREFIX + getSubject());
+				message.setSubject(SUBJECT_PREFIX + getSubject(), "utf-8");
 
 				// Send the actual HTML message, as big as you like
-				message.setContent(getMessageBody(), "text/html");
+				message.setContent(getMessageBody(), "text/html; charset=utf-8");
 
 				// Send message
 				Transport.send(message);
